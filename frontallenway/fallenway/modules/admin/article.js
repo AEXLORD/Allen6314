@@ -5,14 +5,21 @@ var md = require('node-markdown').Markdown;
 
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
+
 var MyCookies = require('../../config/mycookies.js');
 var mycookies = new MyCookies();
+
+var Logger = require('../../config/logconfig.js');
+var logger = new Logger().getLogger();
 
 var router = express.Router();
 
 
 //跳到添加文章首页
 router.get('/addArticle',function(req,res,next){
+
+    logger.debug("admin/article.js -- /admin/addArticle ...");
+
     async.waterfall([
             //请求文章分类
             function(callback){
@@ -22,10 +29,19 @@ router.get('/addArticle',function(req,res,next){
                         if(returnData.statusCode == 0){
                             callback(null,returnData.data);
                         } else {
-                            console.log('request for getting first level classifies fail!');
+                            logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                            res.render('error/unknowerror');
                         }
                      } else {
-                        console.log('request for getting first level classifies fail!!!!!!!');
+                        logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                   "error = " + error);
+                        if(response != null){
+                            logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                   "response.statuCode = " + response.statusCode + "..." +
+                                   "response.body = " + response.body);
+                        }
+                        res.render('error/unknowerror');
                     }
                 });
             //请求tags
@@ -37,10 +53,19 @@ router.get('/addArticle',function(req,res,next){
                             data.tags = returnData.data.tags;
                             callback(null,data);
                         } else {
-                            console.log('request for getting first level classifies fail!');
+                            logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                            res.render('error/unknowerror');
                         }
                      } else {
-                        console.log('request for getting first level classifies fail!!!!!!!');
+                        logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                   "error = " + error);
+                        if(response != null){
+                            logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                   "response.statuCode = " + response.statusCode + "..." +
+                                   "response.body = " + response.body);
+                        }
+                        res.render('error/unknowerror');
                     }
                 });
             }
@@ -49,17 +74,17 @@ router.get('/addArticle',function(req,res,next){
                 "<li><a href = \"/admin/article/articleManage\">Article Manage</a></li>" +
                 "<li><a href = \"#\" class = \"active\">Add Article</a></li>";
         result.path = path;
-
-        console.log('err = ' + err + ' ,result = ' + JSON.stringify(result));
         res.render('admin/article/add_updateArticle',{'data':result});
     })
 });
 
 router.post('/addArticle/doAdd',function(req,res,next){
 
-	var cookies = mycookies.getMyCookies(req);
+    logger.debug("admin/article.js -- /admin/addArticle/doAdd ...");
+
+    var cookies = mycookies.getMyCookies(req);
     	if(cookies['Authorization'] == 'undefined'){
- 		console.log("cookies[Authorization] == undefined......");
+ 		logger.info("cookies[Authorization] == undefined......");
 		res.render('admin/login');
 	} else {
 		doSendRequestDoAdd(res,req,cookies);
@@ -67,15 +92,17 @@ router.post('/addArticle/doAdd',function(req,res,next){
 });
 
 router.get('/deleteArticle',function(req,res,next){
-	
-	var cookies = mycookies.getMyCookies(req);
+
+    logger.debug("admin/article.js -- /admin/deleteArticle ...");
+
+    var cookies = mycookies.getMyCookies(req);
     	if(cookies['Authorization'] == 'undefined'){
- 		console.log("cookies[Authorization] == undefined......");
+ 		logger.info("cookies[Authorization] == undefined......");
 		res.render('admin/login');
 	} else {
 		var url = config.getBackendUrlPrefix() + "auth/article/delete-article-by-id";
     		var data = {id:req.query.id};
-		
+
 		var options = {
         		url:url,
         		headers:{
@@ -87,28 +114,35 @@ router.get('/deleteArticle',function(req,res,next){
         		if(!error && response.statusCode == 200 ){
                        		var returnData = JSON.parse(body);
                         	if(returnData.statusCode == 0){
-					res.redirect('/admin/article/articleManage');
-				} else {
-                            		console.log('request for getting first level classifies fail!');
+					            res.redirect('/admin/article/articleManage');
+				            } else {
+                                logger.error("admin/article.js -- /admin/deleteArticle fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                res.render('error/unknowerror');
                         	}
-                     	} else {
-				res.render('error/unknowerror',{
-					'error':error,
-					'response':response
-				});
-                    	}
+                } else {
+                    logger.error("admin/article.js -- /admin/deleteArticle fail ..." +
+                               "error = " + error);
+                    if(response != null){
+                        logger.error("admin/article.js -- /admin/deleteArticle fail ..." +
+                                "response.statuCode = " + response.statusCode + "..." +
+                                "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+            	}
     		});
 	}
 });
 
 router.get('/modifyArticle',function(req,res,next){
 
+    logger.debug("admin/article.js -- /admin/modifyArticle ...");
 	var cookies = mycookies.getMyCookies(req);
         if(cookies['Authorization'] == 'undefined'){
-                console.log("cookies[Authorization] == undefined......");
-                res.render('admin/login');
+ 		    logger.info("cookies[Authorization] == undefined......");
+            res.render('admin/login');
         } else {
-    
+
 		async.waterfall([
             	//请求文章分类
             	function(callback){
@@ -118,10 +152,19 @@ router.get('/modifyArticle',function(req,res,next){
                         		if(returnData.statusCode == 0){
                             			callback(null,returnData.data);
                         		} else {
-                            			console.log('request for getting first level classifies fail!');
+                                    logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                    res.render('error/unknowerror');
                         		}
                      		} else {
-                        		console.log('request for getting first level classifies fail!!!!!!!');
+                                logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                        "error = " + error);
+                                if(response != null){
+                                    logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                        "response.statuCode = " + response.statusCode + "..." +
+                                        "response.body = " + response.body);
+                                }
+                                res.render('error/unknowerror');
                     		}
                	 	});
             	//请求tags
@@ -133,10 +176,19 @@ router.get('/modifyArticle',function(req,res,next){
                             			data.tags = returnData.data.tags;
                             			callback(null,data);
                         		} else {
-                            			console.log('request for getting first level classifies fail!');
+                                    logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                    res.render('error/unknowerror');
                         		}
                      		} else {
-                        		console.log('request for getting first level classifies fail!!!!!!!');
+                                logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                        "error = " + error);
+                                if(response != null){
+                                    logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                        "response.statuCode = " + response.statusCode + "..." +
+                                        "response.body = " + response.body);
+                                }
+                                res.render('error/unknowerror');
                     		}
                 	});
             	},function(data,callback){
@@ -147,21 +199,30 @@ router.get('/modifyArticle',function(req,res,next){
                             			data.article = returnData.data.article;
                             			callback(null,data);
                         		} else {
-                            			console.log('request for getting first level classifies fail!');
+                                    logger.error("admin/article.js --  article/find-article-by-id?id=xx fail ..." +
+                                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                    res.render('error/unknowerror');
                         		}
                     		} else {
-                        		console.log('request for getting first level classifies fail!!!!!!!');
+                                logger.error("admin/article.js -- article/find-article-by-id?id=xx ..." +
+                                        "error = " + error);
+                                if(response != null){
+                                    logger.error("admin/article.js --  article/find-article-by-id?id=xx fail ..." +
+                                        "response.statuCode = " + response.statusCode + "..." +
+                                        "response.body = " + response.body);
+                                }
+                                res.render('error/unknowerror');
                     		}
                 	});
             	}
     		],function(err,result){
-        		console.log('err = ' + err + ' ,result = ' + JSON.stringify(result));
         		res.render('admin/article/add_updateArticle',{'data':result});
     		})
 	}
 });
 
 router.get('/articleManage',function(req,res,next){
+    logger.debug("admin/article.js -- /admin/articleManage ...");
     request(config.getBackendUrlPrefix() + "article/get-all-articles",function(error,response,body){
         if(!error && response.statusCode == 200 ){
             var returnData = JSON.parse(body);
@@ -179,22 +240,29 @@ router.get('/articleManage',function(req,res,next){
                     'articles':articles,
                     'path':path
                 }
-
-                console.log('returnData = ' + JSON.stringify(data));
-
                 res.render('admin/article/articleManageIndex',{'data':data});
             } else {
-                console.log('request for getting first level classifies fail!');
+                logger.error("admin/article.js -- article/get-all-articles fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
             }
         } else {
-            console.log('request for getting first level classifies fail!!!!!!!');
+            logger.error("admin/article.js -- article/get-all-articles ..." +
+                "error = " + error);
+            if(response != null){
+                logger.error("admin/article.js -- article/get-all-articles fail ..." +
+                    "response.statuCode = " + response.statusCode + "..." +
+                    "response.body = " + response.body);
+            }
+            res.render('error/unknowerror');
         }
     });
 });
 
 function doSendRequestDoAdd(res,req,cookies){
-    	var url = config.getBackendUrlPrefix() + "auth/article/save-article";
+    var url = config.getBackendUrlPrefix() + "auth/article/save-article";
 	var data = {
+            'id': req.body.id,
         	'title': req.body.title,
          	'content': req.body.mdData,
          	'classifyId': req.body.classifyId,
@@ -206,8 +274,8 @@ function doSendRequestDoAdd(res,req,cookies){
         	url:url,
         	headers:{
                 	'Authorization': "Bearer " + cookies['Authorization']
-		},
-		form:data
+		    },
+		    form:data
     	}
 
     	request.post(options,function(error,response,body){
@@ -219,19 +287,20 @@ function doSendRequestDoAdd(res,req,cookies){
 				console.log("unknow error in kong or java,because response.statusCode = 200, returnData.statusCode != 0 ");
             		}
         	} else {
-			console.log("error = " + error);
-			console.log("response.statusCode = " + response.statusCode);
-			console.log("response.body = " + response.body);
+                logger.error("admin/article.js -- auth/article/save-article ..." +
+                    "error = " + error);
+                if(response != null){
+                    logger.error("admin/article.js -- auth/article/save-article fail ..." +
+                        "response.statuCode = " + response.statusCode + "..." +
+                        "response.body = " + response.body);
+                }
         		if(response.statusCode == 401){
-				res.render('admin/login');
-			} else {
-				res.render('error/unknowerror',{
-					'error':error,
-					'response':response
-				});
-			}
-		}
-   	});
+				    res.render('admin/login');
+			    } else {
+                    res.render('error/unknowerror');
+			    }
+		    }
+   	    });
 }
 
 module.exports = router;

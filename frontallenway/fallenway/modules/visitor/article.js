@@ -7,7 +7,13 @@ var Config = require('../../config/globalconfig.js');
 var config = new Config();
 var router = express.Router();
 
+var Logger = require('../../config/logconfig.js');
+var logger = new Logger().getLogger();
+
 router.get('/getArticleDetail',function(req,res,next){
+
+    logger.debug("visitor/article.js -- /article/getArticleDetail ...");
+
     async.waterfall([
             //请求 文章 数据
             function(callback){
@@ -16,14 +22,23 @@ router.get('/getArticleDetail',function(req,res,next){
                         var returnData = JSON.parse(body);
 
                         if(returnData.statusCode != 0){
-                            console.log('request for articles fail!');
+                            logger.error("visitor/article.js -- article/find-article-by-id?id=xx fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                            res.render('error/unknowerror');
                          } else {
                             var article = returnData.data.article;
                             article.content = md(article.content);
                             callback(null,returnData.data);
                         }
                      } else {
-                         console.log('request for get articles fail!');
+                        logger.error("visitor/article.js -- article/find-article-by-id?id=xx fail ..." +
+                                   "error = " + error);
+                        if(response != null){
+                            logger.error("visitor/article.js -- article/find-article-by-id?id=xx fail ..." +
+                                   "response.statuCode = " + response.statusCode + "..." +
+                                   "response.body = " + response.body);
+                        }
+                        res.render('error/unknowerror');
                      }
                 });
             //请求推荐文章的数量
@@ -47,13 +62,22 @@ router.get('/getArticleDetail',function(req,res,next){
                     if(!error && response.statusCode == 200){
                         var returnData = JSON.parse(body);
                         if(returnData.statusCode != 0){
-                            console.log('request for get tags fail!');
+                            logger.error("visitor/article.js -- tag/find-all-tags fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                            res.render('error/unknowerror');
                          } else {
-                         data.tags = returnData.data.tags;
-                         callback(null,data);
+                            data.tags = returnData.data.tags;
+                            callback(null,data);
                         }
                      } else {
-                         console.log('request for get tags fail!');
+                        logger.error("visitor/article.js -- tag/find-all-tags fail ..." +
+                                   "error = " + error);
+                        if(response != null){
+                            logger.error("visitor/article.js -- tag/find-all-tags fail ..." +
+                                   "response.statuCode = " + response.statusCode + "..." +
+                                   "response.body = " + response.body);
+                        }
+                        res.render('error/unknowerror');
                      }
                 });
             }
@@ -62,13 +86,14 @@ router.get('/getArticleDetail',function(req,res,next){
         var path = "<li><a href = \"/visitor\">Index</a></li>" +
             "<li class = \"active\">Article Detail</li>";
         result.path = path;
-
-        console.log('url = visitor/article/getArticleDetail, error = '+ err + ' ,data = ' + JSON.stringify(result));
         res.render('visitor/articleDetail',{'data':result});
     });
 });
 
 router.post('/leaveMsg',function(req,res,next){
+
+    logger.debug("visitor/article.js -- /article/leaveMsg ...");
+
     var url = config.getBackendUrlPrefix() + "comment/add-comment";
     var data = {
         'id':req.body.id,
@@ -77,18 +102,24 @@ router.post('/leaveMsg',function(req,res,next){
         'content':req.body.content
     };
     request.post({url:url,form:data},function(err,response,body){
-
-        console.log('response.statusCode = ' + response.statusCode);
-
         if(!err && response.statusCode == 200){
             var returnData = JSON.parse(body);
             if(returnData.statusCode != 0){
-                console.log('request for save comment fail!');
+                logger.error("visitor/article.js -- comment/add-comment fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
             } else {
                 res.redirect('/visitor/article/getArticleDetail?id=' + req.body.id);
             }
         } else {
-            console.log('request for save comment fail!');
+            logger.error("visitor/article.js -- comment/add-comment fail ..." +
+                "error = " + error);
+            if(response != null){
+                logger.error("visitor/article.js -- comment/add-comment fail ..." +
+                    "response.statuCode = " + response.statusCode + "..." +
+                    "response.body = " + response.body);
+            }
+            res.render('error/unknowerror');
         }
     });
 })

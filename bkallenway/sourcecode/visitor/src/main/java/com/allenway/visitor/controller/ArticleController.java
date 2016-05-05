@@ -66,7 +66,7 @@ public class ArticleController {
             } else {
 
                 //如果新增一篇文章,那么该分类的文章 + 1
-                if(article.getId() == null){
+                if(StringUtils.isEmpty(article.getId())){
                     classify.setArticleNum(classify.getArticleNum() + 1);
                     classifyService.save(classify);
                 }

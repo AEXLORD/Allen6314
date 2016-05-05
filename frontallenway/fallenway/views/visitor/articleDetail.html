@@ -29,7 +29,7 @@
 {% block mainContent  %}
     <div class="col-md-12">
         <article class="entry single">
-            <span class="entry-date">24<span>Feb</span></span>
+            <span class="entry-date">{{data.article.readNum}}<span>{{data.article.commentNum}}</span></span>
             <span class="entry-format"><img src="/myImg/dingdangmao.png" style = "width:80px;height:90px;" /><!--<i class="fa fa-file-image-o"></i>--></span>
             <div>
                 <div style = "float:left">
@@ -47,10 +47,10 @@
             <footer class="entry-footer clearfix">
                 <span class="entry-cats">
                     <span class="entry-label"><i class="fa fa-tag"></i>Categories:</span>
-                    <a href = "#">{{data.article.classify.name}}</a>
+                    <a href = "#">{{data.article.classifyName}}</a>
                 </span>
                 <span class="entry-separator">/</span>
-                <a href="#" class="entry-comments">10 Comments</a>
+                <a href="#" class="entry-comments">{{data.article.commentNum}} Comments</a>
                 <span class="entry-separator">/</span>
                 by <a href="#" class="entry-author">Allen</a>
                                 

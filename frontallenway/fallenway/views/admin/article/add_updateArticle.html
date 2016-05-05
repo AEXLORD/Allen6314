@@ -20,7 +20,7 @@
 
 {% block mainContent  %}
 <form id = "addForm" action = "addArticle/doAdd" method = "post">
-    <inpu type = "hidden" value = "{{data.article.id}}" name = "id">
+    <input type = "hidden" value = "{{data.article.id}}" name = "id">
 	<div>
 		<div style="float:left">  
             Title:&nbsp;&nbsp;<input class = "form-control" style="display:inline;width:300px;" type = "text" id="title" name = "title" value = "{{data.article.title}}">

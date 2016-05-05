@@ -37,6 +37,7 @@ Ps：
 - 大体技术：nodejs(express + swig)
 - 细节的地方
   - 使用 async 异步编程
+  - 使用 winston 作为日志记录
 
 # 启动
 

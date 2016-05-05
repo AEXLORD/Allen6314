@@ -9,12 +9,10 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -185,6 +183,29 @@ public class ArticleController {
 
         return  returnTemplate;
     }
+
+    /**
+     * 获取特定分类下的全部的文章
+     * @return
+     */
+    @RequestMapping(value = "/article/get-all-articles-by-classify/{classifyId}",method = RequestMethod.GET)
+    public Object getAllArticlesByClassify(@PathVariable("classifyId") String classifyId){
+        log.info("getAllArticlesByClassify function ... ");
+
+        if(ValidUtils.validIdParam(classifyId)){
+            ReturnTemplate returnTemplate = new ReturnTemplate();
+            List<Article> articles = articleService.findArticlesByClassifyId(classifyId);
+            articles
+                    .parallelStream()
+                    .forEach(param -> setArticleTagClassifyComment(param));
+            returnTemplate.addData("articles",articles);
+
+            return  returnTemplate;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
 
     /**
      * 给文章设置 Tag, Classify,Comment,因为这些都是手动维护，不是数据库帮维护

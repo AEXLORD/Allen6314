@@ -47,12 +47,12 @@
             <footer class="entry-footer clearfix">
                 <span class="entry-cats">
                     <span class="entry-label"><i class="fa fa-tag"></i>Categories:</span>
-                    <a href = "#">{{data.article.classifyName}}</a>
+                    <a href = "/visitor/article/get-articles-by-classify?id={{data.article.classifyId}}">{{data.article.classifyName}}</a>
                 </span>
                 <span class="entry-separator">/</span>
-                <a href="#" class="entry-comments">{{data.article.commentNum}} Comments</a>
+                <a href="javascript:void(0);" class="entry-comments">{{data.article.commentNum}} Comments</a>
                 <span class="entry-separator">/</span>
-                by <a href="#" class="entry-author">Allen</a>
+                by <a href="javascript:void(0);" class="entry-author">Allen</a>
                                 
             </footer>
 
@@ -191,7 +191,7 @@
                     </div><!-- End .media-left -->
                     <div class="media-body">
                         <h4 class="media-heading">{{comment.name}}<span class="comment-date">({{comment.createDate}})</span></h4>
-                        <a href="#" class="reply-link">Reply </a>
+                        <!--<a href="#" class="reply-link">Reply </a>-->
                         <p>{{comment.content}}</p>
                     </div><!-- End .media-body -->
                 </li>

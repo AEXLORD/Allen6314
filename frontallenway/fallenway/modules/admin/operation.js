@@ -8,8 +8,8 @@ var config = new Config();
 var MyCookies = require('../../config/mycookies.js');
 var mycookies = new MyCookies();
 
-var Config = require('../../config/globalconfig.js');
-var config = new Config();
+var Logger = require('../../config/logconfig.js');
+var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
 

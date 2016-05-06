@@ -21,4 +21,6 @@ public interface ArticleService {
 
     //找到推荐的文章
     List<Article> findRecommendArticles();
+
+    List<Article> findArticlesByTagId(String tagId);
 }

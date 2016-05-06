@@ -21,4 +21,7 @@ public interface Article_TagDao extends JpaRepository<Article_Tag, String> {
 
     @Query("select article_Tag from Article_Tag article_Tag where isDelete=false and articleId=:id")
     List<Article_Tag> findByArticleId(@Param(value = "id") String id);
+
+    @Query("select article_Tag from Article_Tag article_Tag where isDelete=false and tagId=:id")
+    List<Article_Tag> findByTagId(@Param(value = "id") String id);
 }

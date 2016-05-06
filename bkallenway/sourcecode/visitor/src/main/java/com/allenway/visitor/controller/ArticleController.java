@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,20 +57,49 @@ public class ArticleController {
                 article.setClassifyId(classify.getId());
             }
 
-            Tag tag = tagService.findTagById(request.getParameter("tagId"));
-            if(tag == null){
+            //获得 tag1,tag2(可选),tag(可选)
+            Tag tag1 = tagService.findTagById(request.getParameter("tagId1"));
+            Tag tag2 = null;
+            Tag tag3 = null;
+            if(!StringUtils.isEmpty(request.getParameter("tagId2"))){
+                tag2 = tagService.findTagById(request.getParameter("tagId2"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("tagId3"))){
+                tag3 = tagService.findTagById(request.getParameter("tagId3"));
+            }
+
+            if(tag1 == null){
                 throw new DataNotFoundException();
             } else {
 
-                //如果新增一篇文章,那么该分类的文章 + 1
+                //如果新增一篇文章,那么该分类的文章 + 1,该标签下的文章分类 + 1
                 if(StringUtils.isEmpty(article.getId())){
                     classify.setArticleNum(classify.getArticleNum() + 1);
                     classifyService.save(classify);
+
+                    tag1.setArticleNum(tag1.getArticleNum() + 1);
+                    tagService.save(tag1);
+
+                    if(tag2 != null){
+                        tag2.setArticleNum(tag2.getArticleNum() + 1);
+                        tagService.save(tag2);
+                    }
+                    if(tag3 != null){
+                        tag1.setArticleNum(tag3.getArticleNum() + 1);
+                        tagService.save(tag3);
+                    }
                 }
 
                 Article art = articleService.save(article);
-                article_tagService.save(new Article_Tag(art.getId(),tag.getId()));
 
+                //保存article 和 tag 的关系
+                article_tagService.save(new Article_Tag(art.getId(),tag1.getId()));
+                if(tag2 != null){
+                    article_tagService.save(new Article_Tag(art.getId(),tag2.getId()));
+                }
+                if(tag3 != null){
+                    article_tagService.save(new Article_Tag(art.getId(),tag3.getId()));
+                }
             }
         } else {
             throw new IllegalArgumentException("param is invalid!");
@@ -87,15 +115,20 @@ public class ArticleController {
      */
     private boolean validArticleParam(Article article,HttpServletRequest request) {
 
-        log.info("validArticleParam function ... article = {}, tagId = {}.",article,request.getParameter("tagId"));
-
+        log.info("validArticleParam function ... article = {}, tagId1 = {}.tagId2 = {}. tagId3 = {}."
+                ,article,request.getParameter("tagId1"),request.getParameter("tagId2"),request.getParameter("tagId3"));
         if(StringUtils.isEmpty(article.getTitle()) ||
                 StringUtils.isEmpty(article.getContent()) ||
-                StringUtils.isEmpty(request.getParameter("classifyId")) ||
-                request.getParameter("tagId").isEmpty()){
+                !ValidUtils.validIdParam(request.getParameter("classifyId"))){
             return false;
         } else {
-            return true;
+            if(ValidUtils.validIdParam(request.getParameter("tagId1")) &&
+                    ValidUtils.validIdParam(request.getParameter("tagId2")) &&
+                    ValidUtils.validIdParam(request.getParameter("tagId3"))) {
+                return false;
+            } else{
+                return true;
+            }
         }
     }
 
@@ -115,6 +148,21 @@ public class ArticleController {
             if(article == null){
                 throw new DataNotFoundException("article == null");
             } else {
+                //该Tag下的文章数量 -1
+                List<Article_Tag> article_Tags = article_tagService.findByArticleId(article.getId());
+                article_Tags.parallelStream().forEach(
+                        param -> {
+                            Tag tag = tagService.findTagById(param.getTagId());
+                            tag.setArticleNum(tag.getArticleNum() - 1);
+                            tagService.save(tag);
+                        }
+                );
+
+                //该分类下的文章 -1
+                Classify classify = classifyService.findClassifyById(article.getClassifyId());
+                classify.setArticleNum(classify.getArticleNum() - 1);
+                classifyService.save(classify);
+
                 //删除文章和 tag 的联系
                 article_tagService.deleteByArticleId(article.getId());
 
@@ -126,11 +174,6 @@ public class ArticleController {
 
                 //删除文章
                 articleService.delete(article);
-
-                //该分类下的文章 -1
-                Classify classify = classifyService.findClassifyById(article.getClassifyId());
-                classify.setArticleNum(classify.getArticleNum() - 1);
-                classifyService.save(classify);
             }
         } else {
             throw new IllegalArgumentException("Param is invalid!");

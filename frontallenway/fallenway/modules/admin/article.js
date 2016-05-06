@@ -96,7 +96,7 @@ router.get('/deleteArticle',function(req,res,next){
     logger.debug("admin/article.js -- /admin/deleteArticle ...");
 
     var cookies = mycookies.getMyCookies(req);
-    	if(cookies['Authorization'] == 'undefined'){
+    if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
 		res.render('admin/login');
 	} else {
@@ -266,7 +266,9 @@ function doSendRequestDoAdd(res,req,cookies){
         	'title': req.body.title,
          	'content': req.body.mdData,
          	'classifyId': req.body.classifyId,
-         	'tagId': req.body.tagId
+         	'tagId1': req.body.tagId1,
+         	'tagId2': req.body.tagId2,
+         	'tagId3': req.body.tagId3
     	}
 
     	var cookies = mycookies.getMyCookies(req);

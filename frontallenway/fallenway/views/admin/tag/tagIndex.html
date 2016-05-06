@@ -1,0 +1,104 @@
+{% extends '../common/header_leftSide.html' %}
+
+{% block subIncludeFileBeforeBody %}
+        <style type = "text/css">
+            .table tbody > tr > td {
+                padding:0;
+            }
+            .table>thead>tr>td {
+                padding:0;
+            }
+            .table tbody > tr > td:first-child {
+                padding:0px;
+            }
+        </style>
+{% endblock %}
+
+{% block subMainContent  %}
+    Tag Name : 
+    <input type = "text" class = "form-control" id = "tagName" name = "name" style = "display:inline;width:20%"> &nbsp;&nbsp;
+    <button class = "btn btn-primary btn-sm" onclick = "addTag()">Add Tag</button>
+    <span id = "addTagWarn" style = "color:red"></span>
+    <h3>Tag List</h3>
+    <table class = "table table-striped" style = "margin-top:10px">
+        <thead>
+            <td>name</td>
+            <td>该分类下的文章</td>
+            <td>Operation</td>
+         </thead>
+         <tbody class = "tagItem">
+            {% for tag in data.tags %}
+            <tr class = "{{tag.id}}">
+                <td>{{tag.name}}</td>
+                <td><a href = "javascript:void(0);" onclick = "getArticleByTag('{{tag.id}}')" >{{tag.articleNum}}</a></td>
+                <td><a href = "javascript:void(0);" onclick = "deleteTag('{{tag.id}}','{{tag.articleNum}}')">Delete</a></td>
+             </tr>
+             {% endfor %}
+        </tbody>
+    </table>
+
+    <hr/>
+    <div class = "showArticles" style = "display:none">
+        <h3>Articles:</h3>
+        <ul class = "tagArticles">
+        </ul>
+    </div>
+<script type = "text/javascript">
+function getArticleByTag(tagId){
+    $(".tagArticles").empty();
+    $(".showArticles").css("display","block");
+    $.get("/admin/tag/get-articles-by-tag?id="+tagId,function(data,status){
+        if(status == 'success'){
+            for(var i = 1; i <= data.articles.length; ++i){
+                var article = data.articles[i-1];
+                $(".tagArticles").append("<li>"+ i + ". " + article.title + "</li>");
+            }
+        } else {
+            $(".tagArticles").append("出错了，没得到该 tag 下的文章!!!");
+        }
+    })
+}
+function addTag(){
+    
+    $('#addTagWarn').empty();
+    var name = $('#tagName').val();
+
+    if(name != null && name.trim() != ""){
+        $.post('/admin/tag/add-tag',{name:name},function(data,status){
+            if(status == 'success'){
+                var tag = data.tag;
+                $('.tagItem').append(
+                    "<tr class = \"" + tag.id + "\">" +
+                    "<td>"+ tag.name +"</td>" + 
+                    "<td><a href = \"javascript:void(0);\" onclick = \"getArticleByTag(\'"+ tag.id +"\')\" >"+ tag.articleNum +"</a></td>" +
+                    "<td><a href = \"javascript:void(0);\" onclick = \"deleteTag('"+ tag.id +"','" + tag.articleNum +"\')\">Delete</a></td>" +
+                    "</tr>"
+                );
+            } else {
+                $('#addTagWarn').append("&nbsp;&nbsp;some error occurs!!!");
+            }
+        })
+    } else {
+       $('#addTagWarn').append("&nbsp;&nbsp;Tag Name can not be empty!");
+    }
+}
+
+function deleteTag(tagId,articleNum){
+    if(articleNum == '0'){
+        $.post('/admin/tag/delete-tag',{id:tagId},function(data,status){
+            if(status == 'success'){
+                $("." + tagId).remove();
+            } else {
+                alert("Delete fail because some error occurs !!!");
+            }
+        }) 
+    } else {
+        alert("Delete fail because articleNum != 0 !!!");
+    }
+}
+</script>
+
+
+{% endblock %}
+
+

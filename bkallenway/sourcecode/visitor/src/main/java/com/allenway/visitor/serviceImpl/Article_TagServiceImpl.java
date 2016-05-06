@@ -32,4 +32,9 @@ public class Article_TagServiceImpl implements Article_TagService {
     public List<Article_Tag> findByArticleId(String id) {
         return article_tagDao.findByArticleId(id);
     }
+
+    @Override
+    public List<Article_Tag> findByTagId(String tagId) {
+        return article_tagDao.findByTagId(tagId);
+    }
 }

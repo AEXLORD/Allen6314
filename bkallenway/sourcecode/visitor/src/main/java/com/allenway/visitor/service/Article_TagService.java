@@ -13,4 +13,6 @@ public interface Article_TagService {
     void deleteByArticleId(String id);
 
     List<Article_Tag> findByArticleId(String id);
+
+    List<Article_Tag> findByTagId(String tagId);
 }

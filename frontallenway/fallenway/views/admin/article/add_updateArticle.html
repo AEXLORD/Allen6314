@@ -44,11 +44,24 @@
             {% endfor %}
 		</select>
         <br/>
-        Tag:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId" name = "tagId">
+        Tag1:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId1" name = "tagId1">
 			{% for tag in data.tags %}
 			<option value="{{tag.id}}"> {{tag.name}} </option>
             {% endfor %}
-						
+		</select>
+        <br/>
+        Tag2:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId2" name = "tagId2">
+			<option value="">无</option>
+            {% for tag in data.tags %}
+			<option value="{{tag.id}}"> {{tag.name}} </option>
+            {% endfor %}
+		</select>
+        <br/>
+        Tag3:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId3" name = "tagId3">
+			<option value="">无</option>
+			{% for tag in data.tags %}
+			<option value="{{tag.id}}"> {{tag.name}} </option>
+            {% endfor %}
 		</select>
         <br/>
         <button class="btn btn-primary" onclick="doAdd()">Publish</button>

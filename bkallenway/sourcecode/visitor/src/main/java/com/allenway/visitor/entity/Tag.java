@@ -23,4 +23,5 @@ import java.util.List;
 @NoArgsConstructor
 public class Tag extends BaseEntity {
     private String name;
+    private int articleNum = 0;
 }

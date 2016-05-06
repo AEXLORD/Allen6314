@@ -279,11 +279,33 @@ public class ArticleController {
         article.setCommentNum(comments.size());
     }
 
+    /**
+     * 找出某一Tag 分类下的文章
+     * @param tagId
+     * @return
+     */
+    @RequestMapping(value = "/article/find-articles-by-tag/{tagId}",method = RequestMethod.GET)
+    public Object findArticlesByTagId(@PathVariable("tagId")String tagId){
+
+        if(ValidUtils.validIdParam(tagId)){
+            ReturnTemplate returnTemplate = new ReturnTemplate();
+            List<Article> articles = articleService.findArticlesByTagId(tagId);
+            articles
+                    .parallelStream()
+                    .forEach(param -> setArticleTagClassifyComment(param));
+            returnTemplate.addData("articles",articles);
+            return returnTemplate;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
     @RequestMapping(value = "/article/get-recommend-articles",method = RequestMethod.GET)
     public Object findRecommendArticles(){
         ReturnTemplate returnTemplate = new ReturnTemplate();
         returnTemplate.addData("recommendArticles",articleService.findRecommendArticles());
         return  returnTemplate;
     }
+
 
 }

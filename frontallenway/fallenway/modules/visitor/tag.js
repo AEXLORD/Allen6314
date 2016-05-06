@@ -41,7 +41,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
                 });
             //请求 主页文章 数据
             },function(data,callback){
-                request(config.getBackendUrlPrefix() + "tag/find-articles-by-tag/" + req.query.id,function(error,response,body){
+                request(config.getBackendUrlPrefix() + "article/find-articles-by-tag/" + req.query.id,function(error,response,body){
         	        if(!error && response.statusCode == 200){
             		    var returnData = JSON.parse(body);
 

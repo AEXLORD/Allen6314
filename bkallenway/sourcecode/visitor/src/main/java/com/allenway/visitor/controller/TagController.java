@@ -2,9 +2,10 @@ package com.allenway.visitor.controller;
 
 import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
-import com.allenway.visitor.entity.Article;
-import com.allenway.visitor.entity.Tag;
+import com.allenway.visitor.entity.*;
 import com.allenway.visitor.service.ArticleService;
+import com.allenway.visitor.service.Article_TagService;
+import com.allenway.visitor.service.ClassifyService;
 import com.allenway.visitor.service.TagService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -90,24 +92,5 @@ public class TagController {
      */
     private boolean validTagParam(Tag tag) {
         return ValidUtils.validIdParam(tag.getName());
-    }
-
-
-    /**
-     * 找出某一Tag 分类下的文章
-     * @param tagId
-     * @return
-     */
-    @RequestMapping(value = "/tag/find-articles-by-tag/{tagId}",method = RequestMethod.GET)
-    public Object findArticlesByTagId(@PathVariable("tagId")String tagId){
-
-        if(ValidUtils.validIdParam(tagId)){
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            List<Article> articles = articleService.findArticlesByTagId(tagId);
-            returnTemplate.addData("articles",articles);
-            return returnTemplate;
-        } else {
-            throw new IllegalArgumentException();
-        }
     }
 }

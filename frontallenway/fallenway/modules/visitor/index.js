@@ -90,7 +90,7 @@ router.get('', function(req, res, next) {
         ],function(err,result){
             var path = "<li><a href = \"/visitor\" class = \"active\">Index</a></li>";
             result.path = path;
-            res.render('visitor/index',{'data':result});
+            res.render('visitor/v2/index',{'data':result});
         })
 });
 

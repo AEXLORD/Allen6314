@@ -50,7 +50,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
     logger.debug("admin/tag.js -- /admin/tag/get-articles-by-tag ...");
 
     logger.debug("id = " + req.query.id);
-    request(config.getBackendUrlPrefix() + "tag/find-articles-by-tag/" + req.query.id,function(error,response,body){
+    request(config.getBackendUrlPrefix() + "article/find-articles-by-tag/" + req.query.id,function(error,response,body){
         	if(!error && response.statusCode == 200){
             		var returnData = JSON.parse(body);
 

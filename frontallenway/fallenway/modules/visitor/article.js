@@ -86,7 +86,8 @@ router.get('/getArticleDetail',function(req,res,next){
         var path = "<li><a href = \"/visitor\">Index</a></li>" +
             "<li class = \"active\">Article Detail</li>";
         result.path = path;
-        res.render('visitor/articleDetail',{'data':result});
+        //res.render('visitor/articleDetail',{'data':result});
+        res.render('visitor/v2/articleDetail',{'data':result});
     });
 });
 

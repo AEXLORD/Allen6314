@@ -1,10 +1,7 @@
 package com.allenway.infrustructure.entity;
 
 import com.allenway.commons.entity.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

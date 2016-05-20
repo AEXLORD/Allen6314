@@ -279,6 +279,8 @@ public class ArticleController {
         article.setCommentNum(comments.size());
     }
 
+
+
     /**
      * 找出某一Tag 分类下的文章
      * @param tagId
@@ -290,9 +292,6 @@ public class ArticleController {
         if(ValidUtils.validIdParam(tagId)){
             ReturnTemplate returnTemplate = new ReturnTemplate();
             List<Article> articles = articleService.findArticlesByTagId(tagId);
-            articles
-                    .parallelStream()
-                    .forEach(param -> setArticleTagClassifyComment(param));
             returnTemplate.addData("articles",articles);
             return returnTemplate;
         } else {

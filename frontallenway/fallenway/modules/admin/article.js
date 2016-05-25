@@ -23,21 +23,21 @@ router.get('/addArticle',function(req,res,next){
     async.waterfall([
             //请求文章分类
             function(callback){
-                request(config.getBackendUrlPrefix() + "classify/find-all-first-level-classifies",function(error,response,body){
+                request(config.getBackendUrlPrefix() + "auth/classify/find-all-first-level-classifies",function(error,response,body){
                     if(!error && response.statusCode == 200 ){
                         var returnData = JSON.parse(body);
                         if(returnData.statusCode == 0){
                             callback(null,returnData.data);
                         } else {
-                            logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                            logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                             res.render('error/unknowerror');
                         }
                      } else {
-                        logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                        logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
                                    "error = " + error);
                         if(response != null){
-                            logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                            logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
                                    "response.statuCode = " + response.statusCode + "..." +
                                    "response.body = " + response.body);
                         }
@@ -46,22 +46,22 @@ router.get('/addArticle',function(req,res,next){
                 });
             //请求tags
             },function(data,callback){
-                request(config.getBackendUrlPrefix() + "tag/find-all-tags",function(error,response,body){
+                request(config.getBackendUrlPrefix() + "auth/tag/find-all-tags",function(error,response,body){
                     if(!error && response.statusCode == 200 ){
                         var returnData = JSON.parse(body);
                         if(returnData.statusCode == 0){
                             data.tags = returnData.data.tags;
                             callback(null,data);
                         } else {
-                            logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                            logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                             res.render('error/unknowerror');
                         }
                      } else {
-                        logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                        logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                    "error = " + error);
                         if(response != null){
-                            logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                            logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                    "response.statuCode = " + response.statusCode + "..." +
                                    "response.body = " + response.body);
                         }
@@ -116,15 +116,15 @@ router.get('/deleteArticle',function(req,res,next){
                         	if(returnData.statusCode == 0){
 					            res.redirect('/admin/article/articleManage');
 				            } else {
-                                logger.error("admin/article.js -- /admin/deleteArticle fail ..." +
+                                logger.error("admin/article.js -- auth/admin/deleteArticle fail ..." +
                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                 res.render('error/unknowerror');
                         	}
                 } else {
-                    logger.error("admin/article.js -- /admin/deleteArticle fail ..." +
+                    logger.error("admin/article.js -- auth/admin/deleteArticle fail ..." +
                                "error = " + error);
                     if(response != null){
-                        logger.error("admin/article.js -- /admin/deleteArticle fail ..." +
+                        logger.error("admin/article.js -- auth/admin/deleteArticle fail ..." +
                                 "response.statuCode = " + response.statusCode + "..." +
                                 "response.body = " + response.body);
                     }
@@ -136,7 +136,7 @@ router.get('/deleteArticle',function(req,res,next){
 
 router.get('/modifyArticle',function(req,res,next){
 
-    logger.debug("admin/article.js -- /admin/modifyArticle ...");
+    logger.debug("admin/article.js -- auth/admin/modifyArticle ...");
 	var cookies = mycookies.getMyCookies(req);
         if(cookies['Authorization'] == 'undefined'){
  		    logger.info("cookies[Authorization] == undefined......");
@@ -146,21 +146,21 @@ router.get('/modifyArticle',function(req,res,next){
 		async.waterfall([
             	//请求文章分类
             	function(callback){
-                	request(config.getBackendUrlPrefix() + "classify/find-all-first-level-classifies",function(error,response,body){
+                	request(config.getBackendUrlPrefix() + "auth/classify/find-all-first-level-classifies",function(error,response,body){
                     		if(!error && response.statusCode == 200 ){
                         		var returnData = JSON.parse(body);
                         		if(returnData.statusCode == 0){
                             			callback(null,returnData.data);
                         		} else {
-                                    logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                    logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
                                         "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                     res.render('error/unknowerror');
                         		}
                      		} else {
-                                logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
                                         "error = " + error);
                                 if(response != null){
-                                    logger.error("admin/article.js -- classify/find-all-first-level-classifies fail ..." +
+                                    logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
                                         "response.statuCode = " + response.statusCode + "..." +
                                         "response.body = " + response.body);
                                 }
@@ -169,22 +169,22 @@ router.get('/modifyArticle',function(req,res,next){
                	 	});
             	//请求tags
             	},function(data,callback){
-                	request(config.getBackendUrlPrefix() + "tag/find-all-tags",function(error,response,body){
+                	request(config.getBackendUrlPrefix() + "auth/tag/find-all-tags",function(error,response,body){
                     		if(!error && response.statusCode == 200 ){
                         		var returnData = JSON.parse(body);
                         		if(returnData.statusCode == 0){
                             			data.tags = returnData.data.tags;
                             			callback(null,data);
                         		} else {
-                                    logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                    logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                         "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                     res.render('error/unknowerror');
                         		}
                      		} else {
-                                logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                         "error = " + error);
                                 if(response != null){
-                                    logger.error("admin/article.js -- tag/find-all-tags fail ..." +
+                                    logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                         "response.statuCode = " + response.statusCode + "..." +
                                         "response.body = " + response.body);
                                 }
@@ -192,22 +192,22 @@ router.get('/modifyArticle',function(req,res,next){
                     		}
                 	});
             	},function(data,callback){
-                	request(config.getBackendUrlPrefix() + "article/find-article-by-id?id=" + req.query.id,function(error,response,body){
+                	request(config.getBackendUrlPrefix() + "auth/article/find-article-by-id?id=" + req.query.id,function(error,response,body){
                     		if(!error && response.statusCode == 200 ){
                         		var returnData = JSON.parse(body);
                         		if(returnData.statusCode == 0){
                             			data.article = returnData.data.article;
                             			callback(null,data);
                         		} else {
-                                    logger.error("admin/article.js --  article/find-article-by-id?id=xx fail ..." +
+                                    logger.error("admin/article.js -- auth/article/find-article-by-id?id=xx fail ..." +
                                         "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                     res.render('error/unknowerror');
                         		}
                     		} else {
-                                logger.error("admin/article.js -- article/find-article-by-id?id=xx ..." +
+                                logger.error("admin/article.js -- auth/article/find-article-by-id?id=xx ..." +
                                         "error = " + error);
                                 if(response != null){
-                                    logger.error("admin/article.js --  article/find-article-by-id?id=xx fail ..." +
+                                    logger.error("admin/article.js --auth/article/find-article-by-id?id=xx fail ..." +
                                         "response.statuCode = " + response.statusCode + "..." +
                                         "response.body = " + response.body);
                                 }
@@ -223,7 +223,7 @@ router.get('/modifyArticle',function(req,res,next){
 
 router.get('/articleManage',function(req,res,next){
     logger.debug("admin/article.js -- /admin/articleManage ...");
-    request(config.getBackendUrlPrefix() + "article/get-all-articles",function(error,response,body){
+    request(config.getBackendUrlPrefix() + "auth/article/get-all-articles",function(error,response,body){
         if(!error && response.statusCode == 200 ){
             var returnData = JSON.parse(body);
             if(returnData.statusCode == 0){
@@ -242,15 +242,15 @@ router.get('/articleManage',function(req,res,next){
                 }
                 res.render('admin/article/articleManageIndex',{'data':data});
             } else {
-                logger.error("admin/article.js -- article/get-all-articles fail ..." +
+                logger.error("admin/article.js -- auth/article/get-all-articles fail ..." +
                     "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                 res.render('error/unknowerror');
             }
         } else {
-            logger.error("admin/article.js -- article/get-all-articles ..." +
+            logger.error("admin/article.js -- auth/article/get-all-articles ..." +
                 "error = " + error);
             if(response != null){
-                logger.error("admin/article.js -- article/get-all-articles fail ..." +
+                logger.error("admin/article.js -- auth/article/get-all-articles fail ..." +
                     "response.statuCode = " + response.statusCode + "..." +
                     "response.body = " + response.body);
             }

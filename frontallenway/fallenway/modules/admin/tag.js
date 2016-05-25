@@ -13,13 +13,13 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
 
-    logger.debug("admin/tag.js -- /admin/tag ...");
-    	request(config.getBackendUrlPrefix() + "tag/find-all-tags",function(error,response,body){
+    logger.debug("admin/tag.js -- auth/admin/tag ...");
+    	request(config.getBackendUrlPrefix() + "auth/tag/find-all-tags",function(error,response,body){
         	if(!error && response.statusCode == 200){
             		var returnData = JSON.parse(body);
 
             		if(returnData.statusCode != 0){
-                        logger.error("admin/tag.js -- tag/find-all-tags fail ..." +
+                        logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
             		} else {
@@ -47,25 +47,25 @@ router.get('',function(req,res,next){
 
 router.get('/get-articles-by-tag',function(req,res,next){
 
-    logger.debug("admin/tag.js -- /admin/tag/get-articles-by-tag ...");
+    logger.debug("admin/tag.js -- auth/article/get-articles-by-tag ...");
 
     logger.debug("id = " + req.query.id);
-    request(config.getBackendUrlPrefix() + "article/find-articles-by-tag/" + req.query.id,function(error,response,body){
+    request(config.getBackendUrlPrefix() + "auth/article/find-articles-by-tag/" + req.query.id,function(error,response,body){
         	if(!error && response.statusCode == 200){
             		var returnData = JSON.parse(body);
 
             		if(returnData.statusCode != 0){
-                        logger.error("admin/tag.js -- /admin/tag/get-articles-by-tag fail ..." +
+                        logger.error("admin/tag.js -- auth/admin/tag/get-articles-by-tag fail ..." +
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
             		} else {
                	 		res.send({'articles':returnData.data.articles});
             		}
         	} else {
-                logger.error("admin/tag.js -- /admin/tag/get-articles-by-tag fail ..." +
+                logger.error("admin/tag.js -- auth/admin/tag/get-articles-by-tag fail ..." +
                     "error = " + error);
                 if(response != null){
-                    logger.error("admin/tag.js -- /admin/tag/get-articles-by-tag fail ..." +
+                    logger.error("admin/tag.js -- auth/admin/tag/get-articles-by-tag fail ..." +
                         "response.statuCode = " + response.statusCode + "..." +
                         "response.body = " + response.body);
                     }
@@ -76,7 +76,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
 
 
 router.post('/add-tag',function(req,res,next){
-    logger.debug("admin/tag.js -- /admin/tag/add-tag ...");
+    logger.debug("admin/tag.js -- auth/admin/tag/add-tag ...");
 
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){

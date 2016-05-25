@@ -20,13 +20,51 @@ router.get('',function(req,res,next){
  		logger.info("cookies[Authorization] == undefined......");
 		res.render('admin/login');
 	} else {
-        var path = "<li><a href = \"/admin\" class = \"active\">Index</a></li>";
-        var data = {
-            'path':path
-        };
-        res.render('admin/index');
+        doSendRequestTest(res,cookies);
     }
 });
+
+function doSendRequestTest(res,cookies){
+
+	var url = config.getBackendUrlPrefix() + "auth/test";
+	var options = {
+        url:url,
+        headers:{
+            'Authorization': "Bearer " + cookies['Authorization']
+        }
+    }
+
+    	request(options,function(error,response,body){
+        	if(!error && response.statusCode == 200){
+            		var returnData = JSON.parse(body);
+
+            		if(returnData.statusCode != 0){
+                        logger.error("admin/index.js -- auth/test fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+            		} else {
+                        var path = "<li><a href = \"/admin\" class = \"active\">Index</a></li>";
+                        var data = {
+                            'path':path
+                        };
+                        res.render('admin/index');
+            		}
+        	} else {
+                logger.error("admin/index.js -- auth/test fail ..." +
+                    "error = " + error);
+                if(response != null){
+                    logger.error("admin/index.js -- auth/test fail ..." +
+                        "response.statuCode = " + response.statusCode + "..." +
+                        "response.body = " + response.body);
+                    }
+            	if(response.statusCode == 401){
+                    res.render('admin/login');
+            	} else {
+                    res.render('error/unknowerror');
+            	}
+        	}
+    	});
+}
 
 module.exports = router;
 

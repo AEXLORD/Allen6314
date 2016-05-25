@@ -34,39 +34,39 @@ function doSendRequestGetRecords(res,cookies){
         }
     }
 
-    	request(options,function(error,response,body){
-        	if(!error && response.statusCode == 200){
-            		var returnData = JSON.parse(body);
+    request(options,function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
 
-            		if(returnData.statusCode != 0){
-                        logger.error("admin/operation.js -- auth/operation/get-records fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-            		} else {
-                		var path = "<li><a href = \"/admin/index\">Index</a></li>" +
-                            		"<li>Operation Manage</li>";
-
-                		var data = {
-                    		'records':returnData.data.records,
-                    		'path':path
-                		}
-               	 		res.render('admin/operation/operIndex',{'data':data});
-            		}
-        	} else {
+            if(returnData.statusCode != 0){
                 logger.error("admin/operation.js -- auth/operation/get-records fail ..." +
-                    "error = " + error);
-                if(response != null){
-                    logger.error("admin/operation.js -- auth/operation/get-records fail ..." +
-                        "response.statuCode = " + response.statusCode + "..." +
-                        "response.body = " + response.body);
-                    }
-            	if(response.statusCode == 401){
-                    res.render('admin/login');
-            	} else {
-                    res.render('error/unknowerror');
-            	}
-        	}
-    	});
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
+            } else {
+                var path = "<li><a href = \"/admin/index\">Index</a></li>" +
+                    "<li>Operation Manage</li>";
+
+                var data = {
+                    'records':returnData.data.records,
+                    'path':path
+                }
+               	res.render('admin/operation/operIndex',{'data':data});
+            }
+        } else {
+            logger.error("admin/operation.js -- auth/operation/get-records fail ..." +
+                "error = " + error);
+            if(response != null){
+                logger.error("admin/operation.js -- auth/operation/get-records fail ..." +
+                    "response.statuCode = " + response.statusCode + "..." +
+                    "response.body = " + response.body);
+            }
+            if(response.statusCode == 401){
+                res.render('admin/login');
+            } else {
+                res.render('error/unknowerror');
+            }
+        }
+    });
 }
 
 module.exports = router;

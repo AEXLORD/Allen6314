@@ -186,7 +186,7 @@ public class ArticleController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/article/find-article-by-id",method = RequestMethod.GET)
+    @RequestMapping(value = {"/article/find-article-by-id","/auth/article/find-article-by-id"},method = RequestMethod.GET)
     public Object findArticleById(String id) {
 
         ReturnTemplate returnTemplate = new ReturnTemplate();
@@ -209,7 +209,7 @@ public class ArticleController {
      * 获取全部的文章
      * @return
      */
-    @RequestMapping(value = "/article/get-all-articles",method = RequestMethod.GET)
+    @RequestMapping(value = {"/article/get-all-articles","/auth/article/get-all-articles"},method = RequestMethod.GET)
     public Object getAllArticles(){
         log.info("getAllArticles function ... ");
         ReturnTemplate returnTemplate = new ReturnTemplate();
@@ -231,7 +231,7 @@ public class ArticleController {
      * 获取特定分类下的全部的文章
      * @return
      */
-    @RequestMapping(value = "/article/get-all-articles-by-classify/{classifyId}",method = RequestMethod.GET)
+    @RequestMapping(value = {"/article/get-all-articles-by-classify/{classifyId}","/auth/article/get-all-articles-by-classify/{classifyId}"},method = RequestMethod.GET)
     public Object getAllArticlesByClassify(@PathVariable("classifyId") String classifyId){
         log.info("getAllArticlesByClassify function ... ");
 
@@ -286,7 +286,7 @@ public class ArticleController {
      * @param tagId
      * @return
      */
-    @RequestMapping(value = "/article/find-articles-by-tag/{tagId}",method = RequestMethod.GET)
+    @RequestMapping(value = {"/article/find-articles-by-tag/{tagId}","/auth/article/find-articles-by-tag/{tagId}"},method = RequestMethod.GET)
     public Object findArticlesByTagId(@PathVariable("tagId")String tagId){
 
         if(ValidUtils.validIdParam(tagId)){
@@ -299,7 +299,7 @@ public class ArticleController {
         }
     }
 
-    @RequestMapping(value = "/article/get-recommend-articles",method = RequestMethod.GET)
+    @RequestMapping(value = {"/article/get-recommend-articles","/auth/article/get-recommend-articles"},method = RequestMethod.GET)
     public Object findRecommendArticles(){
         ReturnTemplate returnTemplate = new ReturnTemplate();
         returnTemplate.addData("recommendArticles",articleService.findRecommendArticles());

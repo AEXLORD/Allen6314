@@ -37,7 +37,7 @@ public class CommentController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/comment/add-comment",method = RequestMethod.POST)
+    @RequestMapping(value = {"/comment/add-comment","/auth/comment/add-comment"},method = RequestMethod.POST)
     public Object addComment(Comment comment, HttpServletRequest request){
         ReturnTemplate returnTemplate = new ReturnTemplate();
         if(validData(comment,request)){

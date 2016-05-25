@@ -37,7 +37,7 @@ public class TagController {
      * 查找全部的 tag
      * @return
      */
-    @RequestMapping(value = "/tag/find-all-tags",method = RequestMethod.GET)
+    @RequestMapping(value = {"/tag/find-all-tags","/auth/tag/find-all-tags"},method = RequestMethod.GET)
     public Object findAllTags(){
 
         ReturnTemplate returnTemplate = new ReturnTemplate();

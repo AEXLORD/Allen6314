@@ -121,7 +121,7 @@ public class ClassifyController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/classify/find-classify-by-id",method = RequestMethod.POST)
+    @RequestMapping(value = {"/classify/find-classify-by-id","/auth/classify/find-classify-by-id"},method = RequestMethod.POST)
     public Object findClassifyById(@RequestParam String id){
 
         ReturnTemplate returnTemplate = new ReturnTemplate();
@@ -144,7 +144,7 @@ public class ClassifyController {
      * 查找所有的一级目录
      * @return
      */
-    @RequestMapping(value = "/classify/find-all-first-level-classifies",method = RequestMethod.GET)
+    @RequestMapping(value = {"/classify/find-all-first-level-classifies","/auth/classify/find-all-first-level-classifies"},method = RequestMethod.GET)
     public Object findAllFirstLevelClassifies(){
 
         ReturnTemplate returnTemplate = new ReturnTemplate();

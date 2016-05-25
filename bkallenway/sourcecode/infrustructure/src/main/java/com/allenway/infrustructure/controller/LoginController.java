@@ -30,7 +30,6 @@ import java.net.URL;
 @Data
 @Slf4j
 @RestController
-@RequestMapping(value = "/login")
 public class LoginController {
 
     @Autowired
@@ -46,7 +45,7 @@ public class LoginController {
      * @param admin
      * @return
      */
-    @RequestMapping(value = "",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Object login(Admin admin) throws IOException {
 
         boolean isParamValid = validLoginAdminParam(admin);

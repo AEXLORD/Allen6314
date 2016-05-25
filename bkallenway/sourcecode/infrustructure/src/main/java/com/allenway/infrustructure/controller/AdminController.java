@@ -31,7 +31,7 @@ public class AdminController {
      * 查找管理员（返回值不包括密码字段）
      * @return
      */
-    @RequestMapping(value = "/admin/find-admin",method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/find-admin","/auth/admin/find-admin"},method = RequestMethod.GET)
     public Object findAdmin(){
 
         Admin admin = adminService.findAdmin();

@@ -9,6 +9,9 @@ var router = express.Router();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
+var MyCookies = require('../../config/mycookies.js');
+var mycookies = new MyCookies();
+
 router.get('',function(req,res,next){
     logger.debug("admin/index.js -- /admin/index ...");
 

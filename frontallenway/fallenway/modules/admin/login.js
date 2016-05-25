@@ -35,7 +35,7 @@ router.post('/dologin',function(req,res,next){
                 res.render('error/unknowerror');
             } else {
 		        res.cookie('Authorization', returnData.data.token.access_token, { path: '/' });
-		        var path = "<li><a href = \"/admin\" class = \"active\">Index</a></li>";
+		        var path = "<li><a href = \"/admin/index\" class = \"active\">Index</a></li>";
 		        var data = {
         		    'path':path
     		    };

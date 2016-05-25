@@ -13,19 +13,19 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
 
-    logger.debug("admin/bug.js -- /admin/bug ...");
+    logger.debug("admin/author.js -- /admin/author ...");
 
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
         res.render('admin/login');
     } else {
-        doSendRequestGetAllBugs(res,cookies);
+        doSendRequestGetAuthor(res,cookies);
     }
 });
 
-function doSendRequestGetAllBugs(res,cookies){
-    var url = config.getBackendUrlPrefix() + "auth/bug/get-all-bugs";
+function doSendRequestGetAuthor(res,cookies){
+    var url = config.getBackendUrlPrefix() + "auth/admin/find-admin";
 
     var options = {
 	    url:url,
@@ -39,24 +39,24 @@ function doSendRequestGetAllBugs(res,cookies){
             var returnData = JSON.parse(body);
 
             if(returnData.statusCode != 0){
-                logger.error("admin/article.js -- auth/bug/get-all-bugs fail ..." +
+                logger.error("admin/author.js -- auth/admin/author fail ..." +
                     "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                 res.render('error/unknowerror');
 	        } else {
                 var path = "<li><a href = \"/admin/index\">Index</a></li>" +
-                "<li>Bug Manage</li>";
+                "<li>Author Manage</li>";
 
                 var data = {
-                    'bugs':returnData.data.bugs,
+                    'author':returnData.data.admin,
                     'path':path
                 }
-                res.render('admin/bug/bugIndex',{'data':data});
+                res.render('admin/author/authorIndex',{'data':data});
             }
         } else {
-            logger.error("admin/article.js -- auth/bug/get-all-bugs fail ..." +
+            logger.error("admin/author.js -- auth/admin/author fail ..." +
                 "error = " + error);
             if(response != null){
-                logger.error("admin/article.js -- auth/bug/get-all-bugs fail ..." +
+                logger.error("admin/article.js -- auth/admin/author fail ..." +
                     "response.statuCode = " + response.statusCode + "..." +
                     "response.body = " + response.body);
             }

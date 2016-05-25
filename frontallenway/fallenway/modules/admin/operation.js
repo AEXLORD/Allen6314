@@ -43,7 +43,7 @@ function doSendRequestGetRecords(res,cookies){
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
             		} else {
-                		var path = "<li><a href = \"/admin\">Index</a></li>" +
+                		var path = "<li><a href = \"/admin/index\">Index</a></li>" +
                             		"<li>Operation Manage</li>";
 
                 		var data = {

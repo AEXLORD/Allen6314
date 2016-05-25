@@ -70,7 +70,7 @@ router.get('/addArticle',function(req,res,next){
                 });
             }
     ],function(err,result){
-        var path = "<li><a href = \"/admin\">Index</a></li>" +
+        var path = "<li><a href = \"/admin/index\">Index</a></li>" +
                 "<li><a href = \"/admin/article/articleManage\">Article Manage</a></li>" +
                 "<li><a href = \"#\" class = \"active\">Add Article</a></li>";
         result.path = path;
@@ -233,7 +233,7 @@ router.get('/articleManage',function(req,res,next){
                    item.content = html;
                 });
 
-                var path = "<li><a href = \"/admin\">Index</a></li>" +
+                var path = "<li><a href = \"/admin/index\">Index</a></li>" +
                 "<li>Article Manage</li>";
 
                 var data = {

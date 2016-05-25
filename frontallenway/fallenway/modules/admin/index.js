@@ -12,11 +12,17 @@ var logger = new Logger().getLogger();
 router.get('',function(req,res,next){
     logger.debug("admin/index.js -- /admin/index ...");
 
-    var path = "<li><a href = \"/admin\" class = \"active\">Index</a></li>";
-    var data = {
-        'path':path
-    };
-    res.render('admin/login');
+    var cookies = mycookies.getMyCookies(req);
+    if(cookies['Authorization'] == 'undefined'){
+ 		logger.info("cookies[Authorization] == undefined......");
+		res.render('admin/login');
+	} else {
+        var path = "<li><a href = \"/admin\" class = \"active\">Index</a></li>";
+        var data = {
+            'path':path
+        };
+        res.render('admin/index');
+    }
 });
 
 module.exports = router;

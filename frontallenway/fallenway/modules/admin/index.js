@@ -16,7 +16,7 @@ router.get('',function(req,res,next){
     var data = {
         'path':path
     };
-    res.render('admin/index',{'data':data});
+    res.render('admin/login');
 });
 
 module.exports = router;

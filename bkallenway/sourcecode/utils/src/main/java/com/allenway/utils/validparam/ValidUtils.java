@@ -5,7 +5,9 @@ import org.springframework.util.StringUtils;
 /**
  * Created by wuhuachuan on 16/3/9.
  */
-public class ValidUtils {
+
+//abstract 防止实例化
+public abstract class ValidUtils {
 
     /**
      * 检测 id 是否合理

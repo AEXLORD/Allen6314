@@ -92,7 +92,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
         ],function(err,result){
             var path = "<li><a href = \"/visitor\" class = \"active\">Index</a></li>";
             result.path = path;
-            res.render('visitor/index',{'data':result});
+            res.render('v2/visitor/index',{'data':result});
         })
 });
 

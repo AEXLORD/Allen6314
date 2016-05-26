@@ -18,8 +18,8 @@ public interface ArticleDao extends JpaRepository<Article, String> {
     @Query("select article from Article article where isDelete=false and classifyId=:classifyId order by createDate")
     List<Article> findArticlesByClassifyId(@Param(value = "classifyId") String classifyId);
 
-    @Query("select article from Article article where isDelete=false order by createDate")
-    List<Article> findAllArticles();
+    @Query("select article.id,article.title,article.readNum from Article article where isDelete=false order by createDate")
+    List<Object[]> findAllArticles();
 
 //    @Query("select article from Article article where isDelete=false order by readNum desc limit 0,5")
 //    List<Article> findRecommendArticles();

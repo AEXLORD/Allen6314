@@ -212,17 +212,9 @@ public class ArticleController {
     @RequestMapping(value = {"/article/get-all-articles","/auth/article/get-all-articles"},method = RequestMethod.GET)
     public Object getAllArticles(){
         log.info("getAllArticles function ... ");
+
         ReturnTemplate returnTemplate = new ReturnTemplate();
-
-        List<Article> articles = articleService.findAllArticles();
-
-        articles
-            .parallelStream()
-            .forEach(param -> setArticleTagClassifyComment(param));
-
-        returnTemplate.addData("articles",articles);
-
-        log.info("getAllArticles function ... returnData  = " + returnTemplate.toString() );
+        returnTemplate.addData("articles",articleService.findAllArticles());
 
         return  returnTemplate;
     }

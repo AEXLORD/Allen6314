@@ -53,7 +53,22 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> findAllArticles() {
-        return articleDao.findAllArticles();
+
+        List<Object[]> objs = articleDao.findAllArticles();
+        List<Article> articles = new LinkedList<Article>();
+
+        objs
+            .parallelStream()
+            .forEach(param ->{
+                articles.add(new Article
+                                    .Builder()
+                                    .id(param[0])
+                                    .title(param[1])
+                                    .readNum(param[2])
+                                    .build());
+            });
+
+        return articles;
     }
 
     @Override

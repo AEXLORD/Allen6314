@@ -29,7 +29,7 @@ public class BaseEntity {
     @Id
     @GeneratedValue(generator = "systemUUID")
     @GenericGenerator(name="systemUUID",strategy="uuid2")
-    private String id;
+    protected String id;
 
     @JsonSerialize(using=CustomLocalDateTimeSerializer.class)
     @JsonDeserialize(using=CustomLocalDateTimeDeserializer.class)

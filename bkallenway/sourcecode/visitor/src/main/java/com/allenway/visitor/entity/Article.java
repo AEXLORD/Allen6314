@@ -35,6 +35,31 @@ public class Article extends BaseEntity {
     private transient List<Comment> comments;
     private transient int commentNum;
 
+    public Article(Builder buider){
+        super.id = buider.id;
+        this.title = buider.title;
+        this.readNum = buider.readNum;
+    }
 
+    public static class Builder{
+        private String id;
+        private String title;
+        private int readNum = 0;
 
+        public Builder id(Object id){
+            this.id = (String)id;
+            return this;
+        }
+        public Builder title(Object title){
+            this.title = (String)title;
+            return this;
+        }
+        public Builder readNum(Object readNum){
+            this.readNum = (int)readNum;
+            return this;
+        }
+        public Article build(){
+            return new Article(this);
+        }
+    }
 }

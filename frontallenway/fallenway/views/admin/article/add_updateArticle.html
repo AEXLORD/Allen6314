@@ -1,94 +1,89 @@
-{% extends '../common/header.html' %}
+<html>
+    <head>
+        <meta charset="utf8">
+        <title>愿无岁月可回首</title>
 
-{% block subIncludeFileBeforeBody %}
+        <link rel="stylesheet" href="/editorMd/css/editormd.min.css" />
+        <script src = "/javascripts/jquery.min.js" ></script>
+	    <script src="/editorMd/editormd.min.js"></script>
 
-    <link rel="stylesheet" href="/editorMd/css/editormd.min.css" />
-    
-    <style type="text/css">
-	   .table>tbody>tr>td {
-	    	border-top: none;
-	    }
-       .divider {
-           width:0px;
-       }
-       .page-header{
-           margin-bottom:20px;
-       }
-    </style>
-{% endblock %}
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)
+            },i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+            ga('create', 'UA-77363750-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </head>
+    <body style = "padding:20px;">
+        <form id = "addForm" action = "addArticle/doAdd" method = "post">
+            <input type = "hidden" value = "{{data.article.id}}" name = "id">
+	        <div>
+		        <div style="float:left">  
+                    <input class = "form-control" style="display:inline;width:700px;font-size:20px" 
+                        type = "text" id="title" name = "title" value = "{{data.article.title}}" placeholder="Title">
+		        </div>
+		        <div style="float:right">  
+			        <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>
+		        </div>
+		        <div style="clear:both"></div>
+	        </div>
+	
+            <div id="editormd" style="min-height:600px;margin-top:20px;font-size:16px;">
+                <textarea name = "mdData" style="display:none;" id="mdData" >{{data.article.content}}</textarea>
+	        </div>
 
-{% block mainContent  %}
-<form id = "addForm" action = "addArticle/doAdd" method = "post">
-    <input type = "hidden" value = "{{data.article.id}}" name = "id">
-	<div>
-		<div style="float:left">  
-            Title:&nbsp;&nbsp;<input class = "form-control" style="display:inline;width:300px;" type = "text" id="title" name = "title" value = "{{data.article.title}}">
-		</div>
-		<div style="float:right">  
-			<a class="btn btn-primary" href="/admin/article/articleManage">Back</a>
-		</div>
-		<div style="clear:both">
-			
-		</div>
-		
-	</div>
-	<div id="editormd" style="min-height:600px;">
-        <textarea name = "mdData" style="display:none;" id="mdData" >{{data.article.content}}</textarea>
-	</div>
-
-	<div>
-        Classify:&nbsp;&nbsp; <select class = "form-control" style="display:inline;width:300px;" id="classifyId" name = "classifyId">
-		    {% for classify in data.classifies %}
-			<option value="{{classify.id}}"> {{classify.name}} </option>
-            {% endfor %}
-		</select>
-        <br/>
-        Tag1:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId1" name = "tagId1">
-			{% for tag in data.tags %}
-			<option value="{{tag.id}}"> {{tag.name}} </option>
-            {% endfor %}
-		</select>
-        <br/>
-        Tag2:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId2" name = "tagId2">
-			<option value="">无</option>
-            {% for tag in data.tags %}
-			<option value="{{tag.id}}"> {{tag.name}} </option>
-            {% endfor %}
-		</select>
-        <br/>
-        Tag3:&nbsp;&nbsp;<select class = "form-control" style="display:inline;width:300px;" id="tagId3" name = "tagId3">
-			<option value="">无</option>
-			{% for tag in data.tags %}
-			<option value="{{tag.id}}"> {{tag.name}} </option>
-            {% endfor %}
-		</select>
-        <br/>
-        <button class="btn btn-primary" onclick="doAdd()">Publish</button>
-		&nbsp;&nbsp;&nbsp;<span style = "color:red" id = "publishWarn"></span>
-        <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>&nbsp;&nbsp;
-</form>
-
-{% endblock %}
-
-
-
-{% block subIncludeFileAfterBody %}
-    <script src="/javascripts/jquery.min.js"></script>
-	<script src="/editorMd/editormd.min.js"></script>
-	<script type="text/javascript">
+	        <div>
+                <div>
+                Classify:&nbsp;&nbsp; 
+                <select style="display:inline;width:100px;font-size:20px" id="classifyId" name = "classifyId">
+		            {% for classify in data.classifies %}
+			            <option value="{{classify.id}}"> {{classify.name}} </option>
+                    {% endfor %}
+		        </select>
+                <div>
+                <div style = "margin-top:15px;">
+                    Tag1:&nbsp;&nbsp;
+                    <select style="display:inline;width:100px;font-size:20px" id="tagId1" name = "tagId1">
+			            {% for tag in data.tags %}
+			            <option value="{{tag.id}}"> {{tag.name}} </option>
+                        {% endfor %}
+		            </select>
+                </div>
+                <div style = "margin-top:15px;">
+                Tag2:&nbsp;&nbsp;
+                <select style="display:inline;width:100px;font-size:20px" id="tagId2" name = "tagId2">
+			        <option value="">无</option>
+                    {% for tag in data.tags %}
+			        <option value="{{tag.id}}"> {{tag.name}} </option>
+                    {% endfor %}
+		        </select>
+                </div>
+                <div style = "margin-top:15px;">
+                    Tag3:&nbsp;&nbsp;
+                    <select style="display:inline;width:100px;font-size:20px" id="tagId3" name = "tagId3">
+			        <option value="">无</option>
+			        {% for tag in data.tags %}
+			        <option value="{{tag.id}}"> {{tag.name}} </option>
+                    {% endfor %}
+		        </select>
+                </div>
+                <div style = "margin-top:15px;">
+                    <button class="btn btn-primary" onclick="doAdd()">Publish</button>
+	                &nbsp;&nbsp;&nbsp;<span style = "color:red" id = "publishWarn"></span>
+                    <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>&nbsp;&nbsp;
+                </div>
+            </div>
+        </form>
+    </body>
+    <script type="text/javascript">
 	    $(function() {
 	        var editor = editormd("editormd", {
-	            path : "/editorMd/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
+	            path : "/editorMd/lib/" 
 	        });
-
-	        /*
-	        // or
-	        var editor = editormd({
-	            id   : "editormd",
-	            path : "../lib/"
-	        });
-	        */
 	    })
 
 	    function doAdd(){
@@ -104,19 +99,6 @@
 		    	}
 
                 $('#addForm').submit();
-				<!--$.post(url,data-->
-                        <!--,function(data,status){-->
-
-					<!--console.log("data1,status = " + data + " " + status);-->
-			  <!--      if (status == "success" && data == "succe-->ss") {
-						
-						<!--var url = "/"-->
-						<!--window.location.href = url;-->
-					<!--} else {-->
-						<!--alert("服务器保存出错，请备份稍后再次保存！");-->
-			  <!--[>  <]    }-->
-				<!--}-->
-                <!--)-->
 	    	} else {
 	    		;
 	    	}
@@ -137,4 +119,7 @@
 	    	return valid;
 	    }
 	</script>
-{% endblock %}
+</html>
+
+
+

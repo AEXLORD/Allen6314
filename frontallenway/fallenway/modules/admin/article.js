@@ -2,6 +2,7 @@ var request = require('request');
 var async = require('async');
 var express = require('express');
 var md = require('node-markdown').Markdown;
+//var md = require("markdown").markdown;
 
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
@@ -385,6 +386,7 @@ router.get('/articleManage',function(req,res,next){
 
                     articles.forEach(function(item){
                         var html = md(item.content);
+                        //var html = md.toHTML(item.content);
                         item.content = html;
                     });
 

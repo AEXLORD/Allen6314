@@ -3,7 +3,7 @@
 {% block mainContent  %}
     <div style = "width:70%;border:1px solid #ddd;padding:15px;margin:auto auto">
         <h2>{{data.article.title}}</h2>
-        <hr/>
+        <hr style = "background:none repeat scroll 0 0 #ddd;border:thin none;height:5px;margin-left:0px;width:15%"/>
         <div>
             {% autoescape false %}{{data.article.content}}{% endautoescape %}
         </div>

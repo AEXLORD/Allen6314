@@ -12,7 +12,10 @@ public interface TagService {
 
     Tag findTagById(String tagId);
 
-    Tag save(Tag tag);
+    Tag saveTag(Tag tag);
 
-    void delete(String id);
+    void deleteTagById(String id);
+
+    //得到该tag 下的文章数量
+    int getArticleSumNumByTag(String tagId);
 }

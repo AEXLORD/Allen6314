@@ -11,9 +11,14 @@ import org.springframework.data.repository.query.Param;
 
 public interface AdminDao extends JpaRepository<Admin, String> {
 
-    @Query("select admin from Admin admin where isDelete=false")
-    Admin findAdmin();
+//    @Query("select admin from Admin admin where isDelete=false ")
+//    Admin findAdmin();
 
-    @Query("select admin from Admin admin where isDelete=false and username=:username")
-    Admin findAdminByUsername(@Param(value = "username") String username);
+//    @Query("select admin from Admin admin where isDelete=false and username=:username")
+//    Admin findAdminByUsername(@Param(value = "username") String username);
+
+
+    Admin findAdminByUsernameAndIsDelete(String username,boolean isDelete);
+
+    Admin findAdminByIsDelete(boolean isDelete);
 }

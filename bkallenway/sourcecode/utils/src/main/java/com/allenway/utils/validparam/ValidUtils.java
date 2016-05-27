@@ -12,7 +12,7 @@ public abstract class ValidUtils {
     /**
      * 检测 id 是否合理
      * @param id
-     * @return
+     * @return true:参数合法 ; false:参数非法
      */
     public static boolean validIdParam(String id) {
         if(StringUtils.isEmpty(id)){

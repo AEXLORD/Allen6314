@@ -13,16 +13,22 @@ import java.util.List;
 /**
  * Created by wuhuachuan on 16/4/2.
  */
-public interface TagDao  extends JpaRepository<Tag, String> {
+public interface TagDao extends JpaRepository<Tag, String> {
 
-    @Query("select tag from Tag tag where isDelete=false")
-    List<Tag> findAllTags();
+    List<Tag> findTagByIsDelete(boolean isDelete);
 
-    @Query("select tag from Tag tag where isDelete=false and id = :id")
-    Tag findTagById(@Param(value = "id") String tagId);
+    Tag findTagByIdAndIsDelete(String tagId,boolean isDelete);
 
     @Modifying
     @Transactional
-    @Query("update Tag set isDelete=true where id=:id")
-    void deleteTag(@Param(value = "id")String id);
+    @Query(value = "update Tag set isDelete=true where id=:id")
+    void deleteTagById(@Param(value = "id")String id);
+
+    /**
+     * 得到该tag 下的文章数量
+     * @param tagId
+     * @return
+     */
+    @Query(value = "select count(id) from tb_article where is_delete=false and tag_id=:tagId",nativeQuery = true)
+    int getArticleSumNumByTag(@Param("tagId")String tagId);
 }

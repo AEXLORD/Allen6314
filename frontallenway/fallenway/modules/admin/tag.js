@@ -11,7 +11,6 @@ var mycookies = new MyCookies();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
-
 //Tag首页 -- 查找全部的tag
 router.get('',function(req,res,next){
 
@@ -85,7 +84,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
 		res.render('admin/login');
 	} else {
 
-        var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-tag/" + req.query.id;
+        var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-tagid?tagid=" + req.query.id;
 	    var options = {
             url:url,
             headers:{

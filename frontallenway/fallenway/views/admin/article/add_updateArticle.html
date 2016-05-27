@@ -36,46 +36,18 @@
                 <textarea name = "mdData" style="display:none;" id="mdData" >{{data.article.content}}</textarea>
 	        </div>
 
-	        <div>
-                <div>
-                Classify:&nbsp;&nbsp; 
-                <select style="display:inline;width:100px;font-size:20px" id="classifyId" name = "classifyId">
-		            {% for classify in data.classifies %}
-			            <option value="{{classify.id}}"> {{classify.name}} </option>
+            <div style = "margin-top:15px;">
+                Tag:&nbsp;&nbsp;
+                <select style="display:inline;width:100px;font-size:20px" id="tagId" name = "tagId">
+		            {% for tag in data.tags %}
+		            <option value="{{tag.id}}"> {{tag.name}} </option>
                     {% endfor %}
-		        </select>
-                <div>
-                <div style = "margin-top:15px;">
-                    Tag1:&nbsp;&nbsp;
-                    <select style="display:inline;width:100px;font-size:20px" id="tagId1" name = "tagId1">
-			            {% for tag in data.tags %}
-			            <option value="{{tag.id}}"> {{tag.name}} </option>
-                        {% endfor %}
-		            </select>
-                </div>
-                <div style = "margin-top:15px;">
-                Tag2:&nbsp;&nbsp;
-                <select style="display:inline;width:100px;font-size:20px" id="tagId2" name = "tagId2">
-			        <option value="">无</option>
-                    {% for tag in data.tags %}
-			        <option value="{{tag.id}}"> {{tag.name}} </option>
-                    {% endfor %}
-		        </select>
-                </div>
-                <div style = "margin-top:15px;">
-                    Tag3:&nbsp;&nbsp;
-                    <select style="display:inline;width:100px;font-size:20px" id="tagId3" name = "tagId3">
-			        <option value="">无</option>
-			        {% for tag in data.tags %}
-			        <option value="{{tag.id}}"> {{tag.name}} </option>
-                    {% endfor %}
-		        </select>
-                </div>
-                <div style = "margin-top:15px;">
-                    <button class="btn btn-primary" onclick="doAdd()">Publish</button>
-	                &nbsp;&nbsp;&nbsp;<span style = "color:red" id = "publishWarn"></span>
-                    <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>&nbsp;&nbsp;
-                </div>
+	            </select>
+            </div>
+            <div style = "margin-top:15px;">
+                <button class="btn btn-primary" onclick="doAdd()">Publish</button>
+                &nbsp;&nbsp;&nbsp;<span style = "color:red" id = "publishWarn"></span>
+                <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>&nbsp;&nbsp;
             </div>
         </form>
     </body>
@@ -94,7 +66,6 @@
 		    	var data = {
 		    		"title":$('#title').val(),
 		    		"mdData":$('#mdData').val(),
-		    		"classifyId":$('#classifyId').val(),
 		    		"tagId":$('#tagId').val(),
 		    	}
 

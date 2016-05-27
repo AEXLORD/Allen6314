@@ -15,49 +15,24 @@ router.get('/get-articles-by-tag',function(req,res,next){
     logger.debug("id = " + req.query.id);
 
     async.waterfall([
-            //请求 分类 数据
-            function(callback){
-                request(config.getBackendUrlPrefix() + "classify/find-all-first-level-classifies",function(error,response,body){
-                    if(!error && response.statusCode == 200){
-                        var returnData = JSON.parse(body);
-
-                        if(returnData.statusCode != 0){
-                            logger.error("visitor/index.js -- classify/find-all-first-level-classifies fail ..." +
-                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                            res.render('error/unknowerror');
-                        } else {
-                             callback(null,returnData.data);
-                        }
-                     } else {
-                        logger.error("visitor/index.js -- classify/find-all-first-level-classifies fail ..." +
-                                   "error = " + error);
-                        if(response != null){
-                            logger.error("visitor/index.js -- classify/find-all-first-level-classifies fail ..." +
-                                   "response.statuCode = " + response.statusCode + "..." +
-                                   "response.body = " + response.body);
-                        }
-                        res.render('error/unknowerror');
-                     }
-                });
             //请求 主页文章 数据
-            },function(data,callback){
-                request(config.getBackendUrlPrefix() + "article/find-articles-by-tag/" + req.query.id,function(error,response,body){
+            function(callback){
+                request(config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" + req.query.id,function(error,response,body){
         	        if(!error && response.statusCode == 200){
             		    var returnData = JSON.parse(body);
 
             		    if(returnData.statusCode != 0){
-                            logger.error("visitor/tag.js -- /visitor/tag/get-articles-by-tag fail ..." +
+                            logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
                                 "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                             res.render('error/unknowerror');
             	    	} else {
-                            data.articles = returnData.data.articles;
-                            callback(null,data);
+                            callback(null,returnData.data);
             		    }
         	        } else {
-                        logger.error("visitor/tag.js -- /visitor/tag/get-articles-by-tag fail ..." +
+                        logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
                             "error = " + error);
                     if(response != null){
-                            logger.error("visitor/tag.js -- /visitor/tag/get-articles-by-tag fail ..." +
+                            logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
                                 "response.statuCode = " + response.statusCode + "..." +
                                 "response.body = " + response.body);
                          }
@@ -90,8 +65,6 @@ router.get('/get-articles-by-tag',function(req,res,next){
                 });
             }
         ],function(err,result){
-            var path = "<li><a href = \"/visitor\" class = \"active\">Index</a></li>";
-            result.path = path;
             res.render('visitor/v2/index',{'data':result});
         })
 });

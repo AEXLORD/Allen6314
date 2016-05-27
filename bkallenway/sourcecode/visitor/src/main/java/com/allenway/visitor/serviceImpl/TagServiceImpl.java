@@ -19,21 +19,26 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAllTags() {
-        return tagDao.findAllTags();
+        return tagDao.findTagByIsDelete(false);
     }
 
     @Override
     public Tag findTagById(String tagId) {
-        return tagDao.findTagById(tagId);
+        return tagDao.findTagByIdAndIsDelete(tagId, false);
     }
 
     @Override
-    public Tag save(Tag tag) {
+    public Tag saveTag(Tag tag) {
         return tagDao.saveAndFlush(tag);
     }
 
     @Override
-    public void delete(String id) {
-        tagDao.deleteTag(id);
+    public void deleteTagById(String id) {
+        tagDao.deleteTagById(id);
+    }
+
+    @Override
+    public int getArticleSumNumByTag(String tagId) {
+        return tagDao.getArticleSumNumByTag(tagId);
     }
 }

@@ -1,8 +1,9 @@
+var express = require('express');
+var router = express.Router();
+
+var md = require('node-markdown').Markdown;
 var request = require('request');
 var async = require('async');
-var express = require('express');
-var md = require('node-markdown').Markdown;
-//var md = require("markdown").markdown;
 
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
@@ -13,7 +14,6 @@ var mycookies = new MyCookies();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
-var router = express.Router();
 
 
 //添加文章 -- 跳到添加文章首页
@@ -34,15 +34,7 @@ router.get('/addArticle',function(req,res,next){
 //添加文章 -- 获得添加文章的一些参数
 function doSendRequestGetAddArticleRequiredParams(res,cookies){
 
-	var urlClassifies = config.getBackendUrlPrefix() + "auth/classify/find-all-first-level-classifies";
-	var optionsClassify = {
-        url:urlClassifies,
-        headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
-        }
-    }
-
-	var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
+    var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
         headers:{
@@ -51,37 +43,13 @@ function doSendRequestGetAddArticleRequiredParams(res,cookies){
     }
 
     async.waterfall([
-        //请求文章分类
+        //请求tags
         function(callback){
-            request(optionsClassify,function(error,response,body){
-                if(!error && response.statusCode == 200 ){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode == 0){
-                        callback(null,returnData.data);
-                    } else {
-                        logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
-                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    }
-                } else {
-                    logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
-                                "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
-                                "response.statuCode = " + response.statusCode + "..." +
-                                "response.body = " + response.body);
-                    }
-                    res.render('error/unknowerror');
-                }
-            });
-            //请求tags
-        },function(data,callback){
             request(optionsTags,function(error,response,body){
                 if(!error && response.statusCode == 200 ){
                     var returnData = JSON.parse(body);
                     if(returnData.statusCode == 0){
-                        data.tags = returnData.data.tags;
-                        callback(null,data);
+                        callback(null,returnData.data);
                     } else {
                         logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                                 "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
@@ -134,10 +102,7 @@ function doSendRequestDoAdd(res,req,cookies){
             'id': req.body.id,
         	'title': req.body.title,
          	'content': req.body.mdData,
-         	'classifyId': req.body.classifyId,
-         	'tagId1': req.body.tagId1,
-         	'tagId2': req.body.tagId2,
-         	'tagId3': req.body.tagId3
+         	'tagId': req.body.tagId,
     	}
 
     var cookies = mycookies.getMyCookies(req);
@@ -246,22 +211,6 @@ router.get('/modifyArticle',function(req,res,next){
 //修改文章 -- 获得修改文章的一些参数
 function doSendRequestGetModifyArticleRequiredParams(req,res,cookies){
 
-    var urlClassifies = config.getBackendUrlPrefix() + "auth/classify/find-all-first-level-classifies";
-	var optionsClassify = {
-        url:urlClassifies,
-        headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
-        }
-    }
-
-	var urlClassifies = config.getBackendUrlPrefix() + "auth/classify/find-all-first-level-classifies";
-	var optionsClassify = {
-        url:urlClassifies,
-        headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
-        }
-    }
-
 	var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
@@ -269,7 +218,6 @@ function doSendRequestGetModifyArticleRequiredParams(req,res,cookies){
             'Authorization': "Bearer " + cookies['Authorization']
         }
     }
-
 
 	var urlFindArticle = config.getBackendUrlPrefix() + "auth/article/find-article-by-id?id=" + req.query.id;
 	var optionFindArticle = {
@@ -280,38 +228,13 @@ function doSendRequestGetModifyArticleRequiredParams(req,res,cookies){
     }
 
     async.waterfall([
-        //请求文章分类
-        function(callback){
-            request(optionsClassify,function(error,response,body){
-                if(!error && response.statusCode == 200 ){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode == 0){
-                        callback(null,returnData.data);
-                    } else {
-                        logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
-                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    }
-                } else {
-                    logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
-                            "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js -- auth/classify/find-all-first-level-classifies fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
-                    res.render('error/unknowerror');
-                }
-            });
-
-            //请求tags
-        },function(data,callback){
+        //请求tags
+       function(callback){
             request(optionsTags,function(error,response,body){
                 if(!error && response.statusCode == 200 ){
                     var returnData = JSON.parse(body);
                     if(returnData.statusCode == 0){
-                        data.tags = returnData.data.tags;
-                        callback(null,data);
+                        callback(null,returnData.data);
                     } else {
                         logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
@@ -370,7 +293,7 @@ router.get('/articleManage',function(req,res,next){
  		logger.info("cookies[Authorization] == undefined......");
         res.render('admin/login');
     } else {
-        var url = config.getBackendUrlPrefix() + "auth/article/get-all-articles";
+        var url = config.getBackendUrlPrefix() + "auth/article/find-all-articles";
 	    var options = {
             url:url,
             headers:{
@@ -385,9 +308,7 @@ router.get('/articleManage',function(req,res,next){
                     var articles = returnData.data.articles;
 
                     articles.forEach(function(item){
-                        var html = md(item.content);
-                        //var html = md.toHTML(item.content);
-                        item.content = html;
+                        item.content = md(item.content);
                     });
 
                     var path = "<li><a href = \"/admin/index\">Index</a></li>" +

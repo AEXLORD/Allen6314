@@ -19,4 +19,6 @@ public interface ArticleService {
     List<Article> findAllArticles();
 
     List<Article> findArticlesByTagId(String tagId);
+
+    Article findRandomArticle();
 }

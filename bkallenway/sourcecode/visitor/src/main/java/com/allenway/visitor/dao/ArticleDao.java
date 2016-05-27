@@ -17,6 +17,9 @@ public interface ArticleDao extends JpaRepository<Article, String> {
     List<Article> findAllArticles();
 
     List<Article> findArticleByTagId(String tagId);
+
+    @Query(value = "select * from tb_article order by RAND() LIMIT 1",nativeQuery = true)
+    Article findRandomArticle();
 }
 
 

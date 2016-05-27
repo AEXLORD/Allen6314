@@ -109,4 +109,11 @@ public class ArticleController {
             throw new IllegalArgumentException("tagId is invalid(null or sql attck)");
         }
     }
+
+    @RequestMapping(value = "/article/find-random-article",method = RequestMethod.GET)
+    public Object findRandomArticle(){
+        ReturnTemplate returnTemplate = new ReturnTemplate();
+        returnTemplate.addData("article",articleService.findRandomArticle());
+        return returnTemplate;
+    }
 }

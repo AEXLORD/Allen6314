@@ -11,6 +11,7 @@ var config = new Config();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
+//根据文章 id 获得具体的文章
 router.get('/getArticleDetail',function(req,res,next){
 
     logger.debug("visitor/article.js -- /article/getArticleDetail ...");
@@ -71,5 +72,35 @@ router.get('/getArticleDetail',function(req,res,next){
         res.render('visitor/v2/articleDetail',{'data':result});
     });
 });
+
+
+//随机获得一篇文章
+router.get('/get-random-article',function(req,res,next){
+    request(config.getBackendUrlPrefix() + "article/find-random-article",function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
+            if(returnData.statusCode != 0){
+                logger.error("visitor/article.js -- article/get-random-article fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
+            } else {
+                var article = returnData.data.article;
+                article.content = md(article.content);
+                res.render('visitor/v2/articleDetail',{'data':returnData.data});
+            }
+        } else {
+            logger.error("visitor/article.js -- article/get-random-article fail ..." +
+                "error = " + error);
+            if(response != null){
+                logger.error("visitor/article.js -- article/get-random-article fail ..." +
+                    "response.statuCode = " + response.statusCode + "..." +
+                    "response.body = " + response.body);
+            }
+            res.render('error/unknowerror');
+        }
+    });
+})
+
+
 
 module.exports = router;

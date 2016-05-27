@@ -1,6 +1,7 @@
 package com.allenway.visitor.serviceImpl;
 
 import com.allenway.visitor.dao.ArticleDao;
+import com.allenway.visitor.dao.ExtendCrudDao;
 import com.allenway.visitor.entity.Article;
 import com.allenway.visitor.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleDao articleDao;
+
+    @Autowired
+    private ExtendCrudDao extendCrudDao;
 
     @Override
     public Article saveArticle(Article article) {
@@ -42,5 +46,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> findArticlesByTagId(String tagId) {
         return articleDao.findArticleByTagId(tagId);
+    }
+
+    @Override
+    public Article findRandomArticle() {
+//        return (Article) extendCrudDao.findRandomArticle();
+        return articleDao.findRandomArticle();
+
     }
 }

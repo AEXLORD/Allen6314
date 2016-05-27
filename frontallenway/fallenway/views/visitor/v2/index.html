@@ -58,13 +58,22 @@
 
 
 {% block mainContent %}
+    
+    <div style = "float:left">
+        <div class = "widget" style = "">
+            <span style = "font-weight:bold">每日随机复习一篇</span>
+            <div class = "tagcloud clearfix">
+                <a href = "/visitor/article/get-random-article">Just Do It</a>
+            </div>
+        </div>
 
-    <div class = "widget" style = "float:left">
-        <span style = "font-weight:bold">Tag Cloud</span>
-        <div class = "tagcloud clearfix">
-            {% for tag in data.tags %}
-            <a href = "/visitor/tag/get-articles-by-tag?id={{tag.id}}">{{tag.name}}</a>
-            {% endfor %}
+        <div class = "widget" style = "margin-top:20px;">
+            <span style = "font-weight:bold">Tag Cloud</span>
+            <div class = "tagcloud clearfix">
+                {% for tag in data.tags %}
+                <a href = "/visitor/tag/get-articles-by-tag?id={{tag.id}}">{{tag.name}}</a>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class = "articleBox">

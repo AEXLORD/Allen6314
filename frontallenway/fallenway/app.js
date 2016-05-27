@@ -17,10 +17,12 @@ var visitor_index = require('./modules/visitor/index');
 var visitor_article = require('./modules/visitor/article');
 var visitor_aboutme = require('./modules/visitor/aboutme');
 var visitor_tag = require('./modules/visitor/tag');
+var visitor_play = require('./modules/visitor/play');
 app.use('/visitor',visitor_index);
 app.use('/visitor/article',visitor_article);
 app.use('/visitor/aboutme',visitor_aboutme);
 app.use('/visitor/tag',visitor_tag);
+app.use('/visitor/play',visitor_play);
 
 //管理员
 var admin_index = require('./modules/admin/index.js');

@@ -19,8 +19,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
 
-    @Autowired
-    private ExtendCrudDao extendCrudDao;
+//    @Autowired
+//    private ExtendCrudDao extendCrudDao;
 
     @Override
     public Article saveArticle(Article article) {

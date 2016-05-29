@@ -1,0 +1,25 @@
+{% extends '../common/header.html' %}
+
+{% block mainContent  %}
+    <div style = "width:70%;border:1px solid #ddd;padding:15px;margin:auto auto">
+        <h2>Links ......</h2>
+        <hr/>
+        <div>
+            <div>
+                <p><a href = "https://github.com/pzxwhc" target="_blank">1. My github</a>
+                </p>
+            </div>
+            <div>
+                <p><a href = "https://www.zhihu.com/people/wuhuachuan" target="_blank">2. My zhihu</a>
+                </p>
+            </div>
+        </div>
+
+        <div style= "width:100%">
+            <div style = "float:right">
+                <input type="button" class="btn btn-sm btn-primary" value="Back" onclick = "window.history.go(-1);">
+            </div>
+            <div style = "clear:both"></div>
+        </div>
+    </div>
+{% endblock %}

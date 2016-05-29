@@ -5,16 +5,16 @@ var request = require('request');
 var async = require('async');
 var md = require('node-markdown').Markdown;
 
-var Config = require('../../config/globalconfig.js');
+var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
-var Logger = require('../../config/logconfig.js');
+var Logger = require('../../../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 //根据文章 id 获得具体的文章
 router.get('/getArticleDetail',function(req,res,next){
 
-    logger.debug("visitor/article.js -- /article/getArticleDetail ...");
+    logger.debug("visitor/v2/learning/article.js -- /learning/article/getArticleDetail ...");
 
     async.waterfall([
             //请求 文章 数据
@@ -69,7 +69,7 @@ router.get('/getArticleDetail',function(req,res,next){
                 });
             }
     ],function(err,result){
-        res.render('visitor/v2/articleDetail',{'data':result});
+        res.render('visitor/v3/learning/articleDetail',{'data':result});
     });
 });
 
@@ -86,7 +86,7 @@ router.get('/get-random-article',function(req,res,next){
             } else {
                 var article = returnData.data.article;
                 article.content = md(article.content);
-                res.render('visitor/v2/articleDetail',{'data':returnData.data});
+                res.render('visitor/v3/learning/articleDetail',{'data':returnData.data});
             }
         } else {
             logger.error("visitor/article.js -- article/get-random-article fail ..." +

@@ -1,44 +1,44 @@
 var express = require('express');
-var request = require('request');
-var async = require('async');
-var Config = require('../../config/globalconfig.js');
-
-var config = new Config();
 var router = express.Router();
+var request = require('request');
 
-var Logger = require('../../config/logconfig.js');
+var async = require('async');
+
+var Config = require('../../../../config/globalconfig.js');
+var config = new Config();
+
+var Logger = require('../../../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
-router.get('/get-articles-by-tag',function(req,res,next){
+router.get('', function(req, res, next) {
 
-    logger.debug("visitor/tag.js -- /visitor/tag/get-articles-by-tag ...");
-    logger.debug("id = " + req.query.id);
+    logger.debug("visitor/v2/visitor_learning/index.js -- /learning/visitor ...");
 
     async.waterfall([
             //请求 主页文章 数据
             function(callback){
-                request(config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" + req.query.id,function(error,response,body){
-        	        if(!error && response.statusCode == 200){
-            		    var returnData = JSON.parse(body);
+                request(config.getBackendUrlPrefix() + "article/find-all-articles",function(error,response,body){
+                    if(!error && response.statusCode == 200){
+                        var returnData = JSON.parse(body);
 
-            		    if(returnData.statusCode != 0){
-                            logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
-                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        if(returnData.statusCode != 0){
+                            logger.error("visitor/index.js -- article/find-all-articles fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                             res.render('error/unknowerror');
-            	    	} else {
+                         } else {
                             callback(null,returnData.data);
-            		    }
-        	        } else {
-                        logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
-                            "error = " + error);
-                    if(response != null){
-                            logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
-                                "response.statuCode = " + response.statusCode + "..." +
-                                "response.body = " + response.body);
-                         }
+                        }
+                     } else {
+                        logger.error("visitor/index.js -- article/find-all-articles fail ..." +
+                                   "error = " + error);
+                        if(response != null){
+                            logger.error("visitor/index.js -- article/find-all-articles fail ..." +
+                                   "response.statuCode = " + response.statusCode + "..." +
+                                   "response.body = " + response.body);
+                        }
                         res.render('error/unknowerror');
-        	        }
-    	        });
+                     }
+                });
             //请求 标签 数据
             },function(data,callback){
                 request(config.getBackendUrlPrefix() + "tag/find-all-tags",function(error,response,body){
@@ -65,7 +65,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
                 });
             }
         ],function(err,result){
-            res.render('visitor/v2/index',{'data':result});
+            res.render('visitor/v3/learning/index',{'data':result});
         })
 });
 

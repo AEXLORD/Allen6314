@@ -13,16 +13,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //游客
-var visitor_index = require('./modules/visitor/index');
-var visitor_article = require('./modules/visitor/article');
-var visitor_aboutme = require('./modules/visitor/aboutme');
-var visitor_tag = require('./modules/visitor/tag');
-var visitor_play = require('./modules/visitor/play');
-app.use('/visitor',visitor_index);
-app.use('/visitor/article',visitor_article);
+var visitor_learning_index = require('./modules/visitor/v2/learning/index');
+var visitor_learning_article = require('./modules/visitor/v2/learning/article');
+var visitor_learning_tag = require('./modules/visitor/v2/learning/tag');
+app.use('/visitor/learning/index',visitor_learning_index);
+app.use('/visitor/learning/article',visitor_learning_article);
+app.use('/visitor/learning/tag',visitor_learning_tag);
+
+var visitor_aboutme = require('./modules/visitor/v2/me/aboutme');
 app.use('/visitor/aboutme',visitor_aboutme);
-app.use('/visitor/tag',visitor_tag);
+
+var visitor_play = require('./modules/visitor/v2/play/play');
 app.use('/visitor/play',visitor_play);
+
 
 //管理员
 var admin_index = require('./modules/admin/index.js');

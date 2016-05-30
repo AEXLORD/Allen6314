@@ -17,6 +17,11 @@
 {% block subMainContent  %}
     Tag Name : 
     <input type = "text" class = "form-control" id = "tagName" name = "name" style = "display:inline;width:20%"> &nbsp;&nbsp;
+    <select class = "form-control" id = "moduleId" name = "moduleId" style = "width:20%;display:inline-block">
+        {% for module in data.modules %}
+            <option value = "{{module.id}}">{{module.name}}</option>
+        {% endfor %}
+    </select>
     <button class = "btn btn-primary btn-sm" onclick = "addTag()">Add Tag</button>
     <span id = "addTagWarn" style = "color:red"></span>
     <h3>Tag List</h3>
@@ -62,9 +67,10 @@ function addTag(){
     
     $('#addTagWarn').empty();
     var name = $('#tagName').val();
+    var moduleId = $('#moduleId').val();
 
-    if(name != null && name.trim() != ""){
-        $.post('/admin/tag/add-tag',{name:name},function(data,status){
+    if(name != null && name.trim() != "" && moduleId != null && moduleId.trim() != ""){
+        $.post('/admin/tag/add-tag',{name:name,moduleId:moduleId},function(data,status){
             if(status == 'success'){
                 var tag = data.tag;
                 $('.tagItem').append(
@@ -79,7 +85,7 @@ function addTag(){
             }
         })
     } else {
-       $('#addTagWarn').append("&nbsp;&nbsp;Tag Name can not be empty!");
+       $('#addTagWarn').append("&nbsp;&nbsp;Tag Name or Module can not be empty!");
     }
 }
 

@@ -38,7 +38,7 @@ function addModule(){
     $('#addModuleWarn').empty();
     var name = $('#moduleName').val();
     if(name != null && name.trim() != ""){
-        $.post('/admin/module/add-module',{name:name},function(data,status){
+        $.post('/admin/module/add-module',{name:name,moduleId:moduleId},function(data,status){
             if(status == 'success'){
                 var module = data.module;
                 $('.moduleItem').append(

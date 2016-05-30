@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
+
 var request = require('request');
+var async = require('async');
 
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
@@ -21,54 +23,83 @@ router.get('',function(req,res,next){
  		logger.info("cookies[Authorization] == undefined......");
 		res.render('admin/login');
 	} else {
-        	doSendRequestFindAllTags(res,cookies);
+        async.waterfall([
+            //请求全部tags
+            function(callback){
+                var url = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
+	            var options = {
+                        url:url,
+                        headers:{
+                            'Authorization': "Bearer " + cookies['Authorization']
+                        }
+                }
+
+                request(options,function(error,response,body){
+                    if(!error && response.statusCode == 200){
+                        var returnData = JSON.parse(body);
+
+                        if(returnData.statusCode != 0){
+                            logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
+                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                            res.render('error/unknowerror');
+                         } else {
+                            callback(null,returnData.data);
+                        }
+                    } else {
+                        logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
+                            "error = " + error);
+                        if(response != null){
+                            logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
+                                "response.statuCode = " + response.statusCode + "..." +
+                                "response.body = " + response.body);
+                        }
+                        res.render('error/unknowerror');
+                    }
+
+                })
+                //请求module
+            },function(data,callback){
+                var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
+	            var options = {
+                        url:url,
+                        headers:{
+                            'Authorization': "Bearer " + cookies['Authorization']
+                        }
+                }
+                request(options,function(error,response,body){
+                if(!error && response.statusCode == 200 ){
+                    var returnData = JSON.parse(body);
+                    if(returnData.statusCode == 0){
+                        data.modules = returnData.data.modules;
+                        callback(null,data);
+                    } else {
+                        logger.error("admin/tag.js -- auth/tag/find-all-modules fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    }
+                } else {
+                    logger.error("admin/tag.js -- auth/tag/find-all-modules ..." +
+                        "error = " + error);
+                    if(response != null){
+                        logger.error("admin/tag.js --auth/tag/find-all-modules fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
+        }
+    	],function(err,result){
+            var path = "<li><a href = \"/admin/index\">Index</a></li>" +
+                    "<li>Tag Manage</li>";
+
+            result.path = path;
+            res.render('admin/tag/tagIndex',{'data':result});
+	    })
     }
 });
 
 
-
-
-//Tag首页 -- 查找全部的tag
-function doSendRequestFindAllTags(res,cookies){
-
-    var url = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
-	var options = {
-        url:url,
-        headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
-        }
-    }
-
-    request(options,function(error,response,body){
-        if(!error && response.statusCode == 200){
-            var returnData = JSON.parse(body);
-
-            if(returnData.statusCode != 0){
-                logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
-                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                res.render('error/unknowerror');
-            } else {
-                var path = "<li><a href = \"/admin/index\">Index</a></li>" +
-                    "<li>Tag Manage</li>";
-
-                var data = {
-                    'tags':returnData.data.tags,
-                    'path':path
-                }
-               	res.render('admin/tag/tagIndex',{'data':data});
-            }
-        } else {
-            logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
-                "error = " + error);
-            if(response != null){
-                logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
-                    "response.statuCode = " + response.statusCode + "..." +
-                    "response.body = " + response.body);
-            }
-            res.render('error/unknowerror');
-        }
-    });
-}
 
 
 
@@ -131,7 +162,7 @@ router.post('/add-tag',function(req,res,next){
 	} else {
 
         var url = config.getBackendUrlPrefix() + "auth/tag/add-tag";
-        var data = {name:req.body.name};
+        var data = {name:req.body.name,moduleId:req.body.moduleId};
 
         var options = {
             url:url,

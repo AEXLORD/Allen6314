@@ -6,6 +6,8 @@ import com.allenway.visitor.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by wuhuachuan on 16/5/30.
  */
@@ -16,7 +18,12 @@ public class ModuleServiceImpl implements ModuleService{
     private ModuleDao moduleDao;
 
     @Override
-    public void addModule(Module module) {
-        moduleDao.saveAndFlush(module);
+    public Module addModule(Module module) {
+        return moduleDao.saveAndFlush(module);
+    }
+
+    @Override
+    public List<Module> findAllModules() {
+        return moduleDao.findModuleByIsDelete(false);
     }
 }

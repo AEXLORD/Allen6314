@@ -1,0 +1,58 @@
+{% extends '../common/header_leftSide.html' %}
+
+{% block subIncludeFileBeforeBody %}
+        <style type = "text/css">
+            .table tbody > tr > td {
+                padding:0;
+            }
+            .table>thead>tr>td {
+                padding:0;
+            }
+            .table tbody > tr > td:first-child {
+                padding:0px;
+            }
+        </style>
+{% endblock %}
+
+{% block subMainContent  %}
+    Module Name : 
+    <input type = "text" class = "form-control" id = "moduleName" name = "name" style = "display:inline;width:20%"> &nbsp;&nbsp;
+    <button class = "btn btn-primary btn-sm" onclick = "addModule()">Add Module</button>
+    <span id = "addModuleWarn" style = "color:red"></span>
+    <h3>Module列表</h3>
+    <table class = "table table-striped">
+        <thead>
+            <td>module Name</td>
+         </thead>
+        <tbody class = "moduleItem">
+            {% for module in data.modules %}
+            <tr class = "{{module.id}}">
+                <td>{{module.name}}</td>
+             </tr>
+             {% endfor %}
+        </tbody>
+    </table>
+
+<script type = "text/javascript">
+function addModule(){
+    $('#addModuleWarn').empty();
+    var name = $('#moduleName').val();
+    if(name != null && name.trim() != ""){
+        $.post('/admin/module/add-module',{name:name},function(data,status){
+            if(status == 'success'){
+                var module = data.module;
+                $('.moduleItem').append(
+                    "<tr class = \"" + module.id + "\">" +
+                    "<td>"+ module.name +"</td>" + 
+                    "</tr>"
+                );
+            } else {
+                $('#addModuleWarn').append("&nbsp;&nbsp;some error occurs!!!");
+            }
+        })
+    } else {
+       $('#addModuleWarn').append("&nbsp;&nbsp;Module Name can not be empty!");
+    }
+}
+</script>
+{% endblock %}

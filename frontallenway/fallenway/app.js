@@ -35,6 +35,7 @@ var admin_bug = require('./modules/admin/bug.js');
 var admin_login = require('./modules/admin/login.js');
 var admin_tag = require('./modules/admin/tag.js');
 var admin_author = require('./modules/admin/author.js');
+var admin_module = require('./modules/admin/module.js');
 app.use('/login',admin_login);
 app.use('/admin/index',admin_index);
 app.use('/admin/article',admin_article);
@@ -42,6 +43,7 @@ app.use('/admin/operation',admin_operation);
 app.use('/admin/bug',admin_bug);
 app.use('/admin/tag',admin_tag);
 app.use('/admin/author',admin_author);
+app.use('/admin/module',admin_module);
 
 var port = 7000;
 app.listen(port);

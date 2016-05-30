@@ -19,7 +19,15 @@ public class ModuleController {
 
     @RequestMapping(value = "/auth/module/add-module",method = RequestMethod.POST)
     public Object addModule(Module module){
-        moduleService.addModule(module);
-        return new ReturnTemplate();
+        ReturnTemplate returnTemplate = new ReturnTemplate();
+        returnTemplate.addData("module",moduleService.addModule(module));
+        return returnTemplate;
+    }
+
+    @RequestMapping(value = "/auth/module/find-all-modules",method = RequestMethod.GET)
+    public Object findAllModules(){
+        ReturnTemplate returnTemplate = new ReturnTemplate();
+        returnTemplate.addData("modules",moduleService.findAllModules());
+        return returnTemplate;
     }
 }

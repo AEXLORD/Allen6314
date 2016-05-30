@@ -19,6 +19,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Tag extends BaseEntity {
     private String name;   //tag 名称
+    private String moduleId; //每个 tag 都属于某一个 module
 
     private transient int articleNum;
 }

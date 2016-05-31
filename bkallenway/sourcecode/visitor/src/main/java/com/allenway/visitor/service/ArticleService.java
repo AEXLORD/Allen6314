@@ -21,4 +21,6 @@ public interface ArticleService {
     List<Article> findArticlesByTagId(String tagId);
 
     Article findRandomArticle();
+
+    List<Article> findAllArticlesByModuleId(String moduleId);
 }

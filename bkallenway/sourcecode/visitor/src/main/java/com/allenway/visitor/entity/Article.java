@@ -23,4 +23,5 @@ public class Article extends BaseEntity {
     private String content;   //内容
     private int readNum = 0;  //阅读量
     private String tagId;   //所属 tag
+    private String moduleId; //所属于module
 }

@@ -19,4 +19,5 @@ import javax.persistence.Table;
 public class Module extends BaseEntity{
 
     private String name;
+    private int weight; //权重,用于控制 module 在用户界面的显示位置
 }

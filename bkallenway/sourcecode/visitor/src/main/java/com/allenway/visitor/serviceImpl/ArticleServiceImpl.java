@@ -54,4 +54,9 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findRandomArticle();
 
     }
+
+    @Override
+    public List<Article> findAllArticlesByModuleId(String moduleId) {
+        return articleDao.findArticleByModuleIdAndIsDelete(moduleId,false);
+    }
 }

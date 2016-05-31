@@ -4,6 +4,7 @@ import com.allenway.infrustructure.exception.DataNotFoundException;
 import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
 import com.allenway.visitor.entity.Article;
+import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ArticleService;
 import com.allenway.visitor.service.TagService;
 import lombok.Data;
@@ -34,6 +35,8 @@ public class ArticleController {
     @RequestMapping(value = "/auth/article/save-article",method = RequestMethod.POST)
     public Object saveArticle(Article article, HttpServletRequest request){
         validArticleParam(article,request);
+        //设置 moduleId
+        article.setModuleId(tagService.findTagById(article.getTagId()).getModuleId());
         articleService.saveArticle(article);
         return new ReturnTemplate();
     }
@@ -115,5 +118,13 @@ public class ArticleController {
         ReturnTemplate returnTemplate = new ReturnTemplate();
         returnTemplate.addData("article",articleService.findRandomArticle());
         return returnTemplate;
+    }
+
+    @RequestMapping(value = {"/article/find-all-articles-by-moduleid","/auth/article/find-all-articles-by-moduleid"}
+            ,method = RequestMethod.GET)
+    public Object findAllArticlesByModule(String moduleId){
+        ReturnTemplate returnTemplate = new ReturnTemplate();
+        returnTemplate.addData("articles",articleService.findAllArticlesByModuleId(moduleId));
+        return  returnTemplate;
     }
 }

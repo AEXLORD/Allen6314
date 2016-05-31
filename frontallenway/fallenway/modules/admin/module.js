@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
-var async = require('async');
 
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
@@ -85,7 +84,7 @@ router.post('/add-module',function(req,res,next){
 	} else {
 
         var url = config.getBackendUrlPrefix() + "auth/module/add-module";
-        var data = {name:req.body.name};
+        var data = {name:req.body.name,weight:req.body.weight};
 
         var options = {
             url:url,

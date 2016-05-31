@@ -15,19 +15,23 @@
 {% endblock %}
 
 {% block subMainContent  %}
-    Module Name : 
-    <input type = "text" class = "form-control" id = "moduleName" name = "name" style = "display:inline;width:20%"> &nbsp;&nbsp;
+    <input type = "text" class = "form-control" id = "moduleName" name = "name" 
+        style = "display:inline;width:20%" placeholder = "Module Name"> &nbsp;&nbsp;
+    <input type = "text" class = "form-control" id = "weight" name = "weight" 
+        style = "display:inline;width:20%" placeholder = "weight:1,2,3 ..."> &nbsp;&nbsp;
     <button class = "btn btn-primary btn-sm" onclick = "addModule()">Add Module</button>
     <span id = "addModuleWarn" style = "color:red"></span>
     <h3>Module列表</h3>
     <table class = "table table-striped">
         <thead>
-            <td>module Name</td>
+            <td>Module Name</td>
+            <td>Module Weight</td>
          </thead>
         <tbody class = "moduleItem">
             {% for module in data.modules %}
             <tr class = "{{module.id}}">
                 <td>{{module.name}}</td>
+                <td>{{module.weight}}</td>
              </tr>
              {% endfor %}
         </tbody>
@@ -37,13 +41,15 @@
 function addModule(){
     $('#addModuleWarn').empty();
     var name = $('#moduleName').val();
-    if(name != null && name.trim() != ""){
-        $.post('/admin/module/add-module',{name:name,moduleId:moduleId},function(data,status){
+    var weight = $('#weight').val();
+    if(name != null && name.trim() != "" && weight != null && weight.trim() != ""){
+        $.post('/admin/module/add-module',{name:name,weight:weight},function(data,status){
             if(status == 'success'){
                 var module = data.module;
                 $('.moduleItem').append(
                     "<tr class = \"" + module.id + "\">" +
                     "<td>"+ module.name +"</td>" + 
+                    "<td>"+ module.weight +"</td>" + 
                     "</tr>"
                 );
             } else {

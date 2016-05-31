@@ -15,7 +15,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE database allenway CHARACTER SET UTF8;
+create database allenway character set utf8;
 use allenway;
 
 --
@@ -66,6 +66,7 @@ CREATE TABLE `tb_article` (
   `is_delete` bit(1) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
+  `module_id` varchar(255) DEFAULT NULL,
   `read_num` int(11) NOT NULL,
   `tag_id` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
@@ -110,6 +111,33 @@ LOCK TABLES `tb_bug` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_module`
+--
+
+DROP TABLE IF EXISTS `tb_module`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_module` (
+  `id` varchar(255) NOT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `is_delete` bit(1) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `weight` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_module`
+--
+
+LOCK TABLES `tb_module` WRITE;
+/*!40000 ALTER TABLE `tb_module` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_module` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_record`
 --
 
@@ -150,6 +178,7 @@ CREATE TABLE `tb_tag` (
   `create_date` datetime DEFAULT NULL,
   `is_delete` bit(1) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
+  `module_id` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -173,4 +202,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-27 11:44:27
+-- Dump completed on 2016-05-31 11:58:20

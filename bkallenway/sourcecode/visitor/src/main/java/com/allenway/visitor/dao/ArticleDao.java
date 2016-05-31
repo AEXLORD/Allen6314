@@ -20,6 +20,8 @@ public interface ArticleDao extends JpaRepository<Article, String> {
 
     @Query(value = "select * from tb_article order by RAND() LIMIT 1",nativeQuery = true)
     Article findRandomArticle();
+
+    List<Article> findArticleByModuleIdAndIsDelete(String moduleId, boolean isDelete);
 }
 
 

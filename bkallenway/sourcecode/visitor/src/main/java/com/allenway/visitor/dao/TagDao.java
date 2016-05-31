@@ -31,4 +31,6 @@ public interface TagDao extends JpaRepository<Tag, String> {
      */
     @Query(value = "select count(id) from tb_article where is_delete=false and tag_id=:tagId",nativeQuery = true)
     int getArticleSumNumByTag(@Param("tagId")String tagId);
+
+    List<Tag> findTagByModuleIdAndIsDelete(String moduleId, boolean isDelete);
 }

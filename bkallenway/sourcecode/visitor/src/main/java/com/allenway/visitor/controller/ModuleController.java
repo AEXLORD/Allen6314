@@ -24,7 +24,7 @@ public class ModuleController {
         return returnTemplate;
     }
 
-    @RequestMapping(value = "/auth/module/find-all-modules",method = RequestMethod.GET)
+    @RequestMapping(value = {"/auth/module/find-all-modules","/module/find-all-modules"},method = RequestMethod.GET)
     public Object findAllModules(){
         ReturnTemplate returnTemplate = new ReturnTemplate();
         returnTemplate.addData("modules",moduleService.findAllModules());

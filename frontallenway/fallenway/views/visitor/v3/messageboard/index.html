@@ -16,14 +16,11 @@
         }
 
         .panel {
-            border:1px solid transparent;
-            border-radius:0;
+            border:1px solid #ddd;
+            padding: 15px;
         }
         .list-group-item{
             border-width:1px solid #ddd;
-        }
-        .title{
-            cursor:pointer;
         }
         a{
             color:#428bca;
@@ -57,43 +54,13 @@
 
 
 {% block mainContent %}
-    
-    <div style = "float:left">
-        <div class = "widget" style = "">
-            <span style = "font-weight:bold">每日随机复习一篇</span>
-            <div class = "tagcloud clearfix">
-                <a href = "/visitor/learning/article/get-random-article">Just Do It</a>
-            </div>
-        </div>
-
-        <div class = "widget" style = "margin-top:20px;">
-            <span style = "font-weight:bold">Tag Cloud</span>
-            <div class = "tagcloud clearfix">
-                {% for tag in data.tags %}
-                <a href = "/visitor/learning/tag/get-articles-by-tag?id={{tag.id}}">{{tag.name}}</a>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
     <div class = "articleBox">
         <div class = "panel">
-            <ul>
-                <li class = "list-group-item">Blog</li>
-                {% for article in data.articles %}
-                    <li class = "list-group-item title" 
-                        onmouseover = "titleMouseOver(this)" 
-                        onmouseout = "titleMouseOut(this)"
-                        onclick = "getArticleDetail('{{article.id}}')">
-                        <a href="/visitor/learning/article/getArticleDetail?id={{article.id}}">
-                            {{article.title}}
-                        </a>
-                    </li>
-                {% endfor  %}
-            </ul>
+            <h2>Links ......</h2>
+            <hr/>
+            <p>message board</p>
         </div>
     </div>
-
-    <div class = "md60 clearfix visible-sm visible-xs"></div>
 {% endblock %}
 
 
@@ -117,17 +84,4 @@
         <script src="/javascripts/mediaelement-and-player.min.js"></script>
         <script src="/javascripts/main.js"></script>
 
-        <script>
-function titleMouseOver(element){
-    $(element).css("background-color","#F0F0F0");
-}    
-function titleMouseOut(element){
-    $(element).css("background-color","#fff");
-}    
-function getArticleDetail(id){
-    window.location.href = "/visitor/learning/article/getArticleDetail?id="+id;
-}
-        </script>
-
 {% endblock %}
-

@@ -5,7 +5,8 @@
 
         <link rel = "stylesheet" href = "/stylesheets/bootstrap.min.css">
         <link rel = "stylesheet" href = "/stylesheets/style.css">
-        
+        <link rel="shortcut icon" type="image/x-icon" href="/images/chuan.ico" media="screen" />
+
         <script src = "/javascripts/jquery.min.js" ></script>
         
         <style type = "text/css">
@@ -47,15 +48,11 @@
                     <div style = "float:left;min-height:50px;padding-top:9px;">
                         <a href = "http://www.wuhuachuan.com">Stay hungry, Stay foolish ......</a>
                     </div>
+                    {% for module in data.modules %}
                     <div class = "www">
-                        <a href = "/visitor/aboutme">关于我</a>
+                        <a href = "{{module.link}}">{{module.name}}</a>
                     </div>
-                    <div class= "www">
-                        <a href = "/visitor/play">PLay</a>
-                    </div>
-                    <div class = "www">
-                        <a href = "/visitor/learning/index">Learning</a>
-                    </div>
+                    {% endfor %}
                     <div style = "clear:both"></div>
                 </div>
                 

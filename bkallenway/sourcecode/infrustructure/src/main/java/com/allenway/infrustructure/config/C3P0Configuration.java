@@ -1,0 +1,70 @@
+package com.allenway.infrustructure.config;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.beans.PropertyVetoException;
+
+/**
+ * Created by wuhuachuan on 16/6/2.
+ */
+
+
+@Configuration
+public class C3P0Configuration {
+
+    @Value("${infrastructure.c3p0.max_size}")
+    private int maxSize;
+
+    @Value("${infrastructure.c3p0.min_size}")
+    private int minSize;
+
+    @Value("${infrastructure.c3p0.init_size}")
+    private int initSize;
+
+    @Value("${infrastructure.c3p0.acquire_increment}")
+    private int acquireIncrement;
+
+    @Value("${infrastructure.c3p0.idle_test_period}")
+    private int idleTestPeriod;
+
+    @Value("${infrastructure.c3p0.max_statements}")
+    private int maxStatements;
+
+    @Value("${infrastructure.c3p0.max_idle_time}")
+    private int maxIdleTime;
+
+    @Value("${infrastructure.c3p0.url}")
+    private String url;
+
+    @Value("${infrastructure.c3p0.username}")
+    private String username;
+
+    @Value("${infrastructure.c3p0.password}")
+    private String password;
+
+    @Value("${infrastructure.c3p0.driverClassName}")
+    private String driverClassName;
+
+    @Bean
+    public ComboPooledDataSource dataSource() throws PropertyVetoException {
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+
+        dataSource.setMaxPoolSize(maxSize);
+        dataSource.setMinPoolSize(minSize);
+        dataSource.setInitialPoolSize(initSize);
+
+        dataSource.setAcquireIncrement(acquireIncrement);
+        dataSource.setIdleConnectionTestPeriod(idleTestPeriod);
+        dataSource.setMaxStatements(maxStatements);
+        dataSource.setMaxIdleTime(maxIdleTime);
+        dataSource.setJdbcUrl(url);
+        dataSource.setPassword(password);
+        dataSource.setUser(username);
+        dataSource.setDriverClass(driverClassName);
+        return dataSource;
+    }
+}
+

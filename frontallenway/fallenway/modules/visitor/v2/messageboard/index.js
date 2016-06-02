@@ -5,8 +5,8 @@ var Logger = require('../../../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
-    logger.debug("visitor/v2/me/aboutme.js -- /visitor/aboutme ...");
-    res.render('visitor/v3/me/aboutme');
+    logger.debug("visitor/v2/messageboard/index.js -- /visitor/messageboard ...");
+    res.render('visitor/v3/messageboard/index');
 });
 
 module.exports = router;

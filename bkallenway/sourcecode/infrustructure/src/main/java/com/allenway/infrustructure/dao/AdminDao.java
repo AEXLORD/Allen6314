@@ -18,7 +18,7 @@ public interface AdminDao extends JpaRepository<Admin, String> {
 //    Admin findAdminByUsername(@Param(value = "username") String username);
 
 
-    Admin findAdminByUsernameAndIsDelete(String username,boolean isDelete);
+    Admin findAdminByUsernameAndIsDelete(String username,String isDelete);
 
-    Admin findAdminByIsDelete(boolean isDelete);
+    Admin findAdminByIsDelete(String isDelete);
 }

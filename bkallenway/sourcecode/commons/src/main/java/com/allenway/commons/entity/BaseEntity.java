@@ -43,6 +43,6 @@ public class BaseEntity {
     private LocalDateTime updateDate;
 
     @JsonIgnore
-    private Boolean isDelete = false; // true:已经删除  false：未删除
+    private String isDelete = "0"; // 1:已经删除  0：未删除
 
 }

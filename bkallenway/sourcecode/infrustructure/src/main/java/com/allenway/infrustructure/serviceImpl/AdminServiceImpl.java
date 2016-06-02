@@ -20,7 +20,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin findAdmin() {
 //        return adminDao.findAdmin();
-        return adminDao.findAdminByIsDelete(false);
+        return adminDao.findAdminByIsDelete("0");
 
     }
 
@@ -31,7 +31,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin findAdminByUsername(String username) {
-        return adminDao.findAdminByUsernameAndIsDelete(username,false);
+        return adminDao.findAdminByUsernameAndIsDelete(username,"0");
 //        return adminDao.findAdminByUsername(username);
     }
 }

@@ -19,12 +19,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAllTags() {
-        return tagDao.findTagByIsDelete(false);
+        return tagDao.findTagByIsDelete("0");
     }
 
     @Override
     public Tag findTagById(String tagId) {
-        return tagDao.findTagByIdAndIsDelete(tagId, false);
+        return tagDao.findTagByIdAndIsDelete(tagId, "0");
     }
 
     @Override
@@ -44,6 +44,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findTagsByModuleId(String moduleId) {
-        return tagDao.findTagByModuleIdAndIsDelete(moduleId,false);
+        return tagDao.findTagByModuleIdAndIsDelete(moduleId,"0");
     }
 }

@@ -4,8 +4,7 @@ spring:
         validationQuery: SELECT 1
         driverClassName: com.mysql.jdbc.Driver
         # url: jdbc:mysql://mysqlserver:3306/allenway?useUnicode=true&characterEncoding=UTF-8
-#        url: jdbc:mysql://localhost:3306/allenway?useUnicode=true&characterEncoding=UTF-8
-        url: jdbc:mysql://java-mysql:3306/allenway?useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/allenway?useUnicode=true&characterEncoding=UTF-8
         password: 123456
         username: root
     jpa:
@@ -28,6 +27,23 @@ infrastructure:
         grantType: password
         provisionKey: 0839b74077dc494ca89d3970bc0ad4c8
         scope: whc
+    c3p0:
+        # 连接池中保留的最大连接数
+        max_size: 10
+        # 连接池中保留的最小连接数
+        min_size: 3
+        # 初始化连接数
+        init_size: 3
+        # 当连接池中的连接用完时，C3P0一次性创建新连接的数目
+        acquire_increment: 2
+        idle_test_period: 3600
+        max_statements: 3
+        max_idle_time: 3600
+        url: jdbc:mysql://localhost:3306/allenway?useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: 123456
+        driverClassName: com.mysql.jdbc.Driver
+
 
 
 

@@ -15,13 +15,13 @@ import java.util.List;
  */
 public interface TagDao extends JpaRepository<Tag, String> {
 
-    List<Tag> findTagByIsDelete(boolean isDelete);
+    List<Tag> findTagByIsDelete(String isDelete);
 
-    Tag findTagByIdAndIsDelete(String tagId,boolean isDelete);
+    Tag findTagByIdAndIsDelete(String tagId,String isDelete);
 
     @Modifying
     @Transactional
-    @Query(value = "update Tag set isDelete=true where id=:id")
+    @Query(value = "update Tag set isDelete='1' where id=:id")
     void deleteTagById(@Param(value = "id")String id);
 
     /**
@@ -29,8 +29,8 @@ public interface TagDao extends JpaRepository<Tag, String> {
      * @param tagId
      * @return
      */
-    @Query(value = "select count(id) from tb_article where is_delete=false and tag_id=:tagId",nativeQuery = true)
+    @Query(value = "select count(id) from tb_article where is_delete='0' and tag_id=:tagId",nativeQuery = true)
     int getArticleSumNumByTag(@Param("tagId")String tagId);
 
-    List<Tag> findTagByModuleIdAndIsDelete(String moduleId, boolean isDelete);
+    List<Tag> findTagByModuleIdAndIsDelete(String moduleId, String isDelete);
 }

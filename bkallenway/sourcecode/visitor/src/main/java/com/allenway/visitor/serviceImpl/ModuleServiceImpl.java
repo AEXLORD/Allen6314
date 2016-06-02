@@ -24,6 +24,6 @@ public class ModuleServiceImpl implements ModuleService{
 
     @Override
     public List<Module> findAllModules() {
-        return moduleDao.findModuleByIsDelete(false);
+        return moduleDao.findAllModules();
     }
 }

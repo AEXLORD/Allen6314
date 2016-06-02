@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface RecordDao extends JpaRepository<Record, String> {
 
-    @Query("select record from Record record where isDelete=false order by createDate")
+    @Query("select record from Record record where isDelete='0' order by createDate")
     List<Record> findAllRecords();
 }

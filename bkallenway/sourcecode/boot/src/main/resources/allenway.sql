@@ -15,9 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create database allenway character set utf8;
-use allenway;
-
 --
 -- Table structure for table `tb_admin`
 --
@@ -28,7 +25,7 @@ DROP TABLE IF EXISTS `tb_admin`;
 CREATE TABLE `tb_admin` (
   `id` varchar(255) NOT NULL,
   `create_date` datetime DEFAULT NULL,
-  `is_delete` bit(1) DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -63,7 +60,7 @@ DROP TABLE IF EXISTS `tb_article`;
 CREATE TABLE `tb_article` (
   `id` varchar(255) NOT NULL,
   `create_date` datetime DEFAULT NULL,
-  `is_delete` bit(1) DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
   `module_id` varchar(255) DEFAULT NULL,
@@ -93,7 +90,7 @@ DROP TABLE IF EXISTS `tb_bug`;
 CREATE TABLE `tb_bug` (
   `id` varchar(255) NOT NULL,
   `create_date` datetime DEFAULT NULL,
-  `is_delete` bit(1) DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `ex` varchar(255) DEFAULT NULL,
   `request_url` varchar(255) DEFAULT NULL,
@@ -120,8 +117,9 @@ DROP TABLE IF EXISTS `tb_module`;
 CREATE TABLE `tb_module` (
   `id` varchar(255) NOT NULL,
   `create_date` datetime DEFAULT NULL,
-  `is_delete` bit(1) DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `weight` int(11) NOT NULL,
   PRIMARY KEY (`id`)
@@ -147,7 +145,7 @@ DROP TABLE IF EXISTS `tb_record`;
 CREATE TABLE `tb_record` (
   `id` varchar(255) NOT NULL,
   `create_date` datetime DEFAULT NULL,
-  `is_delete` bit(1) DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `port` int(11) NOT NULL,
   `remote_address` varchar(255) DEFAULT NULL,
@@ -176,7 +174,7 @@ DROP TABLE IF EXISTS `tb_tag`;
 CREATE TABLE `tb_tag` (
   `id` varchar(255) NOT NULL,
   `create_date` datetime DEFAULT NULL,
-  `is_delete` bit(1) DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `module_id` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -192,6 +190,34 @@ LOCK TABLES `tb_tag` WRITE;
 /*!40000 ALTER TABLE `tb_tag` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tb_tag` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_user`
+--
+
+DROP TABLE IF EXISTS `tb_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_user` (
+  `id` varchar(255) NOT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `is_delete` varchar(255) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+LOCK TABLES `tb_user` WRITE;
+/*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -202,4 +228,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-31 11:58:20
+-- Dump completed on 2016-06-02 16:53:50

@@ -19,6 +19,8 @@
         style = "display:inline;width:20%" placeholder = "Module Name"> &nbsp;&nbsp;
     <input type = "text" class = "form-control" id = "weight" name = "weight" 
         style = "display:inline;width:20%" placeholder = "weight:1,2,3 ..."> &nbsp;&nbsp;
+    <input type = "text" class = "form-control" id = "link" name = "link" 
+        style = "display:inline;width:20%" placeholder = "Module Link"> &nbsp;&nbsp;
     <button class = "btn btn-primary btn-sm" onclick = "addModule()">Add Module</button>
     <span id = "addModuleWarn" style = "color:red"></span>
     <h3>Module列表</h3>
@@ -26,12 +28,14 @@
         <thead>
             <td>Module Name</td>
             <td>Module Weight</td>
+            <td>Module Link</td>
          </thead>
         <tbody class = "moduleItem">
             {% for module in data.modules %}
             <tr class = "{{module.id}}">
                 <td>{{module.name}}</td>
                 <td>{{module.weight}}</td>
+                <td>{{module.link}}</td>
              </tr>
              {% endfor %}
         </tbody>
@@ -42,8 +46,11 @@ function addModule(){
     $('#addModuleWarn').empty();
     var name = $('#moduleName').val();
     var weight = $('#weight').val();
-    if(name != null && name.trim() != "" && weight != null && weight.trim() != ""){
-        $.post('/admin/module/add-module',{name:name,weight:weight},function(data,status){
+    var link = $('#link').val();
+    if(name != null && name.trim() != "" && 
+            weight != null && weight.trim() != "" &&
+            link != null && link.trim() != ""){
+        $.post('/admin/module/add-module',{name:name,weight:weight,link:link},function(data,status){
             if(status == 'success'){
                 var module = data.module;
                 $('.moduleItem').append(

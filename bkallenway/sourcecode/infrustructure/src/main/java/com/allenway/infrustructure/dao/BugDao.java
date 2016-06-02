@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface BugDao extends JpaRepository<Bug, String>{
 
-    @Query("select bug from Bug bug where isDelete=false order by createDate")
+    @Query("select bug from Bug bug where isDelete='0' order by createDate")
     List<Bug> findAllBugs();
 }

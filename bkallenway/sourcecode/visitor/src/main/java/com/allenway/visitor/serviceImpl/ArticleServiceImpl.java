@@ -29,13 +29,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticle(Article article) {
-        article.setIsDelete(true);
+        article.setIsDelete("1");
         articleDao.save(article);
     }
 
     @Override
     public Article findArticleById(String id) {
-        return articleDao.findArticleByIdAndIsDelete(id,false);
+        return articleDao.findArticleByIdAndIsDelete(id,"0");
     }
 
     @Override
@@ -57,6 +57,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> findAllArticlesByModuleId(String moduleId) {
-        return articleDao.findArticleByModuleIdAndIsDelete(moduleId,false);
+        return articleDao.findArticleByModuleIdAndIsDelete(moduleId,"0");
     }
 }

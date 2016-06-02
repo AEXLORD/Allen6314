@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface ArticleDao extends JpaRepository<Article, String> {
 
-    Article findArticleByIdAndIsDelete(String id,boolean isDelete);
+    Article findArticleByIdAndIsDelete(String id,String isDelete);
 
-    @Query(value = "select article from Article article where isDelete=false order by createDate")
+    @Query(value = "select article from Article article where isDelete='0' order by createDate")
     List<Article> findAllArticles();
 
     List<Article> findArticleByTagId(String tagId);
@@ -21,7 +21,7 @@ public interface ArticleDao extends JpaRepository<Article, String> {
     @Query(value = "select * from tb_article order by RAND() LIMIT 1",nativeQuery = true)
     Article findRandomArticle();
 
-    List<Article> findArticleByModuleIdAndIsDelete(String moduleId, boolean isDelete);
+    List<Article> findArticleByModuleIdAndIsDelete(String moduleId, String isDelete);
 }
 
 

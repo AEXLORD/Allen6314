@@ -26,6 +26,10 @@ app.use('/visitor/aboutme',visitor_aboutme);
 var visitor_play = require('./modules/visitor/v2/play/play');
 app.use('/visitor/play',visitor_play);
 
+var visitor_message = require('./modules/visitor/v2/messageboard/index.js');
+app.use('/visitor/messageboard',visitor_message);
+
+
 
 //管理员
 var admin_index = require('./modules/admin/index.js');

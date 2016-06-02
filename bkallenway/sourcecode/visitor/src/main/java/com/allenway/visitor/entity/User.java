@@ -9,16 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Created by wuhuachuan on 16/5/30.
+ * Created by wuhuachuan on 16/5/31.
  */
+
 @ToString(callSuper = true)
 @Data
 @Entity
-@Table(name = "tb_module")
+@Table(name = "tb_user")
 @NoArgsConstructor
-public class Module extends BaseEntity{
+public class User extends BaseEntity{
 
-    private String name;
-    private String link;
-    private int weight; //权重,用于控制 module 在用户界面的显示位置
+    private String username;
+    private String password;
+
+    private String email;
 }

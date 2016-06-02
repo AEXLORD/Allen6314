@@ -95,9 +95,12 @@ router.get('', function(req, res, next) {
                     });
                 }
             },function(err,results){
-                res.render('visitor/v3/learning/index',{'data':results});
+                data.tags = results.tags;
+                data.articles = results.articles;
+                callback(null,data);
             })
         }],function(err,result){
+            res.render('visitor/v3/learning/index',{'data':result});
         })
 });
 

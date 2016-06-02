@@ -84,7 +84,7 @@ router.post('/add-module',function(req,res,next){
 	} else {
 
         var url = config.getBackendUrlPrefix() + "auth/module/add-module";
-        var data = {name:req.body.name,weight:req.body.weight};
+        var data = {name:req.body.name,weight:req.body.weight,link:req.body.link};
 
         var options = {
             url:url,

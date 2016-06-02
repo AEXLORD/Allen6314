@@ -63,6 +63,30 @@ router.get('/get-articles-by-tag',function(req,res,next){
                     res.render('error/unknowerror');
                 }
             });
+        },
+        modules:function(callback){
+            request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+                if(!error && response.statusCode == 200){
+                    var returnData = JSON.parse(body);
+
+                    if(returnData.statusCode != 0){
+                        logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    } else {
+                        callback(null,returnData.data.modules);
+                    }
+                } else {
+                    logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
+                        "error = " + error);
+                    if(response != null){
+                        logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
         }
     },function(err,result){
         res.render('visitor/v3/learning/index',{'data':result});

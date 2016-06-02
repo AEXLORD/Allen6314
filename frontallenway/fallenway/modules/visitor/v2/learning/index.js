@@ -42,10 +42,17 @@ router.get('', function(req, res, next) {
             });
         },function(data,callback){
             var modules = data.modules;
-            var moduleId = modules[0].id;
+
+            var moduleId;
+            modules.forEach(function(entry){
+                if(entry.name == "Learning"){
+                    moduleId = entry.id;
+                }
+            })
+
             var results = {};
             async1.parallel({
-                //默认取 第一个module 的标签
+                //默认取 第一个module learning 的标签
                 tags:function(subcallback){
                     request(config.getBackendUrlPrefix() + "tag/find-tags-by-moduleid?moduleId=" + moduleId,function(error,response,body){
                         if(!error && response.statusCode == 200){

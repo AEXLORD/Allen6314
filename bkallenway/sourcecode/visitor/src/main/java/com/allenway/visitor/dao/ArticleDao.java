@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ArticleDao extends JpaRepository<Article, String> {
 
-    @Query(value = "select * from tb_article where isDelete = '0' order by RAND() LIMIT 1",nativeQuery = true)
+    @Query(value = "select * from tb_article where is_delete = '0' order by RAND() LIMIT 1",nativeQuery = true)
     Article findRandomArticle();
     Article findArticleById(String id);
 

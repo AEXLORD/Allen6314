@@ -120,7 +120,7 @@ function doSendRequestDoAdd(res,req,cookies){
             if(returnData.statusCode == 0){
                 res.redirect('/admin/article/articleManage');
             } else {
-			    console.log("unknow error in kong or java,because response.statusCode = 200, returnData.statusCode != 0 ");
+			    logger.log("unknow error in kong or java,because response.statusCode = 200, returnData.statusCode != 0 ");
             }
         } else {
             logger.error("admin/article.js -- auth/article/save-article ..." +
@@ -293,49 +293,168 @@ router.get('/articleManage',function(req,res,next){
  		logger.info("cookies[Authorization] == undefined......");
         res.render('admin/login');
     } else {
-        var url = config.getBackendUrlPrefix() + "auth/article/find-all-articles";
-	    var options = {
-            url:url,
-            headers:{
-                'Authorization': "Bearer " + cookies['Authorization']
-            }
-        }
+        var moduleid;
+        async.waterfall([
+                function(callback){
+                    request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+                        if(!error && response.statusCode == 200){
+                            var returnData = JSON.parse(body);
 
-        request(options,function(error,response,body){
-            if(!error && response.statusCode == 200 ){
-                var returnData = JSON.parse(body);
-                if(returnData.statusCode == 0){
-                    var articles = returnData.data.articles;
-
-                    articles.forEach(function(item){
-                        item.content = md(item.content);
+                            if(returnData.statusCode != 0){
+                                logger.error("admin/artice.js -- module/find-all-modules fail ..." +
+                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                res.render('error/unknowerror');
+                            } else {
+                                callback(null,returnData.data);
+                            }
+                        } else {
+                            logger.error("admin/article.js -- module/find-all-modules fail ..." +
+                                    "error = " + error);
+                            if(response != null){
+                                logger.error("admin/article.js -- module/find-all-modules fail ..." +
+                                    "response.statuCode = " + response.statusCode + "..." +
+                                    "response.body = " + response.body);
+                            }
+                            res.render('error/unknowerror');
+                        }
                     });
+                },
+                function(data,callback){
+                    var modules = data.modules;
 
-                    var path = "<li><a href = \"/admin/index\">Index</a></li>" +
-                        "<li>Article Manage</li>";
+                    modules.forEach(function(entry){
+                        if(entry.name == "Learning"){
+                            moduleid = entry.id;
+                        }
+                    })
 
-                    var data = {
-                        'articles':articles,
-                        'path':path
-                    }
-                    res.render('admin/article/articleManageIndex',{'data':data});
-                } else {
-                    logger.error("admin/article.js -- auth/article/get-all-articles fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
+                    var pageSize = config.getPageSize();
+                    var url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
+                                    moduleid + "&page=1&size=" + pageSize;
+                    request(url,function(error,response,body){
+                        if(!error && response.statusCode == 200){
+                            var returnData = JSON.parse(body);
+
+                            if(returnData.statusCode != 0){
+                                logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                                   "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                res.render('error/unknowerror');
+                            } else {
+                                data.articles = returnData.data.articles;
+                                data.totalPage = new Array();
+
+                                for(var i = 1; i <= returnData.data.totalPage;i++){
+                                    data.totalPage[i-1] = i;
+                                }
+                                callback(null,data);
+                            }
+                        } else {
+                            logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                                "error = " + error);
+                            if(response != null){
+                                logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                                   "response.statuCode = " + response.statusCode + "..." +
+                                   "response.body = " + response.body);
+                            }
+                            res.render('error/unknowerror');
+                        }
+                    });
                 }
-            } else {
-                logger.error("admin/article.js -- auth/article/get-all-articles ..." +
-                    "error = " + error);
-                if(response != null){
-                    logger.error("admin/article.js -- auth/article/get-all-articles fail ..." +
-                        "response.statuCode = " + response.statusCode + "..." +
-                        "response.body = " + response.body);
-                }
-                res.render('error/unknowerror');
-            }
+        ],function(err,result){
+            result.nowPageLeft = 0;
+            result.nowPage = 1;
+            result.nowPageRight = 2;
+            result.moduleid =  moduleid;
+            res.render('admin/article/articleManageIndex',{'data':result});
         });
     }
+});
+
+
+
+
+router.get('/page',function(req,res,next){
+    var pageNum = req.query.pagenum;
+    var moduleid = req.query.moduleid;
+    var tagid = req.query.tagid;
+
+    async.parallel({
+        modules: function(callback){
+            request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+                if(!error && response.statusCode == 200){
+                    var returnData = JSON.parse(body);
+
+                    if(returnData.statusCode != 0){
+                        logger.error("admin/article.js -- module/find-all-modules fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    } else {
+                        callback(null, returnData.data.modules);
+                    }
+                } else {
+                    logger.error("admin/article.js -- module/find-all-modules fail ..." +
+                            "error = " + error);
+                    if(response != null){
+                        logger.error("admin/article.js -- module/find-all-modules fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
+        },
+        articles_totalPage: function(callback){
+
+            var url;
+            var pageSize = config.getPageSize();
+
+            if(tagid != ""){
+                url = config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagId=" +
+                        tagid + "&page="+ pageNum +"&size=" + pageSize;
+            } else {
+                url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
+                        moduleid + "&page=" + pageNum + "&size=" + pageSize;
+            }
+
+            request(url,function(error,response,body){
+                if(!error && response.statusCode == 200){
+                    var returnData = JSON.parse(body);
+
+                    if(returnData.statusCode != 0){
+                        logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    } else {
+                        callback(null,returnData.data);
+                    }
+                } else {
+                    logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                        "error = " + error);
+                    if(response != null){
+                        logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
+        }
+
+    },function(err,result){
+        result.articles = result.articles_totalPage.articles;
+        result.totalPage = new Array();
+
+        for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
+            result.totalPage[i-1] = i;
+        }
+
+        result.nowPageLeft = parseInt(pageNum) - 1;
+        result.nowPage = pageNum;
+        result.nowPageRight = parseInt(pageNum) + 1;
+        result.moduleid = moduleid;
+
+        res.render('admin/article/articleManageIndex',{'data':result});
+    })
 });
 
 

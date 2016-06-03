@@ -131,8 +131,120 @@ router.get('/get-random-article',function(req,res,next){
     },function(err,results){
         res.render('visitor/v3/learning/articleDetail',{'data':results});
     })
-
 })
+
+
+
+
+
+router.get('/page',function(req,res,next){
+    var pageNum = req.query.pagenum;
+    var moduleid = req.query.moduleid;
+    var tagid = req.query.tagid;
+
+    async.parallel({
+        modules: function(callback){
+            request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+                if(!error && response.statusCode == 200){
+                    var returnData = JSON.parse(body);
+
+                    if(returnData.statusCode != 0){
+                        logger.error("visitor/v2/visitor_learning/article.js -- module/find-all-modules fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    } else {
+                        callback(null, returnData.data.modules);
+                    }
+                } else {
+                    logger.error("visitor/v2/visitor_learning/article.js -- module/find-all-modules fail ..." +
+                            "error = " + error);
+                    if(response != null){
+                        logger.error("visitor/v2/visitor_learning/article.js -- module/find-all-modules fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
+        },
+        tags: function(callback){
+            request(config.getBackendUrlPrefix() + "tag/find-tags-by-moduleid?moduleid=" + moduleid,function(error,response,body){
+                if(!error && response.statusCode == 200){
+                    var returnData = JSON.parse(body);
+                    if(returnData.statusCode != 0){
+                        logger.error("visitor/v2/visitor_learning/article.js -- tag/find-tags-by-moduleid?moduleid= fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    } else {
+                        callback(null,returnData.data.tags);
+                    }
+                } else {
+                    logger.error("visitor/v2/visitor_learning/article.js -- tag/find-tags-by-moduleid?moduleid= fail ..." +
+                        "error = " + error);                            if(response != null){
+                    logger.error("visitor/v2/visitor_learning/article.js -- tag/find-tags-by-moduleid?moduleid= fail ..." +
+                        "response.statuCode = " + response.statusCode + "..." +
+                        "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
+        },
+        articles_totalPage: function(callback){
+
+            var url;
+            var pageSize = config.getPageSize();
+
+            if(tagid != ""){
+                url = config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" +
+                        tagid + "&page="+ pageNum +"&size=" + pageSize;
+            } else {
+                url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
+                        moduleid + "&page=" + pageNum + "&size=" + pageSize;
+            }
+
+            request(url,function(error,response,body){
+                if(!error && response.statusCode == 200){
+                    var returnData = JSON.parse(body);
+
+                    if(returnData.statusCode != 0){
+                        logger.error("visitor/v2/visitor_learning/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                        res.render('error/unknowerror');
+                    } else {
+                        callback(null,returnData.data);
+                    }
+                } else {
+                    logger.error("visitor/v2/visitor_learning/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                        "error = " + error);
+                    if(response != null){
+                        logger.error("visitor/v2/visitor_learning/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+                    }
+                    res.render('error/unknowerror');
+                }
+            });
+        }
+    },function(err,result){
+
+        result.articles = result.articles_totalPage.articles;
+        result.totalPage = new Array();
+
+        for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
+            result.totalPage[i-1] = i;
+        }
+
+        result.nowPageLeft = parseInt(pageNum) - 1;
+        result.nowPage = pageNum;
+        result.nowPageRight = parseInt(pageNum) + 1;
+        result.moduleid = moduleid;
+        result.tagid = tagid;
+
+        res.render('visitor/v3/learning/index',{'data':result});
+    });
+})
+
+
 
 
 

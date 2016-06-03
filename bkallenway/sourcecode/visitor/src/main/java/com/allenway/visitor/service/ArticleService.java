@@ -2,6 +2,8 @@ package com.allenway.visitor.service;
 
 
 import com.allenway.visitor.entity.Article;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,16 +13,23 @@ import java.util.List;
 public interface ArticleService {
 
     Article saveArticle(Article article);
-
     void deleteArticle(Article article);
 
-    Article findArticleById(String id);
+    /**
+     * page: 需要第几页的数据
+     * size: 每页有多少数据
+     */
+    List<Article> findArticlesByTagId(String tagId,String page,String size);
 
-    List<Article> findAllArticles();
-
-    List<Article> findArticlesByTagId(String tagId);
+    /**
+     * page: 需要第几页的数据
+     * size: 每页有多少数据
+     */
+    List<Article> findArticlesByModuleId(String moduleId,String page,String size);
 
     Article findRandomArticle();
+    Article findArticleById(String id);
 
-    List<Article> findAllArticlesByModuleId(String moduleId);
+    int sumArticleByModuleId(String moduleId);
+    int sumArticleByTagId(String tagId);
 }

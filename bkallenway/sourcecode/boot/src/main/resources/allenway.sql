@@ -15,6 +15,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE database allenway CHARACTER SET utf8;
+use allenway;
+
 --
 -- Table structure for table `tb_admin`
 --
@@ -62,7 +65,7 @@ CREATE TABLE `tb_article` (
   `create_date` datetime DEFAULT NULL,
   `is_delete` varchar(255) DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
-  `content` varchar(255) DEFAULT NULL,
+  `content` text DEFAULT NULL,
   `module_id` varchar(255) DEFAULT NULL,
   `read_num` int(11) NOT NULL,
   `tag_id` varchar(255) DEFAULT NULL,
@@ -228,4 +231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-02 16:53:50
+-- Dump completed on 2016-06-03 15:10:15

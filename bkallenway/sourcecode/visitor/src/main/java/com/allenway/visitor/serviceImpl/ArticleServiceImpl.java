@@ -4,9 +4,13 @@ import com.allenway.visitor.dao.ArticleDao;
 import com.allenway.visitor.dao.ExtendCrudDao;
 import com.allenway.visitor.entity.Article;
 import com.allenway.visitor.service.ArticleService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -35,28 +39,76 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article findArticleById(String id) {
-        return articleDao.findArticleByIdAndIsDelete(id,"0");
+        return articleDao.findArticleById(id);
     }
 
+    /**
+     * page: 需要第几页的数据
+     * size: 每页有多少数据
+     */
     @Override
-    public List<Article> findAllArticles() {
-        return articleDao.findAllArticles();
+    public List<Article> findArticlesByTagId(String tagId,String page,String size) {
+
+        int _page = Integer.parseInt(page);
+        int _size = Integer.parseInt(size);
+
+        return getPageArticles(articleDao.findArticleByTagId(tagId),_page,_size);
     }
 
+    /**
+     * page: 需要第几页的数据
+     * size: 每页有多少数据
+     */
     @Override
-    public List<Article> findArticlesByTagId(String tagId) {
-        return articleDao.findArticleByTagId(tagId);
+    public List<Article> findArticlesByModuleId(String moduleId,String page,String size) {
+
+        int _page = Integer.parseInt(page);
+        int _size = Integer.parseInt(size);
+
+        return getPageArticles(articleDao.findArticleByModuleId(moduleId),_page,_size);
+    }
+
+    private List<Article> getPageArticles(List<Article> articleWithOutPage, int page, int size) {
+        List<Article> articleWithPage  = new LinkedList<Article>();
+
+        //总共有多少页
+        int totalPages = (int) Math.ceil((float)articleWithOutPage.size() / size);
+
+        if(page > totalPages || page <= 0){
+            return null;
+        } else if(totalPages == 1){
+            return articleWithOutPage;
+        } else {
+            int begin = (page - 1) * size ;
+            int end;
+
+            if( (articleWithOutPage.size() - begin) < size){
+                end = articleWithOutPage.size();
+            } else {
+                end = begin + size;
+            }
+
+            for (int i = begin; i < end; i++) {
+                articleWithPage.add(articleWithOutPage.get(i));
+            }
+            return articleWithPage;
+        }
     }
 
     @Override
     public Article findRandomArticle() {
 //        return (Article) extendCrudDao.findRandomArticle();
         return articleDao.findRandomArticle();
-
     }
 
     @Override
-    public List<Article> findAllArticlesByModuleId(String moduleId) {
-        return articleDao.findArticleByModuleIdAndIsDelete(moduleId,"0");
+    public int sumArticleByModuleId(String moduleId) {
+        return articleDao.sumArticlesByModuleId(moduleId);
     }
+
+    @Override
+    public int sumArticleByTagId(String tagId) {
+        return articleDao.sumArticlesByTagId(tagId);
+    }
+
 }

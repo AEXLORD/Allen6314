@@ -43,10 +43,10 @@ router.get('', function(req, res, next) {
         },function(data,callback){
             var modules = data.modules;
 
-            var moduleId;
+            var moduleid;
             modules.forEach(function(entry){
                 if(entry.name == "Learning"){
-                    moduleId = entry.id;
+                    moduleid = entry.id;
                 }
             })
 
@@ -54,21 +54,21 @@ router.get('', function(req, res, next) {
             async1.parallel({
                 //默认取 第一个module learning 的标签
                 tags:function(subcallback){
-                    request(config.getBackendUrlPrefix() + "tag/find-tags-by-moduleid?moduleId=" + moduleId,function(error,response,body){
+                    request(config.getBackendUrlPrefix() + "tag/find-tags-by-moduleid?moduleid=" + moduleid,function(error,response,body){
                         if(!error && response.statusCode == 200){
                             var returnData = JSON.parse(body);
                             if(returnData.statusCode != 0){
-                                logger.error("visitor/v2/visitor_learning/index.js -- tag/find-all-tags fail ..." +
+                                logger.error("visitor/v2/visitor_learning/index.js -- tag/find-tags-by-moduleid?moduleid= fail ..." +
                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                 res.render('error/unknowerror');
                             } else {
                                 subcallback(null,returnData.data.tags);
                             }
                         } else {
-                            logger.error("visitor/v2/visitor_learning/index.js -- tag/find-all-tags fail ..." +
+                            logger.error("visitor/v2/visitor_learning/index.js -- tag/find-tags-by-moduleid?moduleid= fail ..." +
                                 "error = " + error);
                             if(response != null){
-                                logger.error("visitor/v2/visitor_learning/index.js -- tag/find-all-tags fail ..." +
+                                logger.error("visitor/v2/visitor_learning/index.js -- tag/find-tags-by-moduleid?moduleid= fail ..." +
                                    "response.statuCode = " + response.statusCode + "..." +
                                    "response.body = " + response.body);
                             }
@@ -77,23 +77,27 @@ router.get('', function(req, res, next) {
                     });
                 //默认取 第一个module 的文章
                 },
-                articles:function(subcallback){
-                    request(config.getBackendUrlPrefix() + "article/find-all-articles-by-moduleid?moduleId=" + moduleId,function(error,response,body){
+                articles_totalPage:function(subcallback){
+                    var pageSize = config.getPageSize();
+                    var url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
+                                    moduleid + "&page=1&size=" + pageSize;
+
+                    request(url,function(error,response,body){
                         if(!error && response.statusCode == 200){
                             var returnData = JSON.parse(body);
 
                             if(returnData.statusCode != 0){
-                                logger.error("visitor/v2/visitor_learning/index.js -- article/find-all-articles-by-moduleid?moduleId fail ..." +
+                                logger.error("visitor/v2/visitor_learning/index.js -- article/find-articles-by-moduleid?moduleid fail ..." +
                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                 res.render('error/unknowerror');
                             } else {
-                                subcallback(null,returnData.data.articles);
+                                subcallback(null,returnData.data);
                             }
                         } else {
-                            logger.error("visitor/v2/visitor_learning/index.js -- article/find-all-articles-by-moduleid?moduleId fail ..." +
+                            logger.error("visitor/v2/visitor_learning/index.js -- article/find-articles-by-moduleid?moduleid fail ..." +
                                 "error = " + error);
                             if(response != null){
-                                logger.error("visitor/v2/visitor_learning/index.js -- article/find-all-articles-by-moduleid?moduleId fail ..." +
+                                logger.error("visitor/v2/visitor_learning/index.js -- article/find-articles-by-moduleid?moduleid fail ..." +
                                    "response.statuCode = " + response.statusCode + "..." +
                                    "response.body = " + response.body);
                             }
@@ -103,7 +107,18 @@ router.get('', function(req, res, next) {
                 }
             },function(err,results){
                 data.tags = results.tags;
-                data.articles = results.articles;
+                data.articles = results.articles_totalPage.articles;
+                data.nowPageLeft = 0;
+                data.nowPage = 1;
+                data.nowPageRight = 2;
+                data.moduleid = moduleid;
+
+                data.totalPage = new Array();
+
+                for(var i = 1; i <= results.articles_totalPage.totalPage;i++){
+                    data.totalPage[i-1] = i;
+                }
+
                 callback(null,data);
             })
         }],function(err,result){

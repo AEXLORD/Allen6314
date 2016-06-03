@@ -20,5 +20,4 @@ public interface TagService {
     int getArticleSumNumByTag(String tagId);
 
     List<Tag> findTagsByModuleId(String moduleId);
-
 }

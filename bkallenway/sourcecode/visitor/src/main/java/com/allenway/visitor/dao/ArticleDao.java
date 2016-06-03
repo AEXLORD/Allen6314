@@ -1,8 +1,11 @@
 package com.allenway.visitor.dao;
 
 import com.allenway.visitor.entity.Article;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -11,17 +14,20 @@ import java.util.List;
  */
 public interface ArticleDao extends JpaRepository<Article, String> {
 
-    Article findArticleByIdAndIsDelete(String id,String isDelete);
-
-    @Query(value = "select article from Article article where isDelete='0' order by createDate")
-    List<Article> findAllArticles();
-
-    List<Article> findArticleByTagId(String tagId);
-
-    @Query(value = "select * from tb_article order by RAND() LIMIT 1",nativeQuery = true)
+    @Query(value = "select * from tb_article where isDelete = '0' order by RAND() LIMIT 1",nativeQuery = true)
     Article findRandomArticle();
+    Article findArticleById(String id);
 
-    List<Article> findArticleByModuleIdAndIsDelete(String moduleId, String isDelete);
+    @Query("select article from Article article where tagId = :tagId and isDelete = '0' order by createDate asc")
+    List<Article> findArticleByTagId(@Param("tagId") String tagId);
+    @Query("select article from Article article where moduleId = :moduleId and isDelete = '0' order by createDate asc")
+    List<Article> findArticleByModuleId(@Param("moduleId") String moduleId);
+
+    @Query("select count(article) from Article article where moduleId=:moduleId and isDelete = '0'")
+    int sumArticlesByModuleId(@Param("moduleId") String moduleId);
+
+    @Query("select count(article) from Article article where tagId=:tagId and isDelete = '0'")
+    int sumArticlesByTagId(@Param("tagId") String tagId);
 }
 
 

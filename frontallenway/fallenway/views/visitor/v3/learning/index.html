@@ -31,7 +31,7 @@
         }
         .articleBox{
             margin-top:100px;
-            width:60%;
+            width:55%;
             margin:0px auto;
         }
         .tagcloud a{
@@ -70,14 +70,14 @@
             <span style = "font-weight:bold">Tag Cloud</span>
             <div class = "tagcloud clearfix">
                 {% for tag in data.tags %}
-                <a href = "/visitor/learning/tag/get-articles-by-tag?id={{tag.id}}">{{tag.name}}</a>
+                <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
                 {% endfor %}
             </div>
         </div>
     </div>
     <div class = "articleBox">
-        <div class = "panel">
-            <ul>
+        <div>
+            <ul style = "padding-left:0px;margin:0px">
                 <li class = "list-group-item">Blog</li>
                 {% for article in data.articles %}
                     <li class = "list-group-item title" 
@@ -90,6 +90,41 @@
                     </li>
                 {% endfor  %}
             </ul>
+            <nav class = "text-right" style = "margin-top:15px;">
+                <ul class="pagination">
+                    <li>
+                        {% if data.nowPage == 1 %}
+                        <a href="#" aria-label="Previous" class = "disabled btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/learning/article/page?pagenum={{data.nowPageLeft}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" aria-label="Previous" class = "btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% for page in data.totalPage %}
+                        {% if page == data.nowPage %}
+                        <li><a href="/visitor/learning/article/page?pagenum={{page}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" 
+                                class = "btn" style = "background-color:#ddd">{{page}}</a></li>
+                        {% else %}
+                        <li><a href="/visitor/learning/article/page?pagenum={{page}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" 
+                                class = "btn">{{page}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        {% if data.nowPage == data.totalPage.length %}
+                        <a href="#" aria-label="Next" class = "disabled btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/learning/article/page?pagenum={{data.nowPageRight}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" aria-label="Next" class = "btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 

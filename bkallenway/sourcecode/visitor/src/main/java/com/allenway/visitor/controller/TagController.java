@@ -77,11 +77,11 @@ public class TagController {
     }
 
     @RequestMapping(value = {"/tag/find-tags-by-moduleid","/auth/tag/find-tags-by-moduleid"},method = RequestMethod.GET)
-    public Object findTagByModule(String moduleId){
+    public Object findTagByModuleId(String moduleid){
 
-        if(ValidUtils.validIdParam(moduleId)){
+        if(ValidUtils.validIdParam(moduleid)){
             ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("tags",tagService.findTagsByModuleId(moduleId));
+            returnTemplate.addData("tags",tagService.findTagsByModuleId(moduleid));
             return returnTemplate;
         } else {
             throw new IllegalArgumentException("module is invalid!");
@@ -111,6 +111,18 @@ public class TagController {
             }
         } else {
             throw new IllegalArgumentException("tagid is invalid!");
+        }
+    }
+
+    @RequestMapping(value = {"/tag/find-tag-by-id","/auth/tag/find-tag-by-id"},method = RequestMethod.GET)
+    public Object findTagById(String tagid){
+
+        if(ValidUtils.validIdParam(tagid)){
+            ReturnTemplate returnTemplate = new ReturnTemplate();
+            returnTemplate.addData("tag",tagService.findTagById(tagid));
+            return returnTemplate;
+        } else {
+            throw new IllegalArgumentException("module is invalid!");
         }
     }
 

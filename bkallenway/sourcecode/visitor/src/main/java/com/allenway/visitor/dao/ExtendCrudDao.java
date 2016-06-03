@@ -17,9 +17,10 @@ public class ExtendCrudDao {
     @PersistenceContext
     private EntityManager em;
 
-    public Object findRandomArticle(){
-        String SQL = "select article from Article article order by rand() LIMIT 1";
+    public void test() {
+        String SQL = "select article from Article article";
         TypedQuery query = em.createQuery(SQL, Article.class);
-        return query.getSingleResult();
+        query.setMaxResults(1);
+        Article article = (Article) query.getSingleResult();
     }
 }

@@ -9,15 +9,18 @@ var router = express.Router();
 var Logger = require('../../../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
-router.get('/get-articles-by-tag',function(req,res,next){
+router.get('/find-articles-by-tagid',function(req,res,next){
 
     logger.debug("visitor/v2/learning/tag.js -- /visitor/tag/get-articles-by-tag ...");
     logger.debug("id = " + req.query.id);
 
     async.parallel({
         //请求 主页文章 数据
-        articles:function(callback){
-            request(config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" + req.query.id,function(error,response,body){
+        articles_totalPage:function(callback){
+            var pageSize = config.getPageSize();
+            var url = config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" +
+                                    req.query.id + "&page=1&size=" + pageSize;
+            request(url,function(error,response,body){
         	    if(!error && response.statusCode == 200){
             		var returnData = JSON.parse(body);
 
@@ -26,7 +29,7 @@ router.get('/get-articles-by-tag',function(req,res,next){
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
             	    } else {
-                        callback(null,returnData.data.articles);
+                        callback(null,returnData.data);
             		}
         	    } else {
                     logger.error("visitor/tag.js -- /article/find-articles-by-tagid/ fail ..." +
@@ -89,6 +92,27 @@ router.get('/get-articles-by-tag',function(req,res,next){
             });
         }
     },function(err,result){
+        result.articles = result.articles_totalPage.articles;
+        result.nowPageLeft = 0;
+        result.nowPage = 1;
+        result.nowPageRight = 2;
+        result.tagid = req.query.id;
+
+        var tag;
+        result.tags.forEach(function(entry){
+            if(entry.id == req.query.id){
+                tag = entry;
+            }
+        })
+        result.moduleid = tag.moduleId;
+
+        result.totalPage = new Array();
+        for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
+            result.totalPage[i-1] = i;
+        }
+
+        console.log("======= result = " + result);
+
         res.render('visitor/v3/learning/index',{'data':result});
     })
 });

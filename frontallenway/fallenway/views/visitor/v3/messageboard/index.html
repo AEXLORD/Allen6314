@@ -56,9 +56,82 @@
 {% block mainContent %}
     <div class = "articleBox">
         <div class = "panel">
-            <h2>Leave sth ......</h2>
+            <form id = "msgForm" action = "" method = "post">
+                <div>
+                <input type = "text" placeholder = "怎么联系你" style = "width:100%">
+                </div>
+                <div style = "margin-top:10px;">
+                <input type = "text" placeholder = "说吧" style = "width:100%">
+                </div>
+                <div style = "margin-top:10px;" class= "text-right">
+                <a class = "btn btn-primary btn-sm" style = "width:10%">OK</a>
+                </div>
+            </form>
             <hr/>
-            <p>message board / 接入腾讯qq，还在审批 😢ing</p>
+            
+            {% for message in data.messages%}
+            <div>
+                <span>{{message.floor}}楼 <i>{{message.userId}}</i> 说：</span><br/>
+                <span style = "padding-left:25px;">{{message.content}}</span><br/>
+            </div>
+            <hr style = "width:30%"/>
+            {% endfor %}
+            <!--<div>-->
+                <!--<span>1楼 <i>我是博主</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">我是博主我最帅！</span><br/>-->
+            <!--</div>-->
+            <!--<hr style = "width:30%"/>-->
+            <!--<div>-->
+                <!--<span>2楼 <i>QQ联系我：748227431</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">我是博主我最帅！</span><br/>-->
+            <!--</div>-->
+            <!--<hr style = "width:30%"/>-->
+            <!--<div>-->
+                <!--<span>3楼 <i>天外飞仙</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">博主你这个是怎么做的啊，帮我做一个功能啊！</span><br/>-->
+            <!--</div>-->
+            <!--<hr style = "width:30%"/>-->
+            <!--<div>-->
+                <!--<span>4楼 <i>我是轩哥啊</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">你个水货，我要刷挂你的博客！！！！</span><br/>-->
+            <!--</div>-->
+
+
+            <nav class = "text-right" style = "margin-top:15px;">
+                <ul class="pagination">
+                    <li>
+                        {% if data.nowPage == 1 %}
+                        <a href="#" aria-label="Previous" class = "disabled btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/messageboard/page?pagenum={{data.nowPageLeft}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" aria-label="Previous" class = "btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% for page in data.totalPage %}
+                        {% if page == data.nowPage %}
+                        <li><a href="/visitor/messageboard/page?pagenum={{page}}" 
+                                class = "btn" style = "background-color:#ddd">{{page}}</a></li>
+                        {% else %}
+                        <li><a href="/visitor/messageboard/page?pagenum={{page}}" 
+                                class = "btn">{{page}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        {% if data.nowPage == data.totalPage.length %}
+                        <a href="#" aria-label="Next" class = "disabled btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/messageboard/page?pagenum={{data.nowPageRight}}" aria-label="Next" class = "btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 {% endblock %}

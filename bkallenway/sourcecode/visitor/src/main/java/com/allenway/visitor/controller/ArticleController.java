@@ -4,16 +4,11 @@ import com.allenway.infrustructure.exception.DataNotFoundException;
 import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
 import com.allenway.visitor.entity.Article;
-import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ArticleService;
 import com.allenway.visitor.service.TagService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -103,20 +98,20 @@ public class ArticleController {
             ,method = RequestMethod.GET)
     public Object findArticlesByTagId(String tagid,String page, String size) {
         if (ValidUtils.validIdParam(tagid)) {
-            if(Integer.parseInt(size) > 20){
-                throw new IllegalArgumentException("size is too large!");
+            if(ValidUtils.validPageAndSize(page,size)){
+                ReturnTemplate returnTemplate = new ReturnTemplate();
+
+                //计算总页数
+                int totleSize = articleService.sumArticleByTagId(tagid);
+                int totalPages = (int) Math.ceil((float)totleSize / Integer.parseInt(size));
+
+                returnTemplate.addData("articles", articleService.findArticlesByTagId(tagid,page,size));
+                returnTemplate.addData("totalPage",totalPages);
+
+                return returnTemplate;
+            } else {
+                throw new IllegalArgumentException("page or size isn't valid");
             }
-
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-
-            //计算总页数
-            int totleSize = articleService.sumArticleByTagId(tagid);
-            int totalPages = (int) Math.ceil((float)totleSize / Integer.parseInt(size));
-
-            returnTemplate.addData("articles", articleService.findArticlesByTagId(tagid,page,size));
-            returnTemplate.addData("totalPage",totalPages);
-
-            return returnTemplate;
         } else {
             throw new IllegalArgumentException("tagId is invalid(null or sql attck)");
         }
@@ -129,22 +124,21 @@ public class ArticleController {
     @RequestMapping(value = {"/article/find-articles-by-moduleid","/auth/article/find-articles-by-moduleid"}
             ,method = RequestMethod.GET)
     public Object findArticlesByModuleId(String moduleid,String page,String size){
-
         if(ValidUtils.validIdParam(moduleid)){
-            if(Integer.parseInt(size) > 20){
-                throw new IllegalArgumentException("size is too large!");
+            if(ValidUtils.validPageAndSize(page,size)){
+                ReturnTemplate returnTemplate = new ReturnTemplate();
+
+                //计算总页数
+                int totleSize = articleService.sumArticleByModuleId(moduleid);
+                int totalPages = (int) Math.ceil((float)totleSize / Integer.parseInt(size));
+
+                returnTemplate.addData("articles",articleService.findArticlesByModuleId(moduleid,page,size));
+                returnTemplate.addData("totalPage",totalPages);
+
+                return  returnTemplate;
+            } else {
+                throw new IllegalArgumentException("page or size isn't valid");
             }
-
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-
-            //计算总页数
-            int totleSize = articleService.sumArticleByModuleId(moduleid);
-            int totalPages = (int) Math.ceil((float)totleSize / Integer.parseInt(size));
-
-            returnTemplate.addData("articles",articleService.findArticlesByModuleId(moduleid,page,size));
-            returnTemplate.addData("totalPage",totalPages);
-
-            return  returnTemplate;
         } else {
             throw new IllegalArgumentException("moduleId is inValid!");
         }
@@ -156,6 +150,4 @@ public class ArticleController {
         returnTemplate.addData("article",articleService.findRandomArticle());
         return returnTemplate;
     }
-
-
 }

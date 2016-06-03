@@ -78,7 +78,7 @@ router.get('', function(req, res, next) {
                 //默认取 第一个module 的文章
                 },
                 articles_totalPage:function(subcallback){
-                    var pageSize = config.getPageSize();
+                    var pageSize = config.getArticleListPageSize();
                     var url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
                                     moduleid + "&page=1&size=" + pageSize;
 

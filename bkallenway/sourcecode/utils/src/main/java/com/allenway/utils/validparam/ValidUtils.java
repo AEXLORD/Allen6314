@@ -24,4 +24,22 @@ public abstract class ValidUtils {
             return true;
         }
     }
+    /**
+     * 分页查询的时候,验证 Page 和 Size 是否合理
+     * 1. page,size 不能为空
+     * 2. page,size 都是大于0 的数.
+     * 3. size 每页的大小不能超过 15
+     * @return
+     */
+    public static boolean validPageAndSize(String page,String size) {
+        if(StringUtils.isEmpty(page) || StringUtils.isEmpty(size)){
+            return false;
+        } else if(Integer.parseInt(page) <= 0 || Integer.parseInt(size) <= 0){
+            return false;
+        } else if(Integer.parseInt(size) > 15){
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

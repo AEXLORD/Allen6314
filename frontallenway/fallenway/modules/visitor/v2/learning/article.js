@@ -192,7 +192,7 @@ router.get('/page',function(req,res,next){
         articles_totalPage: function(callback){
 
             var url;
-            var pageSize = config.getPageSize();
+            var pageSize = config.getArticleListPageSize();
 
             if(tagid != ""){
                 url = config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" +

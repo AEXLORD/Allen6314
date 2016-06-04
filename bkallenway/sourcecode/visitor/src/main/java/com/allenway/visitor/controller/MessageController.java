@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -76,6 +77,16 @@ public class MessageController {
             return returnTemplate;
         } else {
             throw new IllegalArgumentException("page or size isn't valid");
+        }
+    }
+
+    @RequestMapping(value = {"/message/delete-message","/auth/message/delete-message"},method = RequestMethod.POST)
+    public Object deleteMessage(@RequestParam("id") String id){
+        if(ValidUtils.validIdParam(id)){
+            messageService.deleteMessageById(id);
+            return new ReturnTemplate();
+        } else {
+            throw new IllegalArgumentException("messageid isn't valid");
         }
     }
 }

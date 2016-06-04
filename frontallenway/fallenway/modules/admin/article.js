@@ -296,7 +296,7 @@ router.get('/articleManage',function(req,res,next){
         var moduleid;
         async.waterfall([
                 function(callback){
-                    request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+                    request(config.getBackendUrlPrefix() + "auth/module/find-all-modules",function(error,response,body){
                         if(!error && response.statusCode == 200){
                             var returnData = JSON.parse(body);
 
@@ -328,15 +328,15 @@ router.get('/articleManage',function(req,res,next){
                         }
                     })
 
-                    var pageSize = config.getPageSize();
-                    var url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
+                    var pageSize = config.getArticleListPageSize();
+                    var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleid?moduleid=" +
                                     moduleid + "&page=1&size=" + pageSize;
                     request(url,function(error,response,body){
                         if(!error && response.statusCode == 200){
                             var returnData = JSON.parse(body);
 
                             if(returnData.statusCode != 0){
-                                logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                                logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
                                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                                 res.render('error/unknowerror');
                             } else {
@@ -380,7 +380,7 @@ router.get('/page',function(req,res,next){
 
     async.parallel({
         modules: function(callback){
-            request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+            request(config.getBackendUrlPrefix() + "auth/module/find-all-modules",function(error,response,body){
                 if(!error && response.statusCode == 200){
                     var returnData = JSON.parse(body);
 
@@ -406,13 +406,13 @@ router.get('/page',function(req,res,next){
         articles_totalPage: function(callback){
 
             var url;
-            var pageSize = config.getPageSize();
+            var pageSize = config.getArticleListPageSize();
 
             if(tagid != ""){
-                url = config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagId=" +
+                url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-tagid?tagId=" +
                         tagid + "&page="+ pageNum +"&size=" + pageSize;
             } else {
-                url = config.getBackendUrlPrefix() + "article/find-articles-by-moduleid?moduleid=" +
+                url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleid?moduleid=" +
                         moduleid + "&page=" + pageNum + "&size=" + pageSize;
             }
 
@@ -421,17 +421,17 @@ router.get('/page',function(req,res,next){
                     var returnData = JSON.parse(body);
 
                     if(returnData.statusCode != 0){
-                        logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                        logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
                     } else {
                         callback(null,returnData.data);
                     }
                 } else {
-                    logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                    logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
                         "error = " + error);
                     if(response != null){
-                        logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
+                        logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
                             "response.statuCode = " + response.statusCode + "..." +
                             "response.body = " + response.body);
                     }

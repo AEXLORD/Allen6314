@@ -19,4 +19,6 @@ public interface MessageDao extends JpaRepository<Message,String> {
 
     @Query("select message from Message message where isDelete = '0' order by createDate asc")
     List<Message> findAllMessages();
+
+    Message findMessageById(String messageid);
 }

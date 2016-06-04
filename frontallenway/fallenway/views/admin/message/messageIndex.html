@@ -1,0 +1,74 @@
+{% extends '../common/header_leftSide.html' %}
+
+{% block subIncludeFileBeforeBody %}
+        <style type = "text/css">
+            .table tbody > tr > td {
+                padding:0;
+            }
+            .table>thead>tr>td {
+                padding:0;
+            }
+            .table tbody > tr > td:first-child {
+                padding:0px;
+            }
+        </style>
+{% endblock %}
+
+{% block subMainContent  %}
+    <h3>留言列表</h3>
+    <table class = "table table-striped">
+        <thead>
+            <td>floor</td>
+            <td>username</td>
+            <td>content</td>
+            <td>createDate</td>
+            <td>Operation</td>
+         </thead>
+        <tbody>
+            {% for message in data.messages %}
+            <tr>
+                <td>{{message.floor}}</td>
+                <td>{{message.userId}}</td>
+                <td>{{message.content}}</td>
+                <td>{{message.createDate}}</td>
+                <td><a href = "/admin/message/delete?id={{message.id}}">删除</a></td>
+             </tr>
+             {% endfor %}
+        </tbody>
+    </table>
+    <nav class = "text-right" style = "margin-top:15px;">
+        <ul class="pagination">
+            <li>
+                {% if data.nowPage == 1 %}
+                <a href="#" aria-label="Previous" class = "disabled btn">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                {% else %}
+                <a href="/admin/message/page?pagenum={{data.nowPageLeft}}" aria-label="Previous" class = "btn">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                {% endif %}
+            </li>
+            {% for page in data.totalPage %}
+                {% if page == data.nowPage %}
+                <li><a href="/admin/message/page?pagenum={{page}}" 
+                        class = "btn" style = "background-color:#ddd">{{page}}</a></li>
+                {% else %}
+                <li><a href="/admin/message/page?pagenum={{page}}" 
+                        class = "btn">{{page}}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li>
+                {% if data.nowPage == data.totalPage.length %}
+                <a href="#" aria-label="Next" class = "disabled btn">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                {% else %}
+                <a href="/admin/message/page?pagenum={{data.nowPageRight}}" aria-label="Next" class = "btn">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

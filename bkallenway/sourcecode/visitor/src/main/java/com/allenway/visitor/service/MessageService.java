@@ -15,4 +15,6 @@ public interface MessageService {
     int sumMessages();
 
     List<Message> findMessagesByPage(String page, String size);
+
+    void deleteMessageById(String messageid);
 }

@@ -71,7 +71,7 @@
             
             {% for message in data.messages%}
             <div>
-                <span>{{message.floor}}楼 <i>{{message.userId}}</i> 说：</span><br/>
+                <span>{{message.floor}}楼 <i>{{message.userId}}</i>&nbsp; (at {{message.createDate}}) 留言：</span><br/>
                 <span style = "padding-left:25px;">{{message.content}}</span><br/>
             </div>
             <hr style = "width:30%"/>

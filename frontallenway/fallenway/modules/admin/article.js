@@ -296,7 +296,14 @@ router.get('/articleManage',function(req,res,next){
         var moduleid;
         async.waterfall([
                 function(callback){
-                    request(config.getBackendUrlPrefix() + "auth/module/find-all-modules",function(error,response,body){
+                    var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
+                    var options = {
+    	                url:url,
+    	                headers:{
+                            'Authorization': "Bearer " + cookies['Authorization']
+		                },
+                    }
+                    request(options,function(error,response,body){
                         if(!error && response.statusCode == 200){
                             var returnData = JSON.parse(body);
 
@@ -331,7 +338,14 @@ router.get('/articleManage',function(req,res,next){
                     var pageSize = config.getArticleListPageSize();
                     var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleid?moduleid=" +
                                     moduleid + "&page=1&size=" + pageSize;
-                    request(url,function(error,response,body){
+
+                    var options = {
+    	                url:url,
+    	                headers:{
+                            'Authorization': "Bearer " + cookies['Authorization']
+		                },
+                    }
+                    request(options,function(error,response,body){
                         if(!error && response.statusCode == 200){
                             var returnData = JSON.parse(body);
 
@@ -380,7 +394,16 @@ router.get('/page',function(req,res,next){
 
     async.parallel({
         modules: function(callback){
-            request(config.getBackendUrlPrefix() + "auth/module/find-all-modules",function(error,response,body){
+
+            var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
+            var options = {
+    	        url:url,
+    	        headers:{
+                    'Authorization': "Bearer " + cookies['Authorization']
+		        },
+            }
+
+            request(options,function(error,response,body){
                 if(!error && response.statusCode == 200){
                     var returnData = JSON.parse(body);
 
@@ -416,7 +439,13 @@ router.get('/page',function(req,res,next){
                         moduleid + "&page=" + pageNum + "&size=" + pageSize;
             }
 
-            request(url,function(error,response,body){
+            var options = {
+    	        url:url,
+    	        headers:{
+                    'Authorization': "Bearer " + cookies['Authorization']
+		        },
+            }
+            request(options,function(error,response,body){
                 if(!error && response.statusCode == 200){
                     var returnData = JSON.parse(body);
 

@@ -17,7 +17,7 @@ router.get('/find-articles-by-tagid',function(req,res,next){
     async.parallel({
         //请求 主页文章 数据
         articles_totalPage:function(callback){
-            var pageSize = config.getPageSize();
+            var pageSize = config.getArticleListPageSize();
             var url = config.getBackendUrlPrefix() + "article/find-articles-by-tagid?tagid=" +
                                     req.query.id + "&page=1&size=" + pageSize;
             request(url,function(error,response,body){

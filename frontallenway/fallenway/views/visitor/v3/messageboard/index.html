@@ -56,15 +56,17 @@
 {% block mainContent %}
     <div class = "articleBox">
         <div class = "panel">
-            <form id = "msgForm" action = "" method = "post">
+            <form id = "msgForm" action = "/visitor/messageboard/addmessage" method = "post">
                 <div>
-                <input type = "text" placeholder = "怎么联系你" style = "width:100%">
+                    <input id = "username" name = "username" type = "text" placeholder = "怎么联系你" style = "width:100%">
                 </div>
                 <div style = "margin-top:10px;">
-                <input type = "text" placeholder = "说吧" style = "width:100%">
+                    <input id = "_content" name = "content" type = "text" placeholder = "说吧" style = "width:100%">
                 </div>
                 <div style = "margin-top:10px;" class= "text-right">
-                <a class = "btn btn-primary btn-sm" style = "width:10%">OK</a>
+                    <span id = "warn" style = "color:red"></span> &nbsp;&nbsp;
+                    <a href = "javascript:void(0)" onclick = "addMessage()" 
+                        class = "btn btn-primary btn-sm" style = "width:10%">OK</a>
                 </div>
             </form>
             <hr/>
@@ -156,5 +158,39 @@
         <script src="/javascripts/jquery.magnific-popup.min.js"></script>
         <script src="/javascripts/mediaelement-and-player.min.js"></script>
         <script src="/javascripts/main.js"></script>
+
+        <script type = "text/javascript">
+function addMessage(){
+     var username = $('#username').val();
+     var content = $('#_content').val();
+    
+     $('#warn').empty();
+     if(username == null || username.trim() == ''){
+          $('#warn').append("给个联系方式呗");    
+     } else if(content == null || content.trim() == '') {
+          $('#warn').append("说点什么呗");    
+     } else if(content.length > 100 || username.length > 100){
+          $('#warn').append("字数太多了");    
+     } else if(!specialChar(username,content)){
+         $('#warn').append("不能有特殊字符，比如 \'  \"  <  >");    
+     } else {
+         $('#msgForm').submit();
+     }
+}
+function specialChar(username,content){
+    if(username.indexOf('\'') > -1 || content.indexOf('\'') > -1){
+        return false;
+    } else if(username.indexOf('\"') > -1 || content.indexOf('\"') > -1){
+        return false;
+    } else if(username.indexOf('<') > -1 || content.indexOf('<') > -1){
+        return false;
+    } else if(username.indexOf('>') > -1 || content.indexOf('>') > -1){
+        return false;
+    } else {
+         return true;
+    }
+}
+
+        </script>
 
 {% endblock %}

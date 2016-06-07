@@ -21,4 +21,7 @@ public interface MessageDao extends JpaRepository<Message,String> {
     List<Message> findAllMessages();
 
     Message findMessageById(String messageid);
+
+    @Query("select message from Message message where isDelete = '0' and floor > :floor")
+    List<Message> findMessagesBiggerThanFloor(@Param("floor") int floor);
 }

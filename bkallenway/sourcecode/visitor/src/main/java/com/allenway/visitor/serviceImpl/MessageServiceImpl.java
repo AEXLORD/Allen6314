@@ -71,8 +71,19 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void deleteMessageById(String messageid) {
+
         Message message = messageDao.findMessageById(messageid);
         message.setIsDelete("1");
         messageDao.saveAndFlush(message);
+
+        int floor = message.getFloor();
+
+        List<Message> messageList = messageDao.findMessagesBiggerThanFloor(floor);
+        messageList
+                .parallelStream()
+                .forEach(param -> {
+                    param.setFloor(param.getFloor() - 1);
+                    messageDao.save(param);
+                });
     }
 }

@@ -52,9 +52,9 @@ public class MessageController {
             return false;
         } else if (username.length() > 100 || content.length() > 100) {
             return false;
-        } else if( username.contains("<") || username.contains("'") || username.contains("\"")){
+        } else if( username.contains("<") || username.contains(">") || username.contains("'") || username.contains("\"")){
             return false;
-        } else if( content.contains("<") || content.contains("'") || content.contains("\"")){
+        } else if( content.contains("<") || content.contains(">") || content.contains("'") || content.contains("\"")){
             return false;
         } else {
             return true;

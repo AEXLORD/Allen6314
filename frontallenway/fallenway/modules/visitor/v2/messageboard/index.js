@@ -83,19 +83,21 @@ router.get('',function(req,res,next){
         result.nowPage = 1;
         result.nowPageRight = 2;
 
-        console.log("============");
-        console.log(result);
-        console.log("============");
-
         res.render('visitor/v3/messageboard/index',{"data":result});
     })
 });
 
 
-router.get('/page',function(req,res,next){
-    var pageNum = req.query.pagenum;
 
-    console.log("pageNum = " + pageNum);
+
+
+
+
+
+router.get('/page',function(req,res,next){
+    logger.debug("visitor/v2/messageboard/index.js -- /visitor/messageboard/page ...");
+
+    var pageNum = req.query.pagenum;
 
     async.parallel({
         modules:function(callback){
@@ -166,15 +168,81 @@ router.get('/page',function(req,res,next){
         result.nowPage = pageNum;
         result.nowPageRight = parseInt(pageNum) + 1;
 
-        console.log("============");
-        console.log(result);
-        console.log("============");
-
         res.render('visitor/v3/messageboard/index',{"data":result});
     })
 })
 
 
+
+
+router.post('/addmessage',function(req,res,next){
+    logger.debug("visitor/v2/messageboard/index.js -- /visitor/messageboard/page ...");
+
+    var username = req.body.username;
+    var content = req.body.content;
+
+    console.log("username = " + username + " ,content = " + content);
+
+    if(validAddMessage(username,content)){
+
+        var data = {
+            "username":username,
+            "content":content
+        }
+        var url = config.getBackendUrlPrefix() + "message/save-message";
+        var options = {
+    	    url:url,
+	        form:data
+        }
+
+        request.post(options,function(error,response,body){
+            if(!error && response.statusCode == 200){
+                var returnData = JSON.parse(body);
+
+                if(returnData.statusCode != 0){
+                    logger.error("visitor/v2/messagesboard/index.js -- message/save-message fail ..." +
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                } else {
+                    res.redirect('/visitor/messageboard');
+                }
+            } else {
+                logger.error("visitor/v2/messagesboard/index.js -- message/save-message fail ..." +
+                    "error = " + error);
+                if(response != null){
+                    logger.error("visitor/v2/messagesboard/index.js -- message/save-message fail ..." +
+                        "response.statuCode = " + response.statusCode + "..." +
+                        "response.body = " + response.body);
+                }
+                res.render('error/unknowerror');
+            }
+        });
+    } else {
+            logger.error("visitor/v2/messagesboard/index.js -- message/save-message validAddMessage(username,content) == false");
+         res.render('error/toattack');
+    }
+})
+
+function validAddMessage(username,content){
+
+    if(username == null || content == null){
+        return false;
+    } else if (username.trim() == '' || content.trim() == ''){
+        return false;
+    } else if(username.length > 100 || content.length > 100){
+        return false;
+    } else if(username.indexOf('\'') > -1 || content.indexOf('\'') > -1){
+        return false;
+    } else if(username.indexOf('\"') > -1 || content.indexOf('\"') > -1){
+        return false;
+    } else if(username.indexOf('<') > -1 || content.indexOf('<') > -1){
+        return false;
+    } else if(username.indexOf('>') > -1 || content.indexOf('>') > -1){
+        return false;
+    } else {
+         return true;
+    }
+}
 
 
 module.exports = router;

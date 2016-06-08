@@ -1,0 +1,141 @@
+{% extends  '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %}
+
+    <link rel="stylesheet" href="/stylesheets/animate.css">
+    <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+    <link rel="stylesheet" href="/stylesheets/mediaelementplayer.css">
+    <link rel="stylesheet" id="color-scheme" href="/stylesheets/colors/green.css">
+    <script src = "/javascripts/modernizr.js" ></script>
+    <script src = "/javascripts/jquery.min.js" ></script>
+
+    <style type = "text/css">
+        body{
+            font-family:STFangSong, Helvetica, Arial, Vernada, Tahoma, STXihei, "Microsoft YaHei", "Songti SC", SimSun, Heiti, sans-serif;
+            font-size:18px;
+        }
+
+        .panel {
+            border:1px solid #ddd;
+            padding: 15px;
+        }
+        .list-group-item{
+            border-width:1px solid #ddd;
+        }
+        a{
+            color:#428bca;
+            text-decoration:none;
+        }
+        .articleBox{
+            margin-top:100px;
+            width:60%;
+            margin:0px auto;
+        }
+        .tagcloud a{
+            font-size:18px;
+            border-radius:0;
+        }
+    </style>
+        
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)
+        },i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-77363750-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+
+    {% block subIncludeFileBeforeBody1 %}{% endblock %}
+{% endblock %}
+
+
+{% block mainContent %}
+    
+    <!--<div style = "float:left;width:20%">-->
+        <!--<div class = "widget" style = "">-->
+            <!--<span style = "font-weight:bold">随机 Look</span>-->
+            <!--<div class = "tagcloud clearfix">-->
+                <!--<a href = "#">Just Do It</a>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class = "widget" style = "margin-top:20px;">-->
+            <!--<div style = "font-weight:bold;display:block">Tag Cloud</div>-->
+            <!--<div class = "tagcloud clearfix" style = "display:inline-block">-->
+                <!--<a href = "#">火影</a>-->
+            <!--</div>-->
+            <!--<div class = "tagcloud clearfix" style = "display:inline-block">-->
+                <!--<a href = "#">BasketBall</a>-->
+            <!--</div>-->
+            <!--<div class = "tagcloud clearfix" style = "display:inline-block">-->
+                <!--<a href = "#">Football</a>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    
+    <div style = "float:left;width:22%">
+        <div class = "widget">
+            <span style = "font-weight:bold">Tag Cloud</span>
+            <div class = "tagcloud clearfix">
+                <a href = "/visitor/play/news">News</a>
+                <a href = "/visitor/play/zhihu">知乎 Links</a>
+                <a href = "/visitor/play/stroll">Stroll</a>
+            </div>
+        </div>
+    </div>
+
+    <div class = "articleBox">
+        <div class = "panel">
+            <h2>无聊看看 ~~</h2>
+            <hr/>
+        <div>
+            <h5>Topic ~~</h5>
+            <a href = "https://www.zhihu.com/question/26380791" target="_blank">1. 有哪些好的网站，让人第一眼看了就怦然心动，流连忘返？</a>        
+            <br/>
+            <a href = "https://www.zhihu.com/question/36872610" target="_blank">2. 有没有那么一首英文歌让你听一遍就单曲循环了？</a>        
+            <br/>
+            <a href = "https://www.zhihu.com/question/24407926" target="_blank">3. 一个人生活，怎样才能把日子过得优雅而且有品位？</a>        
+            <br/>
+            <a href = "https://www.zhihu.com/question/20872048" target="_blank">4. 男生如何学习服装搭配？</a>        
+            <br/>
+        </div>
+
+        <div style= "width:100%">
+            <div style = "float:right">
+                <input type="button" class="btn btn-sm btn-primary" value="Back" onclick = "window.history.go(-1);">
+            </div>
+            <div style = "clear:both"></div>
+        </div>
+
+        </div>
+    </div>
+
+    <div class = "md60 clearfix visible-sm visible-xs"></div>
+{% endblock %}
+
+
+
+{% block subIncludeFileAfterBody %}
+    {% block subIncludeFileAfterBody1 %}{% endblock %}
+
+        <script src="/javascripts/smoothscroll.js"></script>
+
+        <script src="/javascripts/bootstrap.min.js"></script>
+        <script src="/javascripts/jquery.hoverIntent.min.js"></script>
+        <script src="/javascripts/jquery.nicescroll.min.js"></script>
+        <script src="/javascripts/waypoints.min.js"></script>
+        <script src="/javascripts/waypoints-sticky.min.js"></script>
+        <script src="/javascripts/jquery.debouncedresize.js"></script>
+        <script src="/javascripts/retina.min.js"></script>
+        <script src="/javascripts/owl.carousel.min.js"></script>
+        <script src="/javascripts/jflickrfeed.min.js"></script>
+        <script src="/javascripts/twitter/jquery.tweet.min.js"></script>
+        <script src="/javascripts/jquery.magnific-popup.min.js"></script>
+        <script src="/javascripts/mediaelement-and-player.min.js"></script>
+        <script src="/javascripts/main.js"></script>
+
+{% endblock %}

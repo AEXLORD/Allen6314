@@ -388,6 +388,13 @@ router.get('/articleManage',function(req,res,next){
 
 
 router.get('/page',function(req,res,next){
+
+    var cookies = mycookies.getMyCookies(req);
+    if(cookies['Authorization'] == 'undefined'){
+ 		logger.info("cookies[Authorization] == undefined......");
+        res.render('admin/login');
+    } else {
+
     var pageNum = req.query.pagenum;
     var moduleid = req.query.moduleid;
     var tagid = req.query.tagid;
@@ -484,6 +491,8 @@ router.get('/page',function(req,res,next){
 
         res.render('admin/article/articleManageIndex',{'data':result});
     })
+
+    }
 });
 
 

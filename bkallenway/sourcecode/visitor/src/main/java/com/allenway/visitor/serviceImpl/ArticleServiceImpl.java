@@ -1,13 +1,11 @@
 package com.allenway.visitor.serviceImpl;
 
 import com.allenway.visitor.dao.ArticleDao;
-import com.allenway.visitor.dao.ExtendCrudDao;
 import com.allenway.visitor.entity.Article;
 import com.allenway.visitor.service.ArticleService;
-import io.swagger.models.auth.In;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -18,6 +16,7 @@ import java.util.List;
  */
 
 @Service
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
@@ -27,11 +26,13 @@ public class ArticleServiceImpl implements ArticleService {
 //    private ExtendCrudDao extendCrudDao;
 
     @Override
+    @CacheEvict(value = "article",keyGenerator = "article_id")
     public Article saveArticle(Article article) {
         return articleDao.saveAndFlush(article);
     }
 
     @Override
+    @CacheEvict(value = "article",keyGenerator = "article_id")
     public void deleteArticle(Article article) {
         article.setIsDelete("1");
         articleDao.save(article);

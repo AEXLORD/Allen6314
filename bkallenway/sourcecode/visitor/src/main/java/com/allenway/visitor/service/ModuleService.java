@@ -2,7 +2,7 @@ package com.allenway.visitor.service;
 
 import com.allenway.visitor.entity.Module;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by wuhuachuan on 16/5/30.
@@ -10,5 +10,5 @@ import java.util.List;
 public interface ModuleService {
 
     public Module addModule(Module module);
-    public List<Module> findAllModules();
+    public Set<Module> findAllModules();
 }

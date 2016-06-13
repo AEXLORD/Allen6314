@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
+        <module>config</module>
         <module>utils</module>
         <module>commons</module>
         <module>infrustructure</module>
@@ -30,6 +31,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.allenway</groupId>
+                <artifactId>config</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
             <dependency>
                 <groupId>com.allenway</groupId>
                 <artifactId>utils</artifactId>
@@ -68,7 +74,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

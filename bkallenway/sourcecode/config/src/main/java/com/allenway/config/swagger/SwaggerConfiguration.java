@@ -1,4 +1,4 @@
-package com.allenway.infrustructure.swagger;
+package com.allenway.config.swagger;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@ConditionalOnProperty(name="infrastructure.swagger",havingValue="true")
+@ConditionalOnProperty(name="config.swagger",havingValue="true")
 public class SwaggerConfiguration {
 	@Bean
     public Docket api() { 

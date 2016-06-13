@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,10 +36,25 @@ public class LoginController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired(required = false)
-    private OAuthParamEntity oauthParamEntity;
-
     private Gson gson = new Gson();
+
+    @Value("${config.oauth2.oauthTokenApiURL}")
+    private String oauthTokenApiURL;
+
+    @Value("${config.oauth2.clientId}")
+    private String clientId;
+
+    @Value("${config.oauth2.clientSecret}")
+    private String clientSecret;
+
+    @Value("${config.oauth2.grantType}")
+    private String grantType;
+
+    @Value("${config.oauth2.provisionKey}")
+    private String provisionKey;
+
+    @Value("${config.oauth2.scope}")
+    private String scope;
 
     /**
      * 登录
@@ -115,6 +131,7 @@ public class LoginController {
         SSLCertificateValidation.disable();
 
         HttpURLConnection connection;
+        OAuthParamEntity oauthParamEntity = createOAuthParamEntity();
         connection = (HttpURLConnection) new URL(oauthParamEntity.getOauthTokenApiURL()).openConnection();
         sendConnectionParams(connection,adminId);
         connection.connect();
@@ -145,7 +162,7 @@ public class LoginController {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setDoInput(true);
-
+        OAuthParamEntity oauthParamEntity = createOAuthParamEntity();
         String param =
                 "client_id="+ oauthParamEntity.getClientId() +"&"+
                         "client_secret="+ oauthParamEntity.getClientSecret() +"&"+
@@ -161,6 +178,23 @@ public class LoginController {
         } finally {
             targetOS.close();
         }
+    }
 
+    private OAuthParamEntity createOAuthParamEntity(){
+        log.info("create OAuthParamEntity ... oauthTokenApiURL = {},clientId = {},clientSecret = {},grantType = {},provisionKey = {},scope = {}",
+                                                                            oauthTokenApiURL,
+                                                                            clientId,
+                                                                            clientSecret,
+                                                                            grantType,
+                                                                            provisionKey,
+                                                                            scope);
+        return new OAuthParamEntity.Builder()
+                .oauthTokenApiURL(oauthTokenApiURL)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .grantType(grantType)
+                .provisionKey(provisionKey)
+                .scope(scope)
+                .build();
     }
 }

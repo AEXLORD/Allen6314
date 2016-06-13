@@ -19,7 +19,6 @@ public class CustomLocalDateTimeSerializer extends JsonSerializer<LocalDateTime>
                           SerializerProvider serializerProvider)
             throws IOException {
         generator.writeString(formatter.print(value));
-    	//generator.writeString( value.toString() );
     }
 
 }

@@ -6,6 +6,7 @@ import com.allenway.utils.validparam.ValidUtils;
 import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ArticleService;
 import com.allenway.visitor.service.TagService;
+import com.allenway.visitor.support.TagType;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,15 @@ public class TagController {
     @RequestMapping(value = "/auth/tag/add-tag",method = RequestMethod.POST)
     public Object addTag(Tag tag){
         if(ValidUtils.validIdParam(tag.getName())){
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("tag",tagService.saveTag(tag));
-            return returnTemplate;
+            if(!tag.getType().equals(TagType.BASE) ||
+                    !tag.getType().equals(TagType.FRAME) ||
+                    !tag.getType().equals(TagType.OTHER)){
+                throw new IllegalArgumentException("type is wrong!");
+            } else {
+                ReturnTemplate returnTemplate = new ReturnTemplate();
+                returnTemplate.addData("tag",tagService.saveTag(tag));
+                return returnTemplate;
+            }
         } else {
             throw new IllegalArgumentException("tagName is null");
         }

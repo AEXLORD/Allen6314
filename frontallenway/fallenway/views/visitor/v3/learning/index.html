@@ -33,6 +33,7 @@
             margin-top:100px;
             width:55%;
             margin:0px auto;
+            float:left;
         }
         .tagcloud a{
             font-size:18px;
@@ -60,17 +61,39 @@
     
     <div style = "float:left;width:22%">
         <div class = "widget" style = "">
-            <span style = "font-weight:bold">每日随机复习一篇</span>
+            <span style = "font-weight:bold">随机看一篇</span>
             <div class = "tagcloud clearfix">
                 <a href = "/visitor/learning/article/get-random-article">Just Do It</a>
             </div>
         </div>
 
         <div class = "widget" style = "margin-top:20px;">
-            <span style = "font-weight:bold">Tag Cloud</span>
+            <span style = "font-weight:bold">Tag Cloud - base</span>
             <div class = "tagcloud clearfix">
                 {% for tag in data.tags %}
+                {% if tag.type == "base" %}
                 <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class = "widget" style = "margin-top:20px;">
+            <span style = "font-weight:bold">Tag Cloud - frame</span>
+            <div class = "tagcloud clearfix">
+                {% for tag in data.tags %}
+                {% if tag.type == "frame" %}
+                <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class = "widget" style = "margin-top:20px;">
+            <span style = "font-weight:bold">Tag Cloud - Others</span>
+            <div class = "tagcloud clearfix">
+                {% for tag in data.tags %}
+                {% if tag.type == "other" %}
+                <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -125,6 +148,32 @@
                     </li>
                 </ul>
             </nav>
+        </div>
+    </div>
+    <div style = "float:right;width:22%">
+        <div class = "widget" style = "">
+            <span style = "font-weight:bold">公告</span>
+            <div class = "tagcloud clearfix">
+                <!--<table>-->
+                    <!--<tr>-->
+                        <!--<td>1.</td>-->
+                        <!--<td>您访问该博客的感觉是怎么样的，希望可以到MsgBoard留言，让博主可以更好的改进，ありがとうございます。</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>2.</td>-->
+                        <!--<td>有红包奖励哦 O(∩_∩)O~ 😄</td>-->
+                    <!--</tr>-->
+                <!--</table>-->
+                <div style = "border:solid 1px #ddd;padding:5px">
+                    <div style = "float:left;width:5%">1.  </div>
+                    <div style = "float:right;width:93%;">您访问该博客的感觉是怎么样的，希望可以到MsgBoard留言，让博主可以更好的改进，ありがとうございます。</div>
+                    <div style = "clear:both"></div>
+                    <div style = "float:left;width:5%">2.  </div>
+                    <div style = "float:right;width:93%;">有<span style = "color:red;">红包奖励</span>哦 O(∩_∩)O~ 😄</div>
+                    <div style = "clear:both"></div>
+                </div>
+                <!--<a href = "/visitor/learning/article/get-random-article">Just Do It</a>-->
+            </div>
         </div>
     </div>
 

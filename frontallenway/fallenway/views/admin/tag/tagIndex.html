@@ -22,12 +22,18 @@
             <option value = "{{module.id}}">{{module.name}}</option>
         {% endfor %}
     </select>
+    <select class = "form-control" id = "tagType" name = "tagType" style = "width:20%;display:inline-block">
+        <option value = "base">base</option>
+        <option value = "frame">frame</option>
+        <option value = "other">other</option>
+    </select>
     <button class = "btn btn-primary btn-sm" onclick = "addTag()">Add Tag</button>
     <span id = "addTagWarn" style = "color:red"></span>
     <h3>Tag List</h3>
     <table class = "table table-striped" style = "margin-top:10px">
         <thead>
             <td>name</td>
+            <td>type</td>
             <td>该分类下的文章</td>
             <td>Operation</td>
          </thead>
@@ -35,6 +41,7 @@
             {% for tag in data.tags %}
             <tr class = "{{tag.id}}">
                 <td>{{tag.name}}</td>
+                <td>{{tag.type}}</td>
                 <td><a href = "javascript:void(0);" onclick = "getArticleByTag('{{tag.id}}')" >{{tag.articleNum}}</a></td>
                 <td><a href = "javascript:void(0);" onclick = "deleteTag('{{tag.id}}','{{tag.articleNum}}')">Delete</a></td>
              </tr>
@@ -68,9 +75,12 @@ function addTag(){
     $('#addTagWarn').empty();
     var name = $('#tagName').val();
     var moduleId = $('#moduleId').val();
+    var tagTypeId = $('#tagTypeId').val();
 
-    if(name != null && name.trim() != "" && moduleId != null && moduleId.trim() != ""){
-        $.post('/admin/tag/add-tag',{name:name,moduleId:moduleId},function(data,status){
+    if(name != null && name.trim() != "" && 
+            moduleId != null && moduleId.trim() != "" &&
+            tagType != null && tagType.trim() != ""){
+        $.post('/admin/tag/add-tag',{name:name,moduleId:moduleId,tagType:tagType},function(data,status){
             if(status == 'success'){
                 var tag = data.tag;
                 $('.tagItem').append(

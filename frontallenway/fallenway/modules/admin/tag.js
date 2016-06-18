@@ -162,7 +162,7 @@ router.post('/add-tag',function(req,res,next){
 	} else {
 
         var url = config.getBackendUrlPrefix() + "auth/tag/add-tag";
-        var data = {name:req.body.name,moduleId:req.body.moduleId};
+        var data = {name:req.body.name,moduleId:req.body.moduleId,type:req.body.tagType};
 
         var options = {
             url:url,

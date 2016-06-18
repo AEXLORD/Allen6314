@@ -1,7 +1,7 @@
 var Config = function(){
 
     //var backendUrlPrefix = "http://localhost:8080/";
-    var articleListPageSize = 8;
+    var articleListPageSize = 10;
     var messageListPageSize = 4;
     var backendUrlPrefix = "http://fallenway-kong:8000/";
 

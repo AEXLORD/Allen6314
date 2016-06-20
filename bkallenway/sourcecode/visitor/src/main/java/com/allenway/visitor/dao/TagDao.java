@@ -15,14 +15,10 @@ import java.util.List;
  */
 public interface TagDao extends JpaRepository<Tag, String> {
 
-    List<Tag> findTagByIsDelete(String isDelete);
+    @Query("select tag from Tag tag where isDelete = :isDelete order by type asc")
+    List<Tag> findTagByIsDelete(@Param("isDelete") String isDelete);
 
     Tag findTagByIdAndIsDelete(String tagId,String isDelete);
-
-    @Modifying
-    @Transactional
-    @Query(value = "update Tag set isDelete='1' where id=:id")
-    void deleteTagById(@Param(value = "id")String id);
 
     /**
      * 得到该tag 下的文章数量

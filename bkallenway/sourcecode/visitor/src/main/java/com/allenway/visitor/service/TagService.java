@@ -14,7 +14,7 @@ public interface TagService {
 
     Tag saveTag(Tag tag);
 
-    void deleteTagById(String id);
+    void deleteTag(Tag tag);
 
     //得到该tag 下的文章数量
     int getArticleSumNumByTag(String tagId);

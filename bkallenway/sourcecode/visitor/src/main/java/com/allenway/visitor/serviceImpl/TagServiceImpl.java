@@ -33,8 +33,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteTagById(String id) {
-        tagDao.deleteTagById(id);
+    public void deleteTag(Tag tag) {
+        tag.setIsDelete("1");
+        tagDao.saveAndFlush(tag);
     }
 
     @Override

@@ -3,18 +3,24 @@ package com.allenway.visitor.controller;
 import com.allenway.infrustructure.exception.DataNotFoundException;
 import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
+import com.allenway.visitor.entity.Module;
 import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ArticleService;
+import com.allenway.visitor.service.ModuleService;
 import com.allenway.visitor.service.TagService;
 import com.allenway.visitor.support.TagType;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by wuhuachuan on 16/4/2.
@@ -30,6 +36,9 @@ public class TagController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ModuleService moduleService;
 
     @RequestMapping(value = {"/tag/find-all-tags","/auth/tag/find-all-tags"},method = RequestMethod.GET)
     public Object findAllTags(){
@@ -50,18 +59,22 @@ public class TagController {
 
     @RequestMapping(value = "/auth/tag/add-tag",method = RequestMethod.POST)
     public Object addTag(Tag tag){
-        if(ValidUtils.validIdParam(tag.getName())){
-            if(!tag.getType().equals(TagType.BASE) ||
-                    !tag.getType().equals(TagType.FRAME) ||
-                    !tag.getType().equals(TagType.OTHER)){
-                throw new IllegalArgumentException("type is wrong!");
-            } else {
-                ReturnTemplate returnTemplate = new ReturnTemplate();
-                returnTemplate.addData("tag",tagService.saveTag(tag));
-                return returnTemplate;
-            }
+        if(ValidUtils.validIdParam(tag.getName()) || tagTypeIsValid(tag.getType())) {
+            ReturnTemplate returnTemplate = new ReturnTemplate();
+            returnTemplate.addData("tag", tagService.saveTag(tag));
+            return returnTemplate;
         } else {
             throw new IllegalArgumentException("tagName is null");
+        }
+    }
+
+    private boolean tagTypeIsValid(String type) {
+        if(StringUtils.isEmpty(type)){
+            return true;
+        } else if(type.equals(TagType.BASE) || type.equals(TagType.FRAME) || type.equals(TagType.OTHER)){
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -73,7 +86,7 @@ public class TagController {
             Tag tag = tagService.findTagById(id);
 
             if(tagService.getArticleSumNumByTag(id) == 0){
-                tagService.deleteTagById(id);
+                tagService.deleteTag(tag);
                 return new ReturnTemplate();
             } else {
                 throw new IllegalArgumentException("there are some articles belong to this tag,so delete failed");
@@ -130,6 +143,28 @@ public class TagController {
             return returnTemplate;
         } else {
             throw new IllegalArgumentException("module is invalid!");
+        }
+    }
+
+    @RequestMapping(value = "/auth/tag/find-tagtype-by-moduleid",method = RequestMethod.GET)
+    public Object findTagTypeByModuleId(@RequestParam String moduleid){
+
+        log.info("findTagTypeByModuleId function ... moduleid = {}",moduleid);
+
+        if(ValidUtils.validIdParam(moduleid)){
+            Module module = moduleService.findModuleById(moduleid);
+
+            ReturnTemplate returnTemplate = new ReturnTemplate();
+            if(module.getName().equals("Learning")){
+                List<String> list = new LinkedList<String>();
+                list.add(TagType.BASE.getType());
+                list.add(TagType.FRAME.getType());
+                list.add(TagType.OTHER.getType());
+                returnTemplate.addData("types",list);
+            }
+            return returnTemplate;
+        } else {
+            throw new IllegalArgumentException("moduleid == null!");
         }
     }
 

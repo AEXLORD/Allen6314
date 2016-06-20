@@ -15,4 +15,6 @@ public interface ModuleDao extends JpaRepository<Module,String>{
     @Cacheable(value = "modules",keyGenerator = "all_module")
     @Query("select module from Module module where isDelete='0' order by weight")
     Set<Module> findAllModules();
+
+    Module findModuleByIdAndIsDelete(String moduleid, String isDelete);
 }

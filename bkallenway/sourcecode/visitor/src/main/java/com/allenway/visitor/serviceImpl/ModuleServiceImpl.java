@@ -30,4 +30,9 @@ public class ModuleServiceImpl implements ModuleService{
     public Set<Module> findAllModules() {
         return moduleDao.findAllModules();
     }
+
+    @Override
+    public Module findModuleById(String moduleid) {
+        return moduleDao.findModuleByIdAndIsDelete(moduleid,"0");
+    }
 }

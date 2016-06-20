@@ -13,7 +13,7 @@ var mycookies = new MyCookies();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
-//Tag首页 -- 查找全部的tag
+
 router.get('',function(req,res,next){
 
     logger.debug("admin/tag.js -- auth/admin/tag ...");
@@ -210,7 +210,7 @@ router.post('/delete-tag',function(req,res,next){
 		res.render('admin/login');
 	} else {
 
-        var url = config.getBackendUrlPrefix() + "auth/tag/delete-tag";
+        var url = config.getBackendUrlPrefix() + "auth/tag/delete-tag-by-id";
         var data = {id:req.body.id};
 
         var options = {
@@ -243,6 +243,57 @@ router.post('/delete-tag',function(req,res,next){
     	    }
 	    });
     }
+})
+
+
+
+
+
+router.get("/find-tagtype-by-moduleid",function(req,res,next){
+
+    logger.debug("admin/tag.js -- /auth/find-tagtype-by-moduleid ...");
+
+    var cookies = mycookies.getMyCookies(req);
+    if(cookies['Authorization'] == 'undefined'){
+ 		logger.info("cookies[Authorization] == undefined......");
+		res.render('admin/login');
+	} else {
+
+        var url = config.getBackendUrlPrefix() + "auth/tag/find-tagtype-by-moduleid?moduleid=" + req.query.moduleid;
+
+        var options = {
+            url:url,
+            headers:{
+                'Authorization': "Bearer " + cookies['Authorization']
+            },
+        }
+
+        request.get(options,function(error,response,body){
+            if(!error && response.statusCode == 200 ){
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode == 0){
+
+			        res.send({data:returnData.data});
+		        } else {
+                    logger.error("admin/tag.js -- auth/tag/find-tagtype-by-moduleid fail ..." +
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+        	    }
+            } else {
+                logger.error("admin/tag.js --  auth/tag/find-tagtype-by-moduleid fail ..." +
+                    "error = " + error);
+                if(response != null){
+                    logger.error("admin/tag.js -- auth/tag/find-tagtype-by-moduleid fail ..." +
+                        "response.statuCode = " + response.statusCode + "..." +
+                        "response.body = " + response.body);
+                }
+                res.render('error/unknowerror');
+    	    }
+	    });
+    }
+
+
+
 })
 
 

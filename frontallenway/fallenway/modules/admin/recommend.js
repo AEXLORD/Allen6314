@@ -61,7 +61,7 @@ function doSendRequestGetrecommendsAndRecommends(res,cookies){
             });
         },
         recommends:function(callback){
-            var url = config.getBackendUrlPrefix() + "/auth/recommend/find-all-recommends";
+            var url = config.getBackendUrlPrefix() + "auth/recommend/find-all-recommends";
             var options = {
                 url:url,
                 headers:{

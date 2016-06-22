@@ -59,7 +59,7 @@ public class RecommendController {
         }
     }
 
-    @RequestMapping(value = {"/auth/recommend/find-all-recommends"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/auth/recommend/find-all-recommends","/recommend/find-all-recommends"},method = RequestMethod.GET)
     public Object findAllRecommends(){
         ReturnTemplate returnTemplate = new ReturnTemplate();
         returnTemplate.addData("recommends",recommendService.findAllRecommends());

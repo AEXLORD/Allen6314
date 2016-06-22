@@ -19,6 +19,7 @@ public interface TagDao extends JpaRepository<Tag, String> {
     List<Tag> findTagByIsDelete(@Param("isDelete") String isDelete);
 
     Tag findTagByIdAndIsDelete(String tagId,String isDelete);
+    Tag findTagByNameAndIsDelete(String tagName, String isDelete);
 
     /**
      * 得到该tag 下的文章数量
@@ -29,4 +30,6 @@ public interface TagDao extends JpaRepository<Tag, String> {
     int getArticleSumNumByTag(@Param("tagId")String tagId);
 
     List<Tag> findTagByModuleIdAndIsDelete(String moduleId, String isDelete);
+
+
 }

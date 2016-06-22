@@ -81,28 +81,25 @@
         <div class = "widget">
             <span style = "font-weight:bold">Tag Cloud</span>
             <div class = "tagcloud clearfix">
-                <a href = "/visitor/play/news">Links</a>
-                <a href = "/visitor/play/zhihu">知乎Topic</a>
-                <a href = "/visitor/play/stroll">Stroll</a>
-                <a href = "/visitor/play/eat">Eat</a>
+                {% for tag in data.tags %}
+                <a href = "{{tag.link}}">{{tag.name}}</a>
+                {% endfor %}
             </div>
         </div>
     </div>
 
     <div class = "articleBox">
         <div class = "panel">
-            <h2>知知乎乎 ~~</h2>
+            <h2>知乎 Topic 推荐</h2>
             <hr/>
         <div>
-            <h5>Topic ~~</h5>
-            <a href = "https://www.zhihu.com/question/26380791" target="_blank">1. 有哪些好的网站，让人第一眼看了就怦然心动，流连忘返？</a>        
+            <h5>涨姿势</h5>
+            {% for recommend in data.recommends %}
+            {% if recommend.other == "涨姿势" %}
+            <a href = "{{recommend.link}}" target="_blank">{{loop.index}}. {{recommend.profile}}</a>        
             <br/>
-            <a href = "https://www.zhihu.com/question/36872610" target="_blank">2. 有没有那么一首英文歌让你听一遍就单曲循环了？</a>        
-            <br/>
-            <a href = "https://www.zhihu.com/question/24407926" target="_blank">3. 一个人生活，怎样才能把日子过得优雅而且有品位？</a>        
-            <br/>
-            <a href = "https://www.zhihu.com/question/20872048" target="_blank">4. 男生如何学习服装搭配？</a>        
-            <br/>
+            {% endif %}
+            {% endfor %}
         </div>
 
         <div style= "width:100%">

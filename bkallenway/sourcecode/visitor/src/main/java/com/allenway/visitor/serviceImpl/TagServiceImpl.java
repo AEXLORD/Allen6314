@@ -28,6 +28,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Tag findTagByName(String tagName) {
+        return tagDao.findTagByNameAndIsDelete(tagName, "0");
+    }
+
+    @Override
     public Tag saveTag(Tag tag) {
         return tagDao.saveAndFlush(tag);
     }

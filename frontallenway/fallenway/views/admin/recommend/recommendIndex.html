@@ -1,0 +1,76 @@
+{% extends '../common/header_leftSide.html' %}
+
+{% block subIncludeFileBeforeBody %}
+        <style type = "text/css">
+            .table tbody > tr > td {
+                padding:0;
+            }
+            .table>thead>tr>td {
+                padding:0;
+            }
+            .table tbody > tr > td:first-child {
+                padding:0px;
+            }
+        </style>
+{% endblock %}
+
+{% block subMainContent  %}
+    <input type = "text" class = "form-control" id = "profile" name = "profile" 
+        style = "display:inline;width:20%" placeholder = "profile"> &nbsp;&nbsp;
+    <input type = "text" class = "form-control" id = "link" name = "link" 
+        style = "display:inline;width:20%" placeholder = "link"> &nbsp;&nbsp;
+    <select class = "form-control" id = "classify" name = "classify" style = "width:20%;display:inline-block">
+        <option value = "zhihu">zhihu</option>
+    </select>
+    <input type = "text" class = "form-control" id = "other" name = "other" 
+        style = "display:inline;width:20%" placeholder = "other"> &nbsp;&nbsp;
+    <button class = "btn btn-primary btn-sm" onclick = "addRecommend()">Add Recommend</button>
+    <span id = "addRecommendWarn" style = "color:red"></span>
+    <h3>Recommend List</h3>
+    {% for tag in data.tags %}
+    <h5>Tag - {{tag.name}}</h5>
+    <table class = "table table-striped">
+        <thead>
+            <td>文字简介</td>
+            <td>link</td>
+            <td>所属分类</td>
+            <td>other</td>
+         </thead>
+        <tbody>
+            {% for recommend in data.recommends %}
+            <tr>
+                <td>{{recommend.profile}}</td>
+                <td>{{recommend.link}}</td>
+                <td>{{recommend.classify}}</td>
+                <td>{{recommend.other}}</td>
+             </tr>
+             {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+
+<script type = "text/javascript">
+function addRecommend(){
+    
+    $('#addTagWarn').empty();
+    var profile = $('#profile').val();
+    var link = $('#link').val();
+    var classify = $('#classify').val();
+    var other = $('#other').val();
+
+    if(profile != null && profile.trim() != "" && 
+            link != null && link.trim() != "" ){
+        $.post('/admin/recommend/add-recommend',{profile:profile,link:link,classify:classify,other:other},function(data,status){
+            if(status == 'success'){
+                window.location.href = "/admin/recommend";
+            } else {
+                $('#addRecommendWarn').append("&nbsp;&nbsp;some error occurs!!!");
+            }
+        })
+    } else {
+       $('#addRecommendWarn').append("&nbsp;&nbsp;profile or link can not be empty!");
+    }
+}
+</script>
+
+{% endblock %}

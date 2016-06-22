@@ -23,8 +23,8 @@ app.use('/visitor/learning/tag',visitor_learning_tag);
 var visitor_aboutme = require('./modules/visitor/v2/me/aboutme');
 app.use('/visitor/aboutme',visitor_aboutme);
 
-var visitor_play = require('./modules/visitor/v2/play/play');
-app.use('/visitor/play',visitor_play);
+var visitor_recommend = require('./modules/visitor/v2/recommend/recommend');
+app.use('/visitor/recommend',visitor_recommend);
 
 var visitor_message = require('./modules/visitor/v2/messageboard/index.js');
 app.use('/visitor/messageboard',visitor_message);
@@ -41,6 +41,7 @@ var admin_tag = require('./modules/admin/tag.js');
 var admin_author = require('./modules/admin/author.js');
 var admin_module = require('./modules/admin/module.js');
 var admin_message = require('./modules/admin/message.js');
+var admin_recommend = require('./modules/admin/recommend.js');
 app.use('/login',admin_login);
 app.use('/admin/index',admin_index);
 app.use('/admin/article',admin_article);
@@ -50,6 +51,7 @@ app.use('/admin/tag',admin_tag);
 app.use('/admin/author',admin_author);
 app.use('/admin/module',admin_module);
 app.use('/admin/message',admin_message);
+app.use('/admin/recommend',admin_recommend);
 
 var port = 7000;
 app.listen(port);

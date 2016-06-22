@@ -97,7 +97,7 @@ public class TagController {
     }
 
     @RequestMapping(value = {"/tag/find-tags-by-moduleid","/auth/tag/find-tags-by-moduleid"},method = RequestMethod.GET)
-    public Object findTagByModuleId(String moduleid){
+    public Object findTagsByModuleId(String moduleid){
 
         if(ValidUtils.validIdParam(moduleid)){
             ReturnTemplate returnTemplate = new ReturnTemplate();
@@ -117,21 +117,22 @@ public class TagController {
             if(tag == null){
                 throw new DataNotFoundException("tag is not found!");
             } else {
-                String moduleId = tag.getModuleId();
-
-                List<Tag> tagList = tagService.findTagsByModuleId(moduleId);
-                tagList
-                        .parallelStream()
-                        .forEach(param ->{
-                            param.setArticleNum(tagService.getArticleSumNumByTag(param.getId()));
-                        });
-
-                returnTemplate.addData("tags",tagList);
+                returnTemplate.addData("tags",findTagListByModuleId(tag.getModuleId()));
                 return  returnTemplate;
             }
         } else {
             throw new IllegalArgumentException("tagid is invalid!");
         }
+    }
+
+    private List<Tag> findTagListByModuleId(String moduleId) {
+        List<Tag> tagList = tagService.findTagsByModuleId(moduleId);
+        tagList
+                .parallelStream()
+                .forEach(param ->{
+                    param.setArticleNum(tagService.getArticleSumNumByTag(param.getId()));
+                });
+        return tagList;
     }
 
     @RequestMapping(value = {"/tag/find-tag-by-id","/auth/tag/find-tag-by-id"},method = RequestMethod.GET)

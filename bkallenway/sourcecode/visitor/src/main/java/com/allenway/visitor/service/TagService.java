@@ -11,6 +11,7 @@ public interface TagService {
     List<Tag> findAllTags();
 
     Tag findTagById(String tagId);
+    Tag findTagByName(String tagName);
 
     Tag saveTag(Tag tag);
 
@@ -20,4 +21,6 @@ public interface TagService {
     int getArticleSumNumByTag(String tagId);
 
     List<Tag> findTagsByModuleId(String moduleId);
+
+
 }

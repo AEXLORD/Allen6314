@@ -21,14 +21,13 @@
         style = "display:inline;width:20%" placeholder = "link"> &nbsp;&nbsp;
     <select class = "form-control" id = "classify" name = "classify" style = "width:20%;display:inline-block">
         <option value = "zhihu">zhihu</option>
+        <option value = "movie">movie</option>
     </select>
     <input type = "text" class = "form-control" id = "other" name = "other" 
         style = "display:inline;width:20%" placeholder = "other"> &nbsp;&nbsp;
     <button class = "btn btn-primary btn-sm" onclick = "addRecommend()">Add Recommend</button>
     <span id = "addRecommendWarn" style = "color:red"></span>
     <h3>Recommend List</h3>
-    {% for tag in data.tags %}
-    <h5>Tag - {{tag.name}}</h5>
     <table class = "table table-striped">
         <thead>
             <td>文字简介</td>
@@ -47,7 +46,6 @@
              {% endfor %}
         </tbody>
     </table>
-    {% endfor %}
 
 <script type = "text/javascript">
 function addRecommend(){

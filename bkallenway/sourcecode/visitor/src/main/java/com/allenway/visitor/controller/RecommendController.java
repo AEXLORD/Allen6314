@@ -4,7 +4,6 @@ import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
 import com.allenway.visitor.entity.Recommend;
 import com.allenway.visitor.service.RecommendService;
-import com.allenway.visitor.support.RecommendClassify;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -26,13 +25,13 @@ public class RecommendController {
 
     @RequestMapping(value = {"/recommend/find-recommends-by-classify","/auth/recommend/find-recommends-by-classify"}
             ,method = RequestMethod.GET)
-    public Object findRecommedsByClassify(@RequestParam("classify") String clsasify){
+    public Object findRecommedsByClassify(@RequestParam("classify") String classaify){
 
-        log.info("findRecommedByType function ... clsasify = {}",clsasify);
+        log.info("findRecommedByType function ... clsasify = {}",classaify);
 
-        if(ValidUtils.validIdParam(clsasify) && clsasify.equals(RecommendClassify.zhihu.toString())){
+        if(ValidUtils.validIdParam(classaify)){
             ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("recommends",recommendService.findRecommedByClassify(clsasify));
+            returnTemplate.addData("recommends",recommendService.findRecommedByClassify(classaify));
             return returnTemplate;
         } else {
             throw new IllegalArgumentException("param is invalid!");
@@ -51,8 +50,6 @@ public class RecommendController {
 
     private boolean validRecommend(Recommend recommend) {
         if(StringUtils.isEmpty(recommend.getProfile()) || StringUtils.isEmpty(recommend.getClassify())){
-            return false;
-        } else if(!recommend.getClassify().equals(RecommendClassify.zhihu.toString())){
             return false;
         } else {
             return true;

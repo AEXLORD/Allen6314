@@ -101,6 +101,16 @@
             {% endif %}
             {% endfor %}
         </div>
+        <hr/>
+        <div>
+            <h5>励志</h5>
+            {% for recommend in data.recommends %}
+            {% if recommend.other == "励志" %}
+            <a href = "{{recommend.link}}" target="_blank">{{loop.index}}. {{recommend.profile}}</a>        
+            <br/>
+            {% endif %}
+            {% endfor %}
+        </div>
 
         <div style= "width:100%">
             <div style = "float:right">

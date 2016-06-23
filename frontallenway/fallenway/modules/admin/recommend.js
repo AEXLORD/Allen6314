@@ -22,15 +22,15 @@ router.get('',function(req,res,next){
          logger.info("cookies[Authorization] == undefined......");
         res.render('admin/login');
     } else {
-            doSendRequestGetrecommendsAndRecommends(res,cookies);
+            doSendRequestGetTagsAndRecommends(res,cookies);
     }
 })
 
-function doSendRequestGetrecommendsAndRecommends(res,cookies){
+function doSendRequestGetTagsAndRecommends(res,cookies){
 
     async.parallel({
         tags:function(callback){
-            var url = config.getBackendUrlPrefix() + "/auth/tag/find-tags-by-moduleid?moduleid=aaac4e63-2222-4def-a86c-6543d80a8a59";
+            var url = config.getBackendUrlPrefix() + "auth/tag/find-tags-by-moduleid?moduleid=aaac4e63-2222-4def-a86c-6543d80a8a59";
             var options = {
                 url:url,
                 headers:{
@@ -94,6 +94,7 @@ function doSendRequestGetrecommendsAndRecommends(res,cookies){
         var data = {};
         data.tags = results.tags;
         data.recommends = results.recommends;
+
         res.render('admin/recommend/recommendIndex',{'data':results});
     })
 }

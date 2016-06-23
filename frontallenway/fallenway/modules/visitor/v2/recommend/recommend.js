@@ -117,16 +117,22 @@ router.get('/zhihu',function(req,res,next){
                 var recommends = results.recommends;
                 data.recommends_zhangzishi = new Array();
                 data.recommends_lizhi = new Array();
+                data.recommends_interest = new Array();
 
                 var m = 0;
                 var n = 0;
+                var k = 0;
                 for(var i = 0; i < recommends.length; ++i){
-                    if(recommends[i].other == '励志'){
+                    var other = recommends[i].other;
+                    if(other == '励志'){
                         data.recommends_lizhi[m] = recommends[i];
                         m = m + 1;
-                    } else {
+                    } else if(other == '涨姿势'){
                         data.recommends_zhangzishi[n] = recommends[i];
                         n = n + 1;
+                    } else {
+                        data.recommends_interest[k] = recommends[i];
+                        k = k + 1;
                     }
                 }
 

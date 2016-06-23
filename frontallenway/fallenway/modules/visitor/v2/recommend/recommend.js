@@ -114,7 +114,22 @@ router.get('/zhihu',function(req,res,next){
                 }
             },function(err,results){
                 data.tags = results.tags;
-                data.recommends = results.recommends;
+                var recommends = results.recommends;
+                data.recommends_zhangzishi = new Array();
+                data.recommends_lizhi = new Array();
+
+                var m = 0;
+                var n = 0;
+                for(var i = 0; i < recommends.length; ++i){
+                    if(recommends[i].other == '励志'){
+                        data.recommends_lizhi[m] = recommends[i];
+                        m = m + 1;
+                    } else {
+                        data.recommends_zhangzishi[n] = recommends[i];
+                        n = n + 1;
+                    }
+                }
+
                 callback(null,data);
             })
         }],function(err,result){

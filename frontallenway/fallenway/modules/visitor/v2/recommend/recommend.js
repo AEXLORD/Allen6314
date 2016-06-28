@@ -12,9 +12,6 @@ var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
 router.get('',function(req,res,next){
-
-    logger.debug("visitor/v2/recommend/recommend.js -- /visitor/recommend ...");
-
     res.redirect('/visitor/recommend/to-zhihu');
 });
 
@@ -22,9 +19,6 @@ router.get('',function(req,res,next){
 
 
 router.get('/to-movies',function(req,res,next){
-
-    logger.info("visitor/recommend.js ... /to-movies .. ");
-
     async.parallel({
         modules:function(callback){
             request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
@@ -98,9 +92,6 @@ router.get('/to-movies',function(req,res,next){
 
 
 router.get('/to-zhihu',function(req,res,next){
-
-    logger.info("visitor/recommend.js ... /to-zhihu .. ");
-
     async.parallel({
         modules:function(callback){
             request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){

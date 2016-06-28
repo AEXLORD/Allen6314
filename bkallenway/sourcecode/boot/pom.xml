@@ -11,6 +11,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>boot</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>../scrum</module>
+        <module>../user</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,6 +42,14 @@
         <dependency>
             <groupId>com.allenway</groupId>
             <artifactId>visitor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.allenway</groupId>
+            <artifactId>scrum</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.allenway</groupId>
+            <artifactId>user</artifactId>
         </dependency>
 
     </dependencies>

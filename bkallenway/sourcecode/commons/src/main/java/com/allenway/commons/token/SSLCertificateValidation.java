@@ -1,4 +1,4 @@
-package com.allenway.infrustructure.ssl;
+package com.allenway.commons.token;
 
 import javax.net.ssl.*;
 import java.security.cert.CertificateException;

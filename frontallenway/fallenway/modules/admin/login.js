@@ -14,9 +14,6 @@ router.get('',function(req,res,next){
 });
 
 router.post('/dologin',function(req,res,next){
-
-    logger.debug("admin/login.js -- /admin/dologin ...");
-
     var username = req.body.username;
     var password = req.body.password;
 

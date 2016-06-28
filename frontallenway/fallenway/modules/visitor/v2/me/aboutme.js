@@ -10,9 +10,6 @@ var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
 router.get('',function(req,res,next){
-
-    logger.debug("visitor/v2/me/aboutme.js -- /visitor/aboutme ...");
-
     request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);

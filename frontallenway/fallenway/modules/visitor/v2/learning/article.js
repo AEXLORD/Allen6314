@@ -13,9 +13,6 @@ var logger = new Logger().getLogger();
 
 //根据文章 id 获得具体的文章
 router.get('/getArticleDetail',function(req,res,next){
-
-    logger.debug("visitor/v2/learning/article.js -- visitor/learning/article/getArticleDetail ...");
-
     async.parallel({
         article:function(callback){
             request(config.getBackendUrlPrefix() + "article/find-article-by-id?id=" + req.query.id,function(error,response,body){
@@ -75,9 +72,6 @@ router.get('/getArticleDetail',function(req,res,next){
 
 //随机获得一篇文章
 router.get('/get-random-article',function(req,res,next){
-
-    logger.debug("visitor/v2/learning/article.js -- visitor/learning/article/get-random-article ...");
-
     async.parallel({
         article:function(callback){
             request(config.getBackendUrlPrefix() + "article/find-random-article",function(error,response,body){

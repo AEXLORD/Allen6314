@@ -12,9 +12,6 @@ var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
-
-    logger.debug("admin/author.js -- /admin/author ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

@@ -17,8 +17,6 @@ var logger = new Logger().getLogger();
 
 //留言管理首页
 router.get('',function(req,res,next){
-    logger.debug("admin/message.js -- /admin/message ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -76,8 +74,6 @@ router.get('',function(req,res,next){
 
 
 router.get('/page',function(req,res,next){
-    logger.debug("admin/message.js -- /admin/message/page ...");
-
     var pageNum = req.query.pagenum;
 
     console.log("pageNum = " + pageNum);
@@ -137,8 +133,6 @@ router.get('/page',function(req,res,next){
 
 
 router.get('/delete',function(req,res,next){
-    logger.debug("admin/message.js -- /admin/message/delete ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

@@ -13,8 +13,6 @@ var MyCookies = require('../../config/mycookies.js');
 var mycookies = new MyCookies();
 
 router.get('',function(req,res,next){
-    logger.debug("admin/index.js -- /admin/index ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

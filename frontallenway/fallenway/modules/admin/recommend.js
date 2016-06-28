@@ -14,9 +14,6 @@ var logger = new Logger().getLogger();
 var async = require('async');
 
 router.get('',function(req,res,next){
-
-    logger.debug("admin/recommend.js -- /admin/recommend ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
          logger.info("cookies[Authorization] == undefined......");
@@ -102,10 +99,6 @@ function doSendRequestGetTagsAndRecommends(res,cookies){
 
 
 router.post('/add-recommend',function(req,res,next){
-
-
-    logger.debug("admin/recommend.js -- auth/admin/recommend/add-recommend ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

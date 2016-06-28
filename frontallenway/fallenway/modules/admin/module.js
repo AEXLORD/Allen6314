@@ -12,9 +12,6 @@ var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
-
-    logger.debug("admin/module.js -- /admin/module ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -75,8 +72,6 @@ function doSendRequestGetAllModules(res,cookies){
 
 //添加 module
 router.post('/add-module',function(req,res,next){
-    logger.debug("admin/module.js -- auth/admin/module/add-module ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

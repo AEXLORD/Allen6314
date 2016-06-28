@@ -1,4 +1,4 @@
-package com.allenway.infrustructure.entity;
+package com.allenway.commons.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

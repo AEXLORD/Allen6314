@@ -15,9 +15,6 @@ var logger = new Logger().getLogger();
 
 
 router.get('',function(req,res,next){
-
-    logger.debug("admin/tag.js -- auth/admin/tag ...");
-
     var cookies = mycookies.getMyCookies(req);
 	if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -106,9 +103,6 @@ router.get('',function(req,res,next){
 
 //查找所有文章 -- 根据 tag
 router.get('/get-articles-by-tag',function(req,res,next){
-
-    logger.debug("admin/tag.js -- auth/article/get-articles-by-tag ...");
-
     var cookies = mycookies.getMyCookies(req);
 	if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -153,8 +147,6 @@ router.get('/get-articles-by-tag',function(req,res,next){
 
 //添加 tag
 router.post('/add-tag',function(req,res,next){
-    logger.debug("admin/tag.js -- auth/admin/tag/add-tag ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -201,7 +193,6 @@ router.post('/add-tag',function(req,res,next){
 
 //删除 tag
 router.post('/delete-tag',function(req,res,next){
-    logger.debug("admin/tag.js -- /admin/tag/delete-tag ...");
     logger.debug("id = " + req.body.id);
 
     var cookies = mycookies.getMyCookies(req);
@@ -250,9 +241,6 @@ router.post('/delete-tag',function(req,res,next){
 
 
 router.get("/find-tagtype-by-moduleid",function(req,res,next){
-
-    logger.debug("admin/tag.js -- /auth/find-tagtype-by-moduleid ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

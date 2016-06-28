@@ -12,6 +12,15 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+var Logger = require('./config/logconfig.js');
+var logger = new Logger().getLogger();
+
+var myLogger = function (req, res, next) {
+    logger.debug('request comes to node. path = ' + req.path + '... now = ' + new Date().toLocaleString());
+    next();
+};
+app.use(myLogger);
+
 //游客
 var visitor_learning_index = require('./modules/visitor/v2/learning/index');
 var visitor_learning_article = require('./modules/visitor/v2/learning/article');
@@ -29,7 +38,14 @@ app.use('/visitor/recommend',visitor_recommend);
 var visitor_message = require('./modules/visitor/v2/messageboard/index.js');
 app.use('/visitor/messageboard',visitor_message);
 
+var visitor_scrum = require('./modules/visitor/v2/scrum/scrum.js');
+app.use('/visitor/scrum',visitor_scrum);
 
+var visitor_register = require('./modules/visitor/v2/user/register.js');
+app.use('/visitor/user/register',visitor_register);
+
+var visitor_login = require('./modules/visitor/v2/user/login.js');
+app.use('/visitor/user/login',visitor_login);
 
 //管理员
 var admin_index = require('./modules/admin/index.js');

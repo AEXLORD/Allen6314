@@ -10,8 +10,6 @@ var Logger = require('../../../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 router.get('/find-articles-by-tagid',function(req,res,next){
-
-    logger.debug("visitor/v2/learning/tag.js -- /visitor/tag/get-articles-by-tag ...");
     logger.debug("id = " + req.query.id);
 
     async.parallel({
@@ -110,9 +108,6 @@ router.get('/find-articles-by-tagid',function(req,res,next){
         for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
             result.totalPage[i-1] = i;
         }
-
-        console.log("======= result = " + result);
-
         res.render('visitor/v3/learning/index',{'data':result});
     })
 });

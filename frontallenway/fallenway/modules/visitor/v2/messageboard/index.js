@@ -12,9 +12,6 @@ var config = new Config();
 var async = require('async');
 
 router.get('',function(req,res,next){
-
-    logger.debug("visitor/v2/messageboard/index.js -- /visitor/messageboard ...");
-
     async.parallel({
         modules:function(callback){
             request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
@@ -95,8 +92,6 @@ router.get('',function(req,res,next){
 
 
 router.get('/page',function(req,res,next){
-    logger.debug("visitor/v2/messageboard/index.js -- /visitor/messageboard/page ...");
-
     var pageNum = req.query.pagenum;
 
     async.parallel({
@@ -176,8 +171,6 @@ router.get('/page',function(req,res,next){
 
 
 router.post('/addmessage',function(req,res,next){
-    logger.debug("visitor/v2/messageboard/index.js -- /visitor/messageboard/page ...");
-
     var username = req.body.username;
     var content = req.body.content;
 

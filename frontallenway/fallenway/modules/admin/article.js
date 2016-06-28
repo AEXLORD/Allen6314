@@ -18,9 +18,6 @@ var logger = new Logger().getLogger();
 
 //添加文章 -- 跳到添加文章首页
 router.get('/addArticle',function(req,res,next){
-
-    logger.debug("admin/article.js -- /admin/addArticle ...");
-
     var cookies = mycookies.getMyCookies(req);
 	if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -80,9 +77,6 @@ function doSendRequestGetAddArticleRequiredParams(res,cookies){
 
 //添加文章 -- 获得添加文章的一些参数
 router.post('/addArticle/doAdd',function(req,res,next){
-
-    logger.debug("admin/article.js -- /admin/addArticle/doAdd ...");
-
     var cookies = mycookies.getMyCookies(req);
     	if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -145,9 +139,6 @@ function doSendRequestDoAdd(res,req,cookies){
 
 //删除文章
 router.get('/deleteArticle',function(req,res,next){
-
-    logger.debug("admin/article.js -- /admin/deleteArticle ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -192,9 +183,6 @@ router.get('/deleteArticle',function(req,res,next){
 
 //修改文章 -- 跳到修改文章页面
 router.get('/modifyArticle',function(req,res,next){
-
-    logger.debug("admin/article.js -- auth/admin/modifyArticle ...");
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");
@@ -285,9 +273,6 @@ function doSendRequestGetModifyArticleRequiredParams(req,res,cookies){
 
 //文章管理首页
 router.get('/articleManage',function(req,res,next){
-    logger.debug("admin/article.js -- /admin/articleManage ...");
-
-
     var cookies = mycookies.getMyCookies(req);
     if(cookies['Authorization'] == 'undefined'){
  		logger.info("cookies[Authorization] == undefined......");

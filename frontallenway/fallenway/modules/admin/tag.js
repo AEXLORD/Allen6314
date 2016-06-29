@@ -16,6 +16,7 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
     async.waterfall([
         //请求全部tags
         function(callback){
@@ -23,7 +24,7 @@ router.get('',function(req,res,next){
 	        var options = {
                     url:url,
                     headers:{
-                        'Authorization': "Bearer " + cookies['Authorization']
+                        'Authorization': "Bearer " + cookies[AdminAuthorization]
                     }
             }
 
@@ -55,7 +56,7 @@ router.get('',function(req,res,next){
 	        var options = {
                     url:url,
                     headers:{
-                        'Authorization': "Bearer " + cookies['Authorization']
+                        'Authorization': "Bearer " + cookies[AdminAuthorization]
                     }
             }
             request(options,function(error,response,body){
@@ -96,11 +97,12 @@ router.get('',function(req,res,next){
 //查找所有文章 -- 根据 tag
 router.get('/get-articles-by-tag',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-tagid?tagid=" + req.query.id;
     var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         }
     }
     request(options,function(error,response,body){
@@ -132,12 +134,13 @@ router.get('/get-articles-by-tag',function(req,res,next){
 //添加 tag
 router.post('/add-tag',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/tag/add-tag";
     var data = {name:req.body.name,moduleId:req.body.moduleId,type:req.body.tagType};
     var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         },
         form:data
     }
@@ -171,12 +174,13 @@ router.post('/add-tag',function(req,res,next){
 //删除 tag
 router.post('/delete-tag',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/tag/delete-tag-by-id";
     var data = {id:req.body.id};
     var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         },
         form:data
     }
@@ -208,12 +212,13 @@ router.post('/delete-tag',function(req,res,next){
 
 router.get("/find-tagtype-by-moduleid",function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/tag/find-tagtype-by-moduleid?moduleid=" + req.query.moduleid;
 
     var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         },
     }
 

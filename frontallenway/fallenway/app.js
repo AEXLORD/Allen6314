@@ -53,19 +53,22 @@ app.use('/visitor/learning/tag',visitor_learning_tag);
 app.use('/visitor/aboutme',visitor_aboutme);
 app.use('/visitor/recommend',visitor_recommend);
 app.use('/visitor/messageboard',visitor_message);
-app.use('/visitor/scrum',visitor_scrum);
 app.use('/visitor/user/register',visitor_register);
 app.use('/visitor/user/login',visitor_login);
 
 
+
+
+app.use('/visitor/scrum',visitor_scrum);
 
 //********************************************************
 //*                admin oauth validation                *
 //********************************************************
 var myLogger_admin_oauth = function (req, res, next) {
     var cookies = mycookies.getMyCookies(req);
-	if(cookies['Authorization'] == 'undefined'){
- 		logger.error("cookies[Authorization] == undefined......");
+    var AdminAuthorization = config.getAdminAuthorization();
+	if(cookies[AdminAuthorization] == 'undefined'){
+ 		logger.error("cookies["+  AdminAuthorization +"] == undefined......");
 		res.render('admin/login');
 	} else {
         next();

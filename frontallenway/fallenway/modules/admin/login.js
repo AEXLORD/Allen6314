@@ -31,7 +31,7 @@ router.post('/dologin',function(req,res,next){
                     "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                 res.render('error/unknowerror');
             } else {
-		        res.cookie('Authorization', returnData.data.token.access_token, { path: '/' });
+		        res.cookie(config.getAdminAuthorization(), returnData.data.token.access_token, { path: '/' });
 		        var path = "<li><a href = \"/admin/index\" class = \"active\">Index</a></li>";
 		        var data = {
         		    'path':path

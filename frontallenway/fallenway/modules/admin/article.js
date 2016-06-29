@@ -19,12 +19,13 @@ var logger = new Logger().getLogger();
 //添加文章 -- 跳到添加文章首页
 router.get('/addArticle',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
 
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         }
     }
 
@@ -66,6 +67,12 @@ router.get('/addArticle',function(req,res,next){
 
 //添加文章
 router.post('/addArticle/doAdd',function(req,res,next){
+
+    log.info("req.body.id = " + req.body.id);
+    log.info("req.body.title = " + req.body.title);
+    log.info("req.body.content =" + req.body.content);
+    log.info("req.body.tagId = " + req.body.tagId);
+
     var url = config.getBackendUrlPrefix() + "auth/article/save-article";
 	var data = {
             'id': req.body.id,
@@ -75,10 +82,12 @@ router.post('/addArticle/doAdd',function(req,res,next){
     	}
 
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
+
     var options = {
     	url:url,
     	headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
 		},
 	    form:data
     }
@@ -112,14 +121,18 @@ router.post('/addArticle/doAdd',function(req,res,next){
 
 //删除文章
 router.get('/deleteArticle',function(req,res,next){
+    log.info("req.query.id = " + req.query.id);
+
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
+
     var url = config.getBackendUrlPrefix() + "auth/article/delete-article-by-id";
     var data = {id:req.query.id};
 
     var options = {
         url:url,
             headers:{
-                'Authorization': "Bearer " + cookies['Authorization']
+                'Authorization': "Bearer " + cookies[AdminAuthorization]
             },
         form:data
     }
@@ -152,13 +165,16 @@ router.get('/deleteArticle',function(req,res,next){
 
 //修改文章 -- 跳到修改文章页面
 router.get('/modifyArticle',function(req,res,next){
+    log.info("req.query.id = " + req.query.id);
+
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
 
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         }
     }
 
@@ -166,7 +182,7 @@ router.get('/modifyArticle',function(req,res,next){
 	var optionFindArticle = {
         url:urlFindArticle,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         }
     }
 
@@ -229,6 +245,7 @@ router.get('/modifyArticle',function(req,res,next){
 //文章管理首页
 router.get('/articleManage',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
 
     var moduleid;
     async.waterfall([
@@ -237,7 +254,7 @@ router.get('/articleManage',function(req,res,next){
                 var options = {
     	            url:url,
     	            headers:{
-                        'Authorization': "Bearer " + cookies['Authorization']
+                        'Authorization': "Bearer " + cookies[AdminAuthorization]
 		            },
                 }
                 request(options,function(error,response,body){
@@ -319,7 +336,13 @@ router.get('/articleManage',function(req,res,next){
 
 
 router.get('/page',function(req,res,next){
+
+    logger.info("req.query.pagenum = " + req.query.pagenum);
+    logger.info("req.query.moduleid = " + req.query.moduleid);
+    logger.info("req.query.tagid = " + req.query.tagid);
+
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
     var pageNum = req.query.pagenum;
     var moduleid = req.query.moduleid;
     var tagid = req.query.tagid;
@@ -331,7 +354,7 @@ router.get('/page',function(req,res,next){
             var options = {
     	        url:url,
     	        headers:{
-                    'Authorization': "Bearer " + cookies['Authorization']
+                    'Authorization': "Bearer " + cookies[AdminAuthorization]
 		        },
             }
 

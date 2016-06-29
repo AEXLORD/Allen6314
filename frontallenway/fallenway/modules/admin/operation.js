@@ -13,11 +13,12 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
+    var AdminAuthorization = config.getAdminAuthorization();
 	var url = config.getBackendUrlPrefix() + "auth/operation/get-records";
 	var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + cookies['Authorization']
+            'Authorization': "Bearer " + cookies[AdminAuthorization]
         }
     }
 

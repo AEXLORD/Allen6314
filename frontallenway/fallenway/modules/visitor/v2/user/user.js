@@ -42,7 +42,7 @@ var mycookies = new MyCookies();
 //*************************************************
 //*                 user login                    *
 //*************************************************
-router.post('login/do-login',function(req,res,next){
+router.post('/login/do-login',function(req,res,next){
     var username = req.body.username;
     var password = req.body.password;
     logger.info("visitor/v2/user/login.js -- username = " + username);

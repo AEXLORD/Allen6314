@@ -21,7 +21,7 @@ import java.util.HashMap;
  * Created by wuhuachuan on 16/6/27.
  */
 
-@RestController(value = "visitor_login")
+@RestController(value = "user_login")
 @Slf4j
 public class UserLoginController {
 

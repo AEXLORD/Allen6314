@@ -73,7 +73,7 @@ router.get('/index',function(req,res,next){
                         if(returnData.statusCode != 0){
                             logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +
                                 "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                            if(exceptionCode.getUserHasLogoutCode == response.statusCode){
+                            if(exceptionCode.getUserHasLogoutCode() == returnData.statusCode){
                                 callback(null,null);
                             } else {
                                 res.render('error/unknowerror');
@@ -82,7 +82,7 @@ router.get('/index',function(req,res,next){
                             callback(null,returnData.data.user);
                         }
                     } else {
-                        if(exceptionCode.getUserHasLogoutCode == response.statusCode){
+                        if(exceptionCode.getUserHasLogoutCode() == returnData.statusCode){
                             callback(null,null);
                         } else {
                             logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +

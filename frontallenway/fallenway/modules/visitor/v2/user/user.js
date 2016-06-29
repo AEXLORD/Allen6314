@@ -130,7 +130,7 @@ router.get('/logout',function(req,res,next){
 //*************************************************
 //*                 user register                 *
 //*************************************************
-router.get('register/to-register',function(req,res,next){
+router.get('/register/to-register',function(req,res,next){
     request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
@@ -157,7 +157,7 @@ router.get('register/to-register',function(req,res,next){
 
 
 
-router.post('register/do-register',function(req,res,next){
+router.post('/register/do-register',function(req,res,next){
     var username = req.body.username;
     var password = req.body.password;
     var password1 = req.body.password1;

@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 @RestController(value = "visitor_login")
 @Slf4j
-public class LoginController {
+public class UserLoginController {
 
     @Autowired
     private UserService userService;

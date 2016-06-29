@@ -23,7 +23,7 @@ import java.io.IOException;
 @Data
 @Slf4j
 @RestController(value = "admin_login")
-public class LoginController {
+public class AdminLoginController {
 
     @Autowired
     private AdminService adminService;

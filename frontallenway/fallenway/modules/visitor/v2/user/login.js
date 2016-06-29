@@ -60,6 +60,8 @@ router.post('/do-login',function(req,res,next){
                         "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.send("/error/unknowerror");
                 } else {
+                    logger.info("access token = " + returnData.data.token.access_token);
+		            res.cookie(config.getVisitorAuthorization(), returnData.data.token.access_token, { path: '/' });
                     res.redirect("/visitor/scrum/index");
                 }
             } else {

@@ -9,6 +9,9 @@ var router = express.Router();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
+var MyCookies = require('../../config/mycookies.js');
+var mycookies = new MyCookies();
+
 router.get('',function(req,res,next){
     res.render('admin/login.html');
 });
@@ -31,7 +34,7 @@ router.post('/dologin',function(req,res,next){
                     "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                 res.render('error/unknowerror');
             } else {
-		        res.cookie(config.getAdminAuthorization(), returnData.data.token.access_token, { path: '/' });
+		        res.cookie(mycookies.getAdminAuthorization(), returnData.data.token.access_token, { path: '/' });
 		        var path = "<li><a href = \"/admin/index\" class = \"active\">Index</a></li>";
 		        var data = {
         		    'path':path

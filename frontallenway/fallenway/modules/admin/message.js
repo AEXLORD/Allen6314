@@ -18,7 +18,7 @@ var logger = new Logger().getLogger();
 //留言管理首页
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     var pageSize = config.getMessageListPageSize();
     var url = config.getBackendUrlPrefix() + "auth/message/find-messages-by-page?" +
                 "page=1&size=" + pageSize;
@@ -72,7 +72,7 @@ router.get('',function(req,res,next){
 router.get('/page',function(req,res,next){
     var pageNum = req.query.pagenum;
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     var pageSize = config.getMessageListPageSize();
     var url = config.getBackendUrlPrefix() + "auth/message/find-messages-by-page?" +
                 "page="+ pageNum +"&size=" + pageSize;
@@ -124,7 +124,7 @@ router.get('/page',function(req,res,next){
 
 router.get('/delete',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     var data = {'id': req.query.id}
 
     var url = config.getBackendUrlPrefix() + "auth/message/delete-message";

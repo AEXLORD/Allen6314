@@ -66,7 +66,7 @@ app.use('/visitor/scrum',visitor_scrum);
 //********************************************************
 var myLogger_admin_oauth = function (req, res, next) {
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 	if(cookies[AdminAuthorization] == 'undefined'){
  		logger.error("cookies["+  AdminAuthorization +"] == undefined......");
 		res.render('admin/login');

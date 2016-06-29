@@ -13,7 +13,7 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
 
     var options = {
@@ -65,7 +65,7 @@ router.get('',function(req,res,next){
 //添加 module
 router.post('/add-module',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/module/add-module";
     var data = {id:req.body.id,name:req.body.name,weight:req.body.weight,link:req.body.link};
 

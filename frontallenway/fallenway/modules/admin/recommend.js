@@ -15,7 +15,7 @@ var async = require('async');
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     async.parallel({
         tags:function(callback){
             var url = config.getBackendUrlPrefix() + "auth/tag/find-tags-by-moduleid?moduleid=aaac4e63-2222-4def-a86c-6543d80a8a59";
@@ -91,7 +91,7 @@ router.get('',function(req,res,next){
 
 router.post('/add-recommend',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var url = config.getBackendUrlPrefix() + "auth/recommend/add-recommend";
     var data = {profile:req.body.profile,link:req.body.link,classify:req.body.classify,other:req.body.other};

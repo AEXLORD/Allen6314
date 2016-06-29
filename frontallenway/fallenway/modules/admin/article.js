@@ -19,7 +19,7 @@ var logger = new Logger().getLogger();
 //添加文章 -- 跳到添加文章首页
 router.get('/addArticle',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
@@ -82,7 +82,7 @@ router.post('/addArticle/doAdd',function(req,res,next){
     	}
 
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var options = {
     	url:url,
@@ -124,7 +124,7 @@ router.get('/deleteArticle',function(req,res,next){
     log.info("req.query.id = " + req.query.id);
 
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var url = config.getBackendUrlPrefix() + "auth/article/delete-article-by-id";
     var data = {id:req.query.id};
@@ -168,7 +168,7 @@ router.get('/modifyArticle',function(req,res,next){
     log.info("req.query.id = " + req.query.id);
 
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
@@ -245,7 +245,7 @@ router.get('/modifyArticle',function(req,res,next){
 //文章管理首页
 router.get('/articleManage',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var moduleid;
     async.waterfall([
@@ -342,7 +342,7 @@ router.get('/page',function(req,res,next){
     logger.info("req.query.tagid = " + req.query.tagid);
 
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
     var pageNum = req.query.pagenum;
     var moduleid = req.query.moduleid;
     var tagid = req.query.tagid;

@@ -14,7 +14,7 @@ var mycookies = new MyCookies();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = config.getAdminAuthorization();
+    var AdminAuthorization = mycookies.getAdminAuthorization();
 	var url = config.getBackendUrlPrefix() + "auth/test";
 	var options = {
         url:url,

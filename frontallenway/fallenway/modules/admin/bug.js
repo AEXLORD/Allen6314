@@ -13,17 +13,7 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    if(cookies['Authorization'] == 'undefined'){
- 		logger.info("cookies[Authorization] == undefined......");
-        res.render('admin/login');
-    } else {
-        doSendRequestGetAllBugs(res,cookies);
-    }
-});
-
-function doSendRequestGetAllBugs(res,cookies){
     var url = config.getBackendUrlPrefix() + "auth/bug/get-all-bugs";
-
     var options = {
 	    url:url,
 	    headers:{
@@ -65,7 +55,7 @@ function doSendRequestGetAllBugs(res,cookies){
 	        }
         }
     });
-}
+});
 
 module.exports = router;
 

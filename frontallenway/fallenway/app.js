@@ -1,3 +1,7 @@
+
+//********************************************************
+//*                     basic import                     *
+//********************************************************
 var express = require('express');
 var app = express();
 
@@ -15,39 +19,64 @@ app.use(bodyParser.urlencoded({extended: true}));
 var Logger = require('./config/logconfig.js');
 var logger = new Logger().getLogger();
 
+var MyCookies = require('./config/mycookies.js');
+var mycookies = new MyCookies();
+
+var Config = require('./config/globalconfig.js');
+var config = new Config();
+
+//********************************************************
+//*                      access log                      *
+//********************************************************
 var myLogger = function (req, res, next) {
     logger.debug('request comes to node. path = ' + req.path + '... now = ' + new Date().toLocaleString());
     next();
 };
 app.use(myLogger);
 
-//游客
+
+//********************************************************
+//*                     visitor route                    *
+//********************************************************
 var visitor_learning_index = require('./modules/visitor/v2/learning/index');
 var visitor_learning_article = require('./modules/visitor/v2/learning/article');
 var visitor_learning_tag = require('./modules/visitor/v2/learning/tag');
+var visitor_aboutme = require('./modules/visitor/v2/me/aboutme');
+var visitor_recommend = require('./modules/visitor/v2/recommend/recommend');
+var visitor_message = require('./modules/visitor/v2/messageboard/index.js');
+var visitor_scrum = require('./modules/visitor/v2/scrum/scrum.js');
+var visitor_register = require('./modules/visitor/v2/user/register.js');
+var visitor_login = require('./modules/visitor/v2/user/login.js');
 app.use('/visitor/learning/index',visitor_learning_index);
 app.use('/visitor/learning/article',visitor_learning_article);
 app.use('/visitor/learning/tag',visitor_learning_tag);
-
-var visitor_aboutme = require('./modules/visitor/v2/me/aboutme');
 app.use('/visitor/aboutme',visitor_aboutme);
-
-var visitor_recommend = require('./modules/visitor/v2/recommend/recommend');
 app.use('/visitor/recommend',visitor_recommend);
-
-var visitor_message = require('./modules/visitor/v2/messageboard/index.js');
 app.use('/visitor/messageboard',visitor_message);
-
-var visitor_scrum = require('./modules/visitor/v2/scrum/scrum.js');
 app.use('/visitor/scrum',visitor_scrum);
-
-var visitor_register = require('./modules/visitor/v2/user/register.js');
 app.use('/visitor/user/register',visitor_register);
-
-var visitor_login = require('./modules/visitor/v2/user/login.js');
 app.use('/visitor/user/login',visitor_login);
 
-//管理员
+
+
+//********************************************************
+//*                admin oauth validation                *
+//********************************************************
+var myLogger_admin_oauth = function (req, res, next) {
+    var cookies = mycookies.getMyCookies(req);
+	if(cookies['Authorization'] == 'undefined'){
+ 		logger.error("cookies[Authorization] == undefined......");
+		res.render('admin/login');
+	} else {
+        next();
+    }
+};
+app.use(myLogger_admin_oauth);
+
+
+//********************************************************
+//*                    admin route                       *
+//********************************************************
 var admin_index = require('./modules/admin/index.js');
 var admin_article = require('./modules/admin/article.js');
 var admin_operation = require('./modules/admin/operation.js');
@@ -69,6 +98,11 @@ app.use('/admin/module',admin_module);
 app.use('/admin/message',admin_message);
 app.use('/admin/recommend',admin_recommend);
 
-var port = 7000;
-app.listen(port);
-console.log("Application started on http://localhost:" + port + "/");
+
+//********************************************************
+//*             start (default 7000 port)                *
+//********************************************************
+app.listen(config.getNodePort());
+logger.info("****************************************************");
+logger.info("* * Application started on http://localhost:" + config.getNodePort() + "/  *");
+logger.info("****************************************************");

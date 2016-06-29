@@ -13,15 +13,6 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    if(cookies['Authorization'] == 'undefined'){
- 		logger.info("cookies[Authorization] == undefined......");
-        res.render('admin/login');
-    } else {
-        doSendRequestGetAllModules(res,cookies);
-    }
-});
-
-function doSendRequestGetAllModules(res,cookies){
     var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
 
     var options = {
@@ -65,7 +56,7 @@ function doSendRequestGetAllModules(res,cookies){
 	        }
         }
     });
-}
+});
 
 
 
@@ -73,47 +64,39 @@ function doSendRequestGetAllModules(res,cookies){
 //添加 module
 router.post('/add-module',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    if(cookies['Authorization'] == 'undefined'){
- 		logger.info("cookies[Authorization] == undefined......");
-		res.render('admin/login');
-	} else {
+    var url = config.getBackendUrlPrefix() + "auth/module/add-module";
+    var data = {id:req.body.id,name:req.body.name,weight:req.body.weight,link:req.body.link};
 
-        var url = config.getBackendUrlPrefix() + "auth/module/add-module";
-        var data = {id:req.body.id,name:req.body.name,weight:req.body.weight,link:req.body.link};
+    var options = {
+        url:url,
+        headers:{
+            'Authorization': "Bearer " + cookies['Authorization']
+        },
+	    form:data
+    }
 
-        var options = {
-            url:url,
-            headers:{
-                'Authorization': "Bearer " + cookies['Authorization']
-            },
-		    form:data
-        }
-
-        request.post(options,function(error,response,body){
-            if(!error && response.statusCode == 200 ){
-                var returnData = JSON.parse(body);
-                if(returnData.statusCode == 0){
-			        res.send({module:returnData.data.module});
-		        } else {
-                    logger.error("admin/module.js -- /auth/module/add-module fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
-        	    }
-            } else {
-                logger.error("admin/module.js --  /auth/module/add-module fail ..." +
-                    "error = " + error);
-                if(response != null){
-                    logger.error("admin/module.js -- /auth/module/add-module fail ..." +
-                        "response.statuCode = " + response.statusCode + "..." +
-                        "response.body = " + response.body);
-                }
+    request.post(options,function(error,response,body){
+        if(!error && response.statusCode == 200 ){
+            var returnData = JSON.parse(body);
+            if(returnData.statusCode == 0){
+			    res.send({module:returnData.data.module});
+		    } else {
+                logger.error("admin/module.js -- /auth/module/add-module fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                 res.render('error/unknowerror');
     	    }
-	    });
-    }
+        } else {
+            logger.error("admin/module.js --  /auth/module/add-module fail ..." +
+                "error = " + error);
+            if(response != null){
+                logger.error("admin/module.js -- /auth/module/add-module fail ..." +
+                    "response.statuCode = " + response.statusCode + "..." +
+                    "response.body = " + response.body);
+            }
+            res.render('error/unknowerror');
+        }
+    });
 })
 
 
 module.exports = router;
-
-

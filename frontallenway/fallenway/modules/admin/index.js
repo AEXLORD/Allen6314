@@ -14,16 +14,6 @@ var mycookies = new MyCookies();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    if(cookies['Authorization'] == 'undefined'){
- 		logger.info("cookies[Authorization] == undefined......");
-		res.render('admin/login');
-	} else {
-        doSendRequestTest(res,cookies);
-    }
-});
-
-function doSendRequestTest(res,cookies){
-
 	var url = config.getBackendUrlPrefix() + "auth/test";
 	var options = {
         url:url,
@@ -62,7 +52,7 @@ function doSendRequestTest(res,cookies){
             }
         }
     });
-}
+});
 
 module.exports = router;
 

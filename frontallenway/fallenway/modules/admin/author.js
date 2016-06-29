@@ -13,15 +13,6 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var cookies = mycookies.getMyCookies(req);
-    if(cookies['Authorization'] == 'undefined'){
- 		logger.info("cookies[Authorization] == undefined......");
-        res.render('admin/login');
-    } else {
-        doSendRequestGetAuthor(res,cookies);
-    }
-});
-
-function doSendRequestGetAuthor(res,cookies){
     var url = config.getBackendUrlPrefix() + "auth/admin/find-admin";
 
     var options = {
@@ -65,7 +56,7 @@ function doSendRequestGetAuthor(res,cookies){
 	        }
         }
     });
-}
+});
 
 module.exports = router;
 

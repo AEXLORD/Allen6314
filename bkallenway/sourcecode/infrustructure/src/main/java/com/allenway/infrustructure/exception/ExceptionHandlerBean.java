@@ -95,7 +95,9 @@ public class ExceptionHandlerBean extends ResponseEntityExceptionHandler {
         returnTemplate.setStatusCode(specificException);
         returnTemplate.setErrorMsg(ex.getMessage());
 
-        log.info(ex.getCause().getMessage());
+        StackTraceElement[] trace = ex.getStackTrace();
+        for (StackTraceElement traceElement : trace)
+            log.error("\tat " + traceElement);
 
         return handleExceptionInternal(ex, returnTemplate,
                 new HttpHeaders(), HttpStatus.OK, request);

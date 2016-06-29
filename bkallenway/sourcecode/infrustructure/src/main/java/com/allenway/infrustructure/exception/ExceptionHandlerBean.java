@@ -100,4 +100,16 @@ public class ExceptionHandlerBean extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, returnTemplate,
                 new HttpHeaders(), HttpStatus.OK, request);
     }
+
+    /**
+     * 用户登出异常
+     * @param ex
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @ExceptionHandler({UserLogoutException.class})
+    public ResponseEntity<Object> userLogoutException(RuntimeException ex, WebRequest request) throws IOException {
+        return getResponseEntity(ex,request, ReturnStatusCode.USER_HAS_LOGOUT);
+    }
 }

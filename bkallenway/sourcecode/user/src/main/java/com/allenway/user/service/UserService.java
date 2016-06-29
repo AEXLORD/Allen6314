@@ -9,4 +9,6 @@ public interface UserService {
     void save(User user);
 
     User findUserByUsername(String username);
+
+    User finduserById(String userid);
 }

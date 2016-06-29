@@ -24,4 +24,9 @@ public class UserServiceImpl implements UserService{
     public User findUserByUsername(String username) {
         return userDao.findUserByUsernameAndIsDelete(username,"0");
     }
+
+    @Override
+    public User finduserById(String userid) {
+        return userDao.findUserById(userid);
+    }
 }

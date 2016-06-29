@@ -17,6 +17,10 @@
             <artifactId>visitor</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.allenway</groupId>
+            <artifactId>user</artifactId>
+        </dependency>
+        <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.1.2</version>

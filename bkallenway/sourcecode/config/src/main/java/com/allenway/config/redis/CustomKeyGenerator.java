@@ -1,5 +1,6 @@
 package com.allenway.config.redis;
 
+import com.allenway.user.entity.User;
 import com.allenway.visitor.entity.Article;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,11 @@ public class CustomKeyGenerator {
     public final static String ARTICLE_PREFIX = "article:";
     public final static String ARTICLE_ID = ARTICLE_PREFIX + "articleid:";
 
+//    /**
+//     * user 部分的 key
+//     */
+//    public final static String USER_PREFIX = "user:";
+//    public final static String USER_ID = USER_PREFIX + "userid:";
 
 
 
@@ -61,4 +67,24 @@ public class CustomKeyGenerator {
             }
         };
     }
+
+//    /**
+//     * user 部分的 key
+//     * @return
+//     */
+//    @Bean
+//    public KeyGenerator user_id(){
+//        return new KeyGenerator() {
+//            @Override
+//            public Object generate(Object target, Method method, Object... params) {
+//                if(params[0] instanceof String){
+//                    return USER_ID + params[0];
+//                } else if(params[0] instanceof Article){
+//                    return USER_ID + ((User)params[0]).getId();
+//                } else {
+//                    return null;
+//                }
+//            }
+//        };
+//    }
 }

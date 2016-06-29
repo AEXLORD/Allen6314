@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserDao extends JpaRepository<User,String> {
 
     User findUserByUsernameAndIsDelete(String username,String isDelete);
+
+    User findUserById(String userid);
 }

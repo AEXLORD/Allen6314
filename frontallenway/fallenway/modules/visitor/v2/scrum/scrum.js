@@ -11,6 +11,12 @@ var logger = new Logger().getLogger();
 var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
+var MyCookies = require('../../../../config/mycookies.js');
+var mycookies = new MyCookies();
+
+var ExceptionCode = require('../../../../config/exceptioncode.js');
+var exceptionCode = new ExceptionCode();
+
 router.get('',function(req,res,next){
     res.redirect('/visitor/scrum/index');
 });
@@ -43,45 +49,51 @@ router.get('/index',function(req,res,next){
                     res.render('error/unknowerror');
                 }
             });
-        }/*,*/
-        //scrums:function(callback){
-            //var url = config.getBackendUrlPrefix() + "scrum/find-scrums-by-classify?classify=movie";
+        },
+        user:function(callback){
+            var cookies = mycookies.getMyCookies(req);
+            var VisitorAuthorization = mycookies.getVisitorAuthorization();
+	        if(cookies[VisitorAuthorization] == 'undefined'){
+                callback(null,null);
+	        } else {
+                var token = cookies[VisitorAuthorization];
+                var url = config.getBackendUrlPrefix() + "user/find-user-by-token?token=" + token;
 
-            //request(url,function(error,response,body){
-                //if(!error && response.statusCode == 200){
-                    //var returnData = JSON.parse(body);
+                var options = {
+	                url:url,
+	                headers:{
+		                'Authorization': "Bearer " + token
+	                }
+                }
 
-                    //if(returnData.statusCode != 0){
-                        //logger.error("visitor/v2/scrum/recommed.js -- scrum/find-scrums-by-classify?classify=movie fail ..." +
-                            //"response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                            //res.render('error/unknowerror');
-                    //} else {
-                        //var data = {};
-                        //var scrums = returnData.data.scrums;
-                        /*data.scrums_hanguo = new Array();*/
+                request(options,function(error,response,body){
+                    if(!error && response.statusCode == 200){
+                        var returnData = JSON.parse(body);
 
-                       /* var m = 0;*/
-                        //for(var i = 0; i < scrums.length; ++i){
-                            //var other = scrums[i].other;
-                            //if(other == '韩国'){
-                                //data.scrums_hanguo[m] = scrums[i];
-                                //m = m + 1;
-                            //}
-                        //}
-                        //callback(null,data);
-                    //}
-                //} else {
-                    //logger.error("visitor/v2/scrum/scrum.js -- scrum/find-scrums-by-classify?classify=movie fail ..." +
-                        //"error = " + error);
-                    //if(response != null){
-                        //logger.error("visitor/v2/scrum/scrum.js -- scrum/find-scrums-by-classify?classify=movie fail ..." +
-                            //"response.statuCode = " + response.statusCode + "..." +
-                            //"response.body = " + response.body);
-                    //}
-                    //res.render('error/unknowerror');
-                //}
-            //});
-        /*}*/
+                        if(returnData.statusCode != 0){
+                            logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +
+                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                                res.render('error/unknowerror');
+                        } else {
+                            callback(null,returnData.data.user);
+                        }
+                    } else {
+                        if(exceptionCode.getUserHasLogoutCode == response.statusCode){
+                            callback(null,null);
+                        } else {
+                            logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +
+                                "error = " + error);
+                            if(response != null){
+                                logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +
+                                    "response.statuCode = " + response.statusCode + "..." +
+                                    "response.body = " + response.body);
+                            }
+                            res.render('error/unknowerror');
+                        }
+                    }
+                });
+            }
+        }
     },function(err,result){
         res.render('visitor/v3/scrum/scrumIndex',{'data':result});
     })

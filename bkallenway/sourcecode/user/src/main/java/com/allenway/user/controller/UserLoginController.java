@@ -4,7 +4,9 @@ import com.allenway.commons.token.GetTokenUtils;
 import com.allenway.commons.token.TokenEntity;
 import com.allenway.infrustructure.exception.DataNotFoundException;
 import com.allenway.user.entity.User;
+import com.allenway.user.entity.UserToken;
 import com.allenway.user.service.UserService;
+import com.allenway.user.service.UserTokenService;
 import com.allenway.utils.encryption.DESEncryptUtil;
 import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
@@ -31,6 +33,9 @@ public class UserLoginController {
     @Autowired
     private GetTokenUtils getTokenUtils;
 
+    @Autowired
+    private UserTokenService userTokenService;
+
     @RequestMapping(value = {"/user/login"},method = RequestMethod.POST)
     public Object register(User user) throws IOException {
 
@@ -50,6 +55,8 @@ public class UserLoginController {
 
                 TokenEntity tokenEntity = getTokenUtils.getToken(user1.getId());
                 returnTemplate.addData("token",tokenEntity);
+
+                userTokenService.save(new UserToken(user1.getId(),tokenEntity.getAccess_token()));
 
                 return returnTemplate;
             }

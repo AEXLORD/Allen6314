@@ -25,8 +25,14 @@
             <a href = "javascript:void(0)" onclick = "showScrumProfile()">Scrum 介绍</a>
         </div>
         <div style = "float:right">
-            <a href = "javascript:void(0)">登录</a> -
-            <a href = "/visitor/user/register/to-register">注册</a>
+            {% if data.user == null %}
+                <a href = "javascript:void(0)">登录</a> -
+                <a href = "/visitor/user/register/to-register">注册</a>
+            {% else %}
+            <span>{{data.user.username}}</span> -
+            <a href = "/visitor/user/logout?id={{data.user.id}}">退出</a>
+            {% endif %}
+
         </div>
         <div style = "clear:both"></div>
     </div>

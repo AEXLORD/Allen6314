@@ -45,8 +45,6 @@ var visitor_aboutme = require('./modules/visitor/v2/me/aboutme');
 var visitor_recommend = require('./modules/visitor/v2/recommend/recommend');
 var visitor_message = require('./modules/visitor/v2/messageboard/index.js');
 var visitor_scrum = require('./modules/visitor/v2/scrum/scrum.js');
-var visitor_register = require('./modules/visitor/v2/user/register.js');
-var visitor_login = require('./modules/visitor/v2/user/login.js');
 var visitor_user = require('./modules/visitor/v2/user/user.js');
 app.use('/visitor/learning/index',visitor_learning_index);
 app.use('/visitor/learning/article',visitor_learning_article);
@@ -54,8 +52,6 @@ app.use('/visitor/learning/tag',visitor_learning_tag);
 app.use('/visitor/aboutme',visitor_aboutme);
 app.use('/visitor/recommend',visitor_recommend);
 app.use('/visitor/messageboard',visitor_message);
-app.use('/visitor/user/register',visitor_register);
-app.use('/visitor/user/login',visitor_login);
 app.use('/visitor/user',visitor_user);
 app.use('/visitor/scrum',visitor_scrum);
 

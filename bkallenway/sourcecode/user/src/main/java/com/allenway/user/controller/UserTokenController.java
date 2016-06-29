@@ -32,10 +32,14 @@ public class UserTokenController {
         if(ValidUtils.validIdParam(token)){
             UserToken userToken = userTokenService.findUserTokenByToken(token);
 
-            ReturnTemplate returnTemplate = new ReturnTemplate();
+            if(userToken == null){
+                throw new UserLogoutException("user has logout");
+            } else {
+                ReturnTemplate returnTemplate = new ReturnTemplate();
 
-            returnTemplate.addData("user",userService.finduserById(userToken.getUserId()));
-            return returnTemplate;
+                returnTemplate.addData("user",userService.finduserById(userToken.getUserId()));
+                return returnTemplate;
+            }
         } else {
             throw new IllegalArgumentException("token is invalid");
         }

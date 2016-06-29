@@ -9,6 +9,8 @@ var request = require('request');
 var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
+var MyCookies = require('../../../../config/mycookies.js');
+var mycookies = new MyCookies();
 
 /*router.get('/to-login',function(req,res,next){*/
     //logger.info("visitor/scrum.js ... /visitor/scrum/login .. ");
@@ -61,7 +63,7 @@ router.post('/do-login',function(req,res,next){
                     res.send("/error/unknowerror");
                 } else {
                     logger.info("access token = " + returnData.data.token.access_token);
-		            res.cookie(config.getVisitorAuthorization(), returnData.data.token.access_token, { path: '/' });
+		            res.cookie(mycookies.getVisitorAuthorization(), returnData.data.token.access_token, { path: '/' });
                     res.redirect("/visitor/scrum/index");
                 }
             } else {

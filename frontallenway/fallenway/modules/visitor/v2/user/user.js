@@ -12,31 +12,30 @@ var config = new Config();
 var MyCookies = require('../../../../config/mycookies.js');
 var mycookies = new MyCookies();
 
-/*router.get('/to-login',function(req,res,next){*/
-    //logger.info("visitor/scrum.js ... /visitor/scrum/login .. ");
-    //request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
-        //if(!error && response.statusCode == 200){
-            //var returnData = JSON.parse(body);
+router.get('/login/to-login',function(req,res,next){
+    request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
 
-            //if(returnData.statusCode != 0){
-                //logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                    //"response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                //res.render('error/unknowerror');
-            //} else {
-                //res.render('visitor/v3/user/login',{'data':returnData.data});
-            //}
-        //} else {
-            //logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                //"error = " + error);
-            //if(response != null){
-                //logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                    //"response.statuCode = " + response.statusCode + "..." +
-                    //"response.body = " + response.body);
-            //}
-            //res.render('error/unknowerror');
-        //}
-    //});
-/*})*/
+            if(returnData.statusCode != 0){
+                logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
+            } else {
+                res.render('visitor/v3/user/login',{'data':returnData.data});
+            }
+        } else {
+            logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                "error = " + error);
+            if(response != null){
+                logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                    "response.statuCode = " + response.statusCode + "..." +
+                    "response.body = " + response.body);
+            }
+            res.render('error/unknowerror');
+        }
+    });
+})
 
 
 //*************************************************

@@ -5,7 +5,7 @@ var request = require('request');
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
 
-var MyCookies = require('../../config/mycookies.js');
+var MyCookies = require('../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 var Logger = require('../../config/logconfig.js');
@@ -14,15 +14,13 @@ var logger = new Logger().getLogger();
 var async = require('async');
 
 router.get('',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
     async.parallel({
         tags:function(callback){
             var url = config.getBackendUrlPrefix() + "auth/tag/find-tags-by-moduleid?moduleid=aaac4e63-2222-4def-a86c-6543d80a8a59";
             var options = {
                 url:url,
                 headers:{
-                    'Authorization': "Bearer " + cookies[AdminAuthorization],
+                    'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
                 },
             }
 
@@ -90,16 +88,13 @@ router.get('',function(req,res,next){
 
 
 router.post('/add-recommend',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
-
     var url = config.getBackendUrlPrefix() + "auth/recommend/add-recommend";
     var data = {profile:req.body.profile,link:req.body.link,classify:req.body.classify,other:req.body.other};
 
     var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
         },
 		form:data
     }

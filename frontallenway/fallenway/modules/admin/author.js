@@ -5,21 +5,19 @@ var request = require('request');
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
 
-var MyCookies = require('../../config/mycookies.js');
+var MyCookies = require('../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
     var url = config.getBackendUrlPrefix() + "auth/admin/find-admin";
 
     var options = {
 	    url:url,
 	    headers:{
-		    'Authorization': "Bearer " + cookies[AdminAuthorization]
+		    'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 	    }
     }
 

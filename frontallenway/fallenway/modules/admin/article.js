@@ -8,7 +8,7 @@ var async = require('async');
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
 
-var MyCookies = require('../../config/mycookies.js');
+var MyCookies = require('../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 var Logger = require('../../config/logconfig.js');
@@ -18,14 +18,12 @@ var logger = new Logger().getLogger();
 
 //添加文章 -- 跳到添加文章首页
 router.get('/addArticle',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
         headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
         }
     }
 
@@ -81,13 +79,10 @@ router.post('/addArticle/doAdd',function(req,res,next){
          	'tagId': req.body.tagId,
     	}
 
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
-
     var options = {
     	url:url,
     	headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		},
 	    form:data
     }
@@ -123,16 +118,13 @@ router.post('/addArticle/doAdd',function(req,res,next){
 router.get('/deleteArticle',function(req,res,next){
     log.info("req.query.id = " + req.query.id);
 
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
-
     var url = config.getBackendUrlPrefix() + "auth/article/delete-article-by-id";
     var data = {id:req.query.id};
 
     var options = {
         url:url,
             headers:{
-                'Authorization': "Bearer " + cookies[AdminAuthorization]
+                'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
             },
         form:data
     }
@@ -167,14 +159,11 @@ router.get('/deleteArticle',function(req,res,next){
 router.get('/modifyArticle',function(req,res,next){
     log.info("req.query.id = " + req.query.id);
 
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
-
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
         headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
         }
     }
 
@@ -244,8 +233,6 @@ router.get('/modifyArticle',function(req,res,next){
 
 //文章管理首页
 router.get('/articleManage',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
 
     var moduleid;
     async.waterfall([
@@ -254,7 +241,7 @@ router.get('/articleManage',function(req,res,next){
                 var options = {
     	            url:url,
     	            headers:{
-                        'Authorization': "Bearer " + cookies[AdminAuthorization]
+                        'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		            },
                 }
                 request(options,function(error,response,body){
@@ -341,8 +328,6 @@ router.get('/page',function(req,res,next){
     logger.info("req.query.moduleid = " + req.query.moduleid);
     logger.info("req.query.tagid = " + req.query.tagid);
 
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
     var pageNum = req.query.pagenum;
     var moduleid = req.query.moduleid;
     var tagid = req.query.tagid;
@@ -354,7 +339,7 @@ router.get('/page',function(req,res,next){
             var options = {
     	        url:url,
     	        headers:{
-                    'Authorization': "Bearer " + cookies[AdminAuthorization]
+                    'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		        },
             }
 

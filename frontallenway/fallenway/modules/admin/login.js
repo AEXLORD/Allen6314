@@ -9,7 +9,7 @@ var router = express.Router();
 var Logger = require('../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
-var MyCookies = require('../../config/mycookies.js');
+var MyCookies = require('../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 router.get('',function(req,res,next){

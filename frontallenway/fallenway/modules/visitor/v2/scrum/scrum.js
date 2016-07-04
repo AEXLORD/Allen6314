@@ -11,7 +11,7 @@ var logger = new Logger().getLogger();
 var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
-var MyCookies = require('../../../../config/mycookies.js');
+var MyCookies = require('../../../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 var ExceptionCode = require('../../../../infrustructure_services/ExceptionCode.js');
@@ -51,9 +51,7 @@ router.get('/index',function(req,res,next){
             });
         },
         user:function(callback){
-            var cookies = mycookies.getMyCookies(req);
-            var VisitorAuthorization = mycookies.getVisitorAuthorization();
-	        if(cookies[VisitorAuthorization] == 'undefined'){
+	        if(mycookies.getVisitorAuthorizationCookie() == 'undefined'){
                 callback(null,null);
 	        } else {
                 var token = cookies[VisitorAuthorization];
@@ -130,9 +128,7 @@ function validAddIssue(issue){
 }
 
 function doAddIssue(req,res,issue){
-    var cookies = mycookies.getMyCookies(req);
-    var VisitorAuthorization = mycookies.getVisitorAuthorization();
-	if(cookies[VisitorAuthorization] == 'undefined'){
+	if(mycookies.getVisitorAuthorizationCookie() == 'undefined'){
         res.status(500).json({error:'尚未登录，无法添加'});
     } else {
 

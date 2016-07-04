@@ -8,7 +8,7 @@ var async = require('async');
 var Config = require('../../config/globalconfig.js');
 var config = new Config();
 
-var MyCookies = require('../../config/mycookies.js');
+var MyCookies = require('../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 var Logger = require('../../config/logconfig.js');
@@ -17,8 +17,6 @@ var logger = new Logger().getLogger();
 
 //留言管理首页
 router.get('',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
     var pageSize = config.getMessageListPageSize();
     var url = config.getBackendUrlPrefix() + "auth/message/find-messages-by-page?" +
                 "page=1&size=" + pageSize;
@@ -26,7 +24,7 @@ router.get('',function(req,res,next){
     var options = {
     	url:url,
     	headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		}
     }
 
@@ -71,15 +69,13 @@ router.get('',function(req,res,next){
 
 router.get('/page',function(req,res,next){
     var pageNum = req.query.pagenum;
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
     var pageSize = config.getMessageListPageSize();
     var url = config.getBackendUrlPrefix() + "auth/message/find-messages-by-page?" +
                 "page="+ pageNum +"&size=" + pageSize;
     var options = {
     	url:url,
     	headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		}
     }
 
@@ -123,15 +119,13 @@ router.get('/page',function(req,res,next){
 
 
 router.get('/delete',function(req,res,next){
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
     var data = {'id': req.query.id}
 
     var url = config.getBackendUrlPrefix() + "auth/message/delete-message";
     var options = {
     	url:url,
     	headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		},
 	    form:data
     }

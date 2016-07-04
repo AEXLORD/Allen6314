@@ -9,7 +9,7 @@ var request = require('request');
 var Config = require('../../../../config/globalconfig.js');
 var config = new Config();
 
-var MyCookies = require('../../../../config/mycookies.js');
+var MyCookies = require('../../../../common_utils/mycookies.js');
 var mycookies = new MyCookies();
 
 router.get('/login/to-login',function(req,res,next){

@@ -25,13 +25,7 @@ router.get('/login/to-login',function(req,res,next){
                 res.render('visitor/v3/user/login',{'data':returnData.data});
             }
         } else {
-            logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                "error = " + error);
-            if(response != null){
-                logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                    "response.statuCode = " + response.statusCode + "..." +
-                    "response.body = " + response.body);
-            }
+            logger.error(err.stack);
             res.render('error/unknowerror');
         }
     });
@@ -68,13 +62,7 @@ router.post('/login/do-login',function(req,res,next){
                     res.redirect("/visitor/scrum/index");
                 }
             } else {
-                logger.error("visitor/v2/user/login.js -- user/login fail ..." +
-                    "error = " + error);
-                if(response != null){
-                    logger.error("visitor/v2/user/login.js -- user/login fail ..." +
-                        "response.statuCode = " + response.statusCode + "..." +
-                        "response.body = " + response.body);
-                }
+                logger.error(err.stack);
                 res.send("/error/unknowerror");
             }
         });
@@ -111,13 +99,7 @@ router.get('/logout',function(req,res,next){
                 res.redirect("/visitor/scrum");
             }
         } else {
-            logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                "error = " + error);
-            if(response != null){
-                logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                    "response.statuCode = " + response.statusCode + "..." +
-                    "response.body = " + response.body);
-            }
+            logger.error(err.stack);
             res.render('error/unknowerror');
         }
     });
@@ -142,13 +124,7 @@ router.get('/register/to-register',function(req,res,next){
                 res.render('visitor/v3/user/register',{'data':returnData.data});
             }
         } else {
-            logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                "error = " + error);
-            if(response != null){
-                logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                    "response.statuCode = " + response.statusCode + "..." +
-                    "response.body = " + response.body);
-            }
+            logger.error(err.stack);
             res.render('error/unknowerror');
         }
     });

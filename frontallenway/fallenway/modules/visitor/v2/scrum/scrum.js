@@ -28,25 +28,14 @@ router.get('/index',function(req,res,next){
     async.parallel({
         modules:function(callback){
             request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
-                if(!error && response.statusCode == 200){
-                    var returnData = JSON.parse(body);
+                var returnData = JSON.parse(body);
 
-                    if(returnData.statusCode != 0){
-                        logger.error("visitor/v2/scrum/index.js -- module/find-all-modules fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    } else {
-                        callback(null,returnData.data.modules);
-                    }
-                } else {
+                if(returnData.statusCode != 0){
                     logger.error("visitor/v2/scrum/index.js -- module/find-all-modules fail ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("visitor/v2/scrum/index.js -- module/find-all-modules fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                } else {
+                    callback(null,returnData.data.modules);
                 }
             });
         },
@@ -56,14 +45,12 @@ router.get('/index',function(req,res,next){
 	        } else {
                 var token = cookies[VisitorAuthorization];
                 var url = config.getBackendUrlPrefix() + "user/find-user-by-token?token=" + token;
-
                 var options = {
 	                url:url,
 	                headers:{
 		                'Authorization': "Bearer " + token
 	                }
                 }
-
                 request(options,function(error,response,body){
                     if(!error && response.statusCode == 200){
                         var returnData = JSON.parse(body);
@@ -97,7 +84,12 @@ router.get('/index',function(req,res,next){
             }
         }
     },function(err,result){
-        res.render('visitor/v3/scrum/scrumIndex',{'data':result});
+        if(err != null){
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        } else {
+            res.render('visitor/v3/scrum/scrumIndex',{'data':result});
+        }
     })
 })
 

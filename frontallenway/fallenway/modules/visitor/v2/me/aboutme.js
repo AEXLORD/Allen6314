@@ -23,13 +23,7 @@ router.get('',function(req,res,next){
                 res.render('visitor/v3/me/aboutme',{"data":returnData.data});
             }
         } else {
-            logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
-                "error = " + error);
-            if(response != null){
-                logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
-                    "response.statuCode = " + response.statusCode + "..." +
-                    "response.body = " + response.body);
-            }
+            logger.error(error.stack);
             res.render('error/unknowerror');
         }
     });

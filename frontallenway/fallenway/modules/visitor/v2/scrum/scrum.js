@@ -40,10 +40,10 @@ router.get('/index',function(req,res,next){
             });
         },
         user:function(callback){
-	        if(mycookies.getVisitorAuthorizationCookie() == 'undefined'){
+	        if(mycookies.getVisitorAuthorizationCookie(req) == 'undefined'){
                 callback(null,null);
 	        } else {
-                var token = cookies[VisitorAuthorization];
+                var token = mycookies.getVisitorAuthorizationCookie(req);
                 var url = config.getBackendUrlPrefix() + "user/find-user-by-token?token=" + token;
                 var options = {
 	                url:url,
@@ -120,7 +120,7 @@ function validAddIssue(issue){
 }
 
 function doAddIssue(req,res,issue){
-	if(mycookies.getVisitorAuthorizationCookie() == 'undefined'){
+	if(mycookies.getVisitorAuthorizationCookie(req) == 'undefined'){
         res.status(500).json({error:'尚未登录，无法添加'});
     } else {
 

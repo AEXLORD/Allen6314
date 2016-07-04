@@ -58,7 +58,7 @@ router.post('/login/do-login',function(req,res,next){
                     res.send("/error/unknowerror");
                 } else {
                     logger.info("access token = " + returnData.data.token.access_token);
-		            res.cookie(mycookies.getVisitorAuthorization(), returnData.data.token.access_token, { path: '/' });
+		            res.cookie(mycookies.getVisitorAuthorization(req), returnData.data.token.access_token, { path: '/' });
                     res.redirect("/visitor/scrum/index");
                 }
             } else {

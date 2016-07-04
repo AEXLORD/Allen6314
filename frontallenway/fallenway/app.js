@@ -59,10 +59,8 @@ app.use('/visitor/scrum',visitor_scrum);
 //*                admin oauth validation                *
 //********************************************************
 var myLogger_admin_oauth = function (req, res, next) {
-    var cookies = mycookies.getMyCookies(req);
-    var AdminAuthorization = mycookies.getAdminAuthorization();
-	if(cookies[AdminAuthorization] == 'undefined'){
- 		logger.error("cookies["+  AdminAuthorization +"] == undefined......");
+	if(mycookies.getAdminAuthorizationCookie(req) == 'undefined'){
+ 		logger.error("cookies == undefined......");
 		res.render('admin/login');
 	} else {
         next();

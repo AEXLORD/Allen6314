@@ -1,18 +1,73 @@
 <html>
-<head>
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)
-        },i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <head>
+        <link rel = "stylesheet" href = "/stylesheets/bootstrap.min.css">
 
-        ga('create', 'UA-77363750-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-</head>
-<body>
-    <p>额...sorry ，后端报错了...如果有空，知乎上通知我一声吧，有小红包哦....(*^__^*)</p>
-    <p><a href = "https://www.zhihu.com/people/wuhuachuan">我的知乎：【点这里】</a></p>
-</body>
+        <style type = "text/css">
+.login_box{
+    padding:15px 20px 20px;
+    border-width:1px 0;
+    clear:both;
+    background-color:#fff;
+    border-color:#e7eaec;
+    border-image:none;
+    border-style:solid solid none;
+    max-width:530px;
+    margin: 0 auto;
+}
+.login_form{
+    margin-top:15px;
+}
+.btn-login{
+    background-color:#1ab394;
+    border-color:#1ab394;
+    color:#FFF;
+    width:100%;
+}
+.input_style{
+    background-color:rgb(250, 255, 189);
+    height:34px;
+    border-radius:1px;
+}
+
+        </style>
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)
+            },i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-77363750-1', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+    </head>
+    <body style = "background-color:#f3f3f4">
+        <div style = "margin:0 auto;padding:100px 20px 20px">
+            <h2 style = "text-align:center;font-weight:100;font-size:24">404 Error</h2>
+            <div class = "login_box">
+                <form class = "login_form">
+                    <div style = "margin-bottom:15px;">
+                        <p style = "font-weight:bold"><i>Ops,网站出错了，求通知（T﹏T）：</i></p>
+                    </div>
+                    <div style = "margin-bottom:15px;">
+                        <p style = "font-weight:bold">
+                            <i>
+                                <a href = "https://www.zhihu.com/people/wuhuachuan" target="_blank">
+                                知乎：https://www.zhihu.com/people/wuhuachuan</a>
+                            </i>
+                        </p>
+                    </div>
+                    <div style = "margin-bottom:15px;">
+                        <p style = "font-weight:bold"><i>邮箱：wuhuachuan712@163.com</i></p>
+                    </div>
+                    <div style = "margin-bottom:15px;">
+                        <a class = "btn btn-primary btn-login" style = "border-radius:0" 
+                            href = "https://wuhuachuan.com">回到首页</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
 </html>

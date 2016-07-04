@@ -25,27 +25,15 @@ router.get('',function(req,res,next){
                         'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
                     }
             }
-
             request(options,function(error,response,body){
-                if(!error && response.statusCode == 200){
-                    var returnData = JSON.parse(body);
+                var returnData = JSON.parse(body);
 
-                    if(returnData.statusCode != 0){
-                        logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                     } else {
-                        callback(null,returnData.data);
-                    }
-                } else {
+                if(returnData.statusCode != 0){
                     logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/tag.js -- auth/tag/find-all-tags fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                } else {
+                    callback(null,returnData.data);
                 }
             })
             //请求module
@@ -58,34 +46,28 @@ router.get('',function(req,res,next){
                     }
             }
             request(options,function(error,response,body){
-                if(!error && response.statusCode == 200 ){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode == 0){
-                        data.modules = returnData.data.modules;
-                        callback(null,data);
-                    } else {
-                        logger.error("admin/tag.js -- auth/tag/find-all-modules fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    }
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode == 0){
+                    data.modules = returnData.data.modules;
+                    callback(null,data);
                 } else {
-                    logger.error("admin/tag.js -- auth/tag/find-all-modules ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/tag.js --auth/tag/find-all-modules fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                    logger.error("admin/tag.js -- auth/tag/find-all-modules fail ..." +
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
                 }
             });
         }
     ],function(err,result){
-        var path = "<li><a href = \"/admin/index\">Index</a></li>" +
+        if(!err){
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        } else {
+            var path = "<li><a href = \"/admin/index\">Index</a></li>" +
                 "<li>Tag Manage</li>";
 
-        result.path = path;
-        res.render('admin/tag/tagIndex',{'data':result});
+            result.path = path;
+            res.render('admin/tag/tagIndex',{'data':result});
+        }
     })
 });
 

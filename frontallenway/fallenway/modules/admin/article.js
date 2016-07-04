@@ -26,37 +26,29 @@ router.get('/addArticle',function(req,res,next){
             'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
         }
     }
-
     async.waterfall([
-        //请求tags
         function(callback){
             request(optionsTags,function(error,response,body){
-                if(!error && response.statusCode == 200 ){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode == 0){
-                        callback(null,returnData.data);
-                    } else {
-                        logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    }
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode == 0){
+                    callback(null,returnData.data);
                 } else {
                     logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                            "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                                "response.statuCode = " + response.statusCode + "..." +
-                                "response.body = " + response.body);
-                    }
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
                 }
             });
         }
     ],function(err,result){
-        result.path = "<li><a href = \"/admin/index\">Index</a></li>" +
-                "<li><a href = \"/admin/article/articleManage\">Article Manage</a></li>" +
-                "<li><a href = \"#\" class = \"active\">Add Article</a></li>";
-        res.render('admin/article/add_updateArticle',{'data':result});
+        if(!err){
+            logger.error(error.stack);
+            res.render('error/unknowerror');
+        } else {
+            result.path = "<li><a href = \"/admin/index\">Index</a></li>" +
+                    "<li><a href = \"/admin/article/articleManage\">Article Manage</a></li>" +
+                    "<li><a href = \"#\" class = \"active\">Add Article</a></li>";
+            res.render('admin/article/add_updateArticle',{'data':result});
+        }
     })
 });
 
@@ -65,12 +57,6 @@ router.get('/addArticle',function(req,res,next){
 
 //添加文章
 router.post('/addArticle/doAdd',function(req,res,next){
-
-    log.info("req.body.id = " + req.body.id);
-    log.info("req.body.title = " + req.body.title);
-    log.info("req.body.content =" + req.body.content);
-    log.info("req.body.tagId = " + req.body.tagId);
-
     var url = config.getBackendUrlPrefix() + "auth/article/save-article";
 	var data = {
             'id': req.body.id,
@@ -78,7 +64,6 @@ router.post('/addArticle/doAdd',function(req,res,next){
          	'content': req.body.mdData,
          	'tagId': req.body.tagId,
     	}
-
     var options = {
     	url:url,
     	headers:{
@@ -86,7 +71,6 @@ router.post('/addArticle/doAdd',function(req,res,next){
 		},
 	    form:data
     }
-
     request.post(options,function(error,response,body){
         if(!error && response.statusCode == 200 ){
             var returnData = JSON.parse(body);
@@ -116,11 +100,8 @@ router.post('/addArticle/doAdd',function(req,res,next){
 
 //删除文章
 router.get('/deleteArticle',function(req,res,next){
-    log.info("req.query.id = " + req.query.id);
-
     var url = config.getBackendUrlPrefix() + "auth/article/delete-article-by-id";
     var data = {id:req.query.id};
-
     var options = {
         url:url,
             headers:{
@@ -128,7 +109,6 @@ router.get('/deleteArticle',function(req,res,next){
             },
         form:data
     }
-
     request.post(options,function(error,response,body){
         if(!error && response.statusCode == 200 ){
             var returnData = JSON.parse(body);
@@ -157,8 +137,6 @@ router.get('/deleteArticle',function(req,res,next){
 
 //修改文章 -- 跳到修改文章页面
 router.get('/modifyArticle',function(req,res,next){
-    log.info("req.query.id = " + req.query.id);
-
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
@@ -166,7 +144,6 @@ router.get('/modifyArticle',function(req,res,next){
             'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
         }
     }
-
 	var urlFindArticle = config.getBackendUrlPrefix() + "auth/article/find-article-by-id?id=" + req.query.id;
 	var optionFindArticle = {
         url:urlFindArticle,
@@ -174,58 +151,40 @@ router.get('/modifyArticle',function(req,res,next){
             'Authorization': "Bearer " + cookies[AdminAuthorization]
         }
     }
-
     async.waterfall([
         //请求tags
        function(callback){
             request(optionsTags,function(error,response,body){
-                if(!error && response.statusCode == 200 ){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode == 0){
-                        callback(null,returnData.data);
-                    } else {
-                        logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    }
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode == 0){
+                    callback(null,returnData.data);
                 } else {
                     logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
                 }
             });
         },function(data,callback){
             request(optionFindArticle,function(error,response,body){
-                if(!error && response.statusCode == 200 ){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode == 0){
-                        data.article = returnData.data.article;
-                        callback(null,data);
-                    } else {
-                        logger.error("admin/article.js -- auth/article/find-article-by-id?id=xx fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    }
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode == 0){
+                    data.article = returnData.data.article;
+                    callback(null,data);
                 } else {
-                    logger.error("admin/article.js -- auth/article/find-article-by-id?id=xx ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js --auth/article/find-article-by-id?id=xx fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                    logger.error("admin/article.js -- auth/article/find-article-by-id?id=xx fail ..." +
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
                 }
             });
+        }],
+    function(err,result){
+        if(!err){
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        } else {
+            res.render('admin/article/add_updateArticle',{'data':result});
         }
-    	],function(err,result){
-        	res.render('admin/article/add_updateArticle',{'data':result});
-	})
+    })
 });
 
 
@@ -236,86 +195,69 @@ router.get('/articleManage',function(req,res,next){
 
     var moduleid;
     async.waterfall([
-            function(callback){
-                var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
-                var options = {
-    	            url:url,
-    	            headers:{
-                        'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
-		            },
-                }
-                request(options,function(error,response,body){
-                    if(!error && response.statusCode == 200){
-                        var returnData = JSON.parse(body);
-                        if(returnData.statusCode != 0){
-                            logger.error("admin/artice.js -- module/find-all-modules fail ..." +
-                                "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                            res.render('error/unknowerror');
-                        } else {
-                            callback(null,returnData.data);
-                        }
-                    } else {
-                        logger.error("admin/article.js -- module/find-all-modules fail ..." +
-                                "error = " + error);
-                        if(response != null){
-                            logger.error("admin/article.js -- module/find-all-modules fail ..." +
-                                "response.statuCode = " + response.statusCode + "..." +
-                                "response.body = " + response.body);
-                        }
-                        res.render('error/unknowerror');
-                    }
-                });
-            },
-            function(data,callback){
-                var modules = data.modules;
-                modules.forEach(function(entry){
-                    if(entry.name == "Learning"){
-                        moduleid = entry.id;
-                    }
-                })
-
-                var pageSize = config.getArticleListPageSize();
-                var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleid?moduleid=" +
-                                moduleid + "&page=1&size=" + pageSize;
-                var options = {
-    	            url:url,
-    	            headers:{
-                        'Authorization': "Bearer " + cookies['Authorization']
-	                },
-                }
-                request(options,function(error,response,body){
-                    if(!error && response.statusCode == 200){
-                        var returnData = JSON.parse(body);
-                        if(returnData.statusCode != 0){
-                            logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
-                               "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                            res.render('error/unknowerror');
-                        } else {
-                            data.articles = returnData.data.articles;
-                            data.totalPage = new Array();
-                            for(var i = 1; i <= returnData.data.totalPage;i++){
-                                data.totalPage[i-1] = i;
-                            }
-                            callback(null,data);
-                        }
-                    } else {
-                        logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
-                            "error = " + error);
-                        if(response != null){
-                            logger.error("admin/article.js -- article/find-articles-by-moduleid?moduleid fail ..." +
-                               "response.statuCode = " + response.statusCode + "..." +
-                               "response.body = " + response.body);
-                        }
-                        res.render('error/unknowerror');
-                    }
-                });
+        function(callback){
+            var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
+            var options = {
+                url:url,
+    	        headers:{
+                    'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
+	            },
             }
+            request(options,function(error,response,body){
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode != 0){
+                    logger.error("admin/artice.js -- module/find-all-modules fail ..." +
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                } else {
+                    callback(null,returnData.data);
+                }
+            });
+        },
+        function(data,callback){
+            var modules = data.modules;
+            modules.forEach(function(entry){
+                if(entry.name == "Learning"){
+                    moduleid = entry.id;
+                }
+            })
+
+            var pageSize = config.getArticleListPageSize();
+            var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleid?moduleid=" +
+                            moduleid + "&page=1&size=" + pageSize;
+            var options = {
+    	        url:url,
+                headers:{
+                    'Authorization': "Bearer " + cookies['Authorization']
+                },
+            }
+            request(options,function(error,response,body){
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode != 0){
+                    logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
+                       "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                } else {
+                    data.articles = returnData.data.articles;
+                    data.totalPage = new Array();
+                    for(var i = 1; i <= returnData.data.totalPage;i++){
+                        data.totalPage[i-1] = i;
+                    }
+                    callback(null,data);
+                }
+            });
+        }
     ],function(err,result){
-        result.nowPageLeft = 0;
-        result.nowPage = 1;
-        result.nowPageRight = 2;
-        result.moduleid =  moduleid;
-        res.render('admin/article/articleManageIndex',{'data':result});
+        if(!err){
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        } else {
+            result.nowPageLeft = 0;
+            result.nowPage = 1;
+            result.nowPageRight = 2;
+            result.moduleid =  moduleid;
+            res.render('admin/article/articleManageIndex',{'data':result});
+        }
     });
 });
 
@@ -323,18 +265,11 @@ router.get('/articleManage',function(req,res,next){
 
 
 router.get('/page',function(req,res,next){
-
-    logger.info("req.query.pagenum = " + req.query.pagenum);
-    logger.info("req.query.moduleid = " + req.query.moduleid);
-    logger.info("req.query.tagid = " + req.query.tagid);
-
     var pageNum = req.query.pagenum;
     var moduleid = req.query.moduleid;
     var tagid = req.query.tagid;
-
     async.parallel({
         modules: function(callback){
-
             var url = config.getBackendUrlPrefix() + "auth/module/find-all-modules";
             var options = {
     	        url:url,
@@ -342,35 +277,21 @@ router.get('/page',function(req,res,next){
                     'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 		        },
             }
-
             request(options,function(error,response,body){
-                if(!error && response.statusCode == 200){
-                    var returnData = JSON.parse(body);
+                var returnData = JSON.parse(body);
 
-                    if(returnData.statusCode != 0){
-                        logger.error("admin/article.js -- module/find-all-modules fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    } else {
-                        callback(null, returnData.data.modules);
-                    }
-                } else {
+                if(returnData.statusCode != 0){
                     logger.error("admin/article.js -- module/find-all-modules fail ..." +
-                            "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js -- module/find-all-modules fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                } else {
+                    callback(null, returnData.data.modules);
                 }
             });
         },
         articles_totalPage: function(callback){
-
             var url;
             var pageSize = config.getArticleListPageSize();
-
             if(tagid != ""){
                 url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-tagid?tagId=" +
                         tagid + "&page="+ pageNum +"&size=" + pageSize;
@@ -378,7 +299,6 @@ router.get('/page',function(req,res,next){
                 url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleid?moduleid=" +
                         moduleid + "&page=" + pageNum + "&size=" + pageSize;
             }
-
             var options = {
     	        url:url,
     	        headers:{
@@ -386,43 +306,37 @@ router.get('/page',function(req,res,next){
 		        },
             }
             request(options,function(error,response,body){
-                if(!error && response.statusCode == 200){
-                    var returnData = JSON.parse(body);
+                var returnData = JSON.parse(body);
 
-                    if(returnData.statusCode != 0){
-                        logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    } else {
-                        callback(null,returnData.data);
-                    }
-                } else {
+                if(returnData.statusCode != 0){
                     logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/article.js -- auth/article/find-articles-by-moduleid?moduleid fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                } else {
+                    callback(null,returnData.data);
                 }
             });
         }
 
     },function(err,result){
-        result.articles = result.articles_totalPage.articles;
-        result.totalPage = new Array();
+        if(!err){
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        } else {
+            result.articles = result.articles_totalPage.articles;
+            result.totalPage = new Array();
 
-        for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
-            result.totalPage[i-1] = i;
+            for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
+                result.totalPage[i-1] = i;
+            }
+
+            result.nowPageLeft = parseInt(pageNum) - 1;
+            result.nowPage = pageNum;
+            result.nowPageRight = parseInt(pageNum) + 1;
+            result.moduleid = moduleid;
+
+            res.render('admin/article/articleManageIndex',{'data':result});
         }
-
-        result.nowPageLeft = parseInt(pageNum) - 1;
-        result.nowPage = pageNum;
-        result.nowPageRight = parseInt(pageNum) + 1;
-        result.moduleid = moduleid;
-
-        res.render('admin/article/articleManageIndex',{'data':result});
     })
 });
 

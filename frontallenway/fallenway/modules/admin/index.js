@@ -20,7 +20,6 @@ router.get('',function(req,res,next){
             'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
         }
     }
-
     request(options,function(error,response,body){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);

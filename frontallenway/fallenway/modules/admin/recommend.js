@@ -23,26 +23,14 @@ router.get('',function(req,res,next){
                     'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
                 },
             }
-
             request(options,function(error,response,body){
-                if(!error && response.statusCode == 200){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode != 0){
-                        logger.error("admin/recommend.js -- /auth/tag/find-tags-by-moduleid fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    } else {
-                        callback(null,returnData.data.tags);
-                    }
-                } else {
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode != 0){
                     logger.error("admin/recommend.js -- /auth/tag/find-tags-by-moduleid fail ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/recommend.js -- /auth/tag/find-tags-by-moduleid fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                } else {
+                    callback(null,returnData.data.tags);
                 }
             });
         },
@@ -55,33 +43,26 @@ router.get('',function(req,res,next){
                 }
             }
             request(options,function(error,response,body){
-                if(!error && response.statusCode == 200){
-                    var returnData = JSON.parse(body);
-                    if(returnData.statusCode != 0){
-                        logger.error("admin/recommend.js -- /auth/recommend/find-all-recommends fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                    } else {
-                        callback(null,returnData.data.recommends);
-                    }
-                } else {
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode != 0){
                     logger.error("admin/recommend.js -- /auth/recommend/find-all-recommends fail ..." +
-                        "error = " + error);
-                    if(response != null){
-                        logger.error("admin/recommend.js -- /auth/recommend/find-all-recommends fail ..." +
-                            "response.statuCode = " + response.statusCode + "..." +
-                            "response.body = " + response.body);
-                    }
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                } else {
+                    callback(null,returnData.data.recommends);
                 }
             })
         }
     },function(err,results){
-        var data = {};
-        data.tags = results.tags;
-        data.recommends = results.recommends;
-
-        res.render('admin/recommend/recommendIndex',{'data':results});
+        if(!err){
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        } else {
+            var data = {};
+            data.tags = results.tags;
+            data.recommends = results.recommends;
+            res.render('admin/recommend/recommendIndex',{'data':results});
+        }
     })
 })
 

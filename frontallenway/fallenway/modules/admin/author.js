@@ -13,14 +13,12 @@ var logger = new Logger().getLogger();
 
 router.get('',function(req,res,next){
     var url = config.getBackendUrlPrefix() + "auth/admin/find-admin";
-
     var options = {
 	    url:url,
 	    headers:{
 		    'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
 	    }
     }
-
     request(options,function(error,response,body){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
@@ -47,7 +45,6 @@ router.get('',function(req,res,next){
                     "response.statuCode = " + response.statusCode + "..." +
                     "response.body = " + response.body);
             }
-
 	        if(response.statusCode == 401){
 	    	    res.render('admin/login');
 	        } else {

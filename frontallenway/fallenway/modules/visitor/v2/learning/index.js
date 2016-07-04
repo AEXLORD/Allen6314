@@ -12,9 +12,6 @@ var Logger = require('../../../../config/logconfig.js');
 var logger = new Logger().getLogger();
 
 router.get('', function(req, res, next) {
-
-    logger.debug("visitor/v2/visitor_learning/index.js -- /visitor/learning/index ...");
-
     async.waterfall([
         //请求 全部的 module
         function(callback){

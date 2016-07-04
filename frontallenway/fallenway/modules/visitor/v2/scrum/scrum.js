@@ -14,7 +14,7 @@ var config = new Config();
 var MyCookies = require('../../../../config/mycookies.js');
 var mycookies = new MyCookies();
 
-var ExceptionCode = require('../../../../config/exceptioncode.js');
+var ExceptionCode = require('../../../../infrustructure_services/ExceptionCode.js');
 var exceptionCode = new ExceptionCode();
 
 router.get('',function(req,res,next){
@@ -32,17 +32,17 @@ router.get('/index',function(req,res,next){
                     var returnData = JSON.parse(body);
 
                     if(returnData.statusCode != 0){
-                        logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                        logger.error("visitor/v2/scrum/index.js -- module/find-all-modules fail ..." +
                             "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
                     } else {
                         callback(null,returnData.data.modules);
                     }
                 } else {
-                    logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                    logger.error("visitor/v2/scrum/index.js -- module/find-all-modules fail ..." +
                         "error = " + error);
                     if(response != null){
-                        logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                        logger.error("visitor/v2/scrum/index.js -- module/find-all-modules fail ..." +
                             "response.statuCode = " + response.statusCode + "..." +
                             "response.body = " + response.body);
                     }
@@ -73,7 +73,7 @@ router.get('/index',function(req,res,next){
                         if(returnData.statusCode != 0){
                             logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +
                                 "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                            if(exceptionCode.getUserHasLogoutCode() == returnData.statusCode){
+                            if(exceptionCode.getUSER_HAS_LOGOUT_Code() == returnData.statusCode){
                                 callback(null,null);
                             } else {
                                 res.render('error/unknowerror');
@@ -82,7 +82,7 @@ router.get('/index',function(req,res,next){
                             callback(null,returnData.data.user);
                         }
                     } else {
-                        if(exceptionCode.getUserHasLogoutCode() == returnData.statusCode){
+                        if(exceptionCode.getUSER_HAS_LOGOUT_Code() == returnData.statusCode){
                             callback(null,null);
                         } else {
                             logger.error("visitor/v2/scrum/scrum.js -- user/find-user-by-token?token= fail ..." +
@@ -104,5 +104,73 @@ router.get('/index',function(req,res,next){
 })
 
 
+
+router.post('/add-issue',function(req,res,next){
+
+    var issue = req.body.issue;
+
+    logger.info("issue = " + issue);
+
+    if(validAddIssue(issue)){
+        doAddIssue(req,res,issue);
+    } else {
+        logger.error("validAddIssue(issue) false,issue = " + issue);
+        res.status(500).json({error:'issue 不能为空或者仅仅只含空格'});
+    }
+})
+
+function validAddIssue(issue){
+    if(issue == null || issue.trim() == ''){
+         return false;
+    } else if(issue.length > 10) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function doAddIssue(req,res,issue){
+    var cookies = mycookies.getMyCookies(req);
+    var VisitorAuthorization = mycookies.getVisitorAuthorization();
+	if(cookies[VisitorAuthorization] == 'undefined'){
+        res.status(500).json({error:'尚未登录，无法添加'});
+    } else {
+
+        var token = cookies[VisitorAuthorization];
+        var url = config.getBackendUrlPrefix() + "issue/add-issue";
+        var data = {
+            name:issue
+        }
+        var options = {
+	        url:url,
+	        headers:{
+		        'Authorization': "Bearer " + token
+	        },
+            form:data
+        }
+
+        request.post(options,function(error,response,body){
+            if(!error && response.statusCode == 200){
+                var returnData = JSON.parse(body);
+                if(returnData.statusCode != 0){
+                    logger.error("visitor/v2/scrum/scrum.js -- issue/add-issue fail ..." +
+                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                    res.status(500).json({error:'后台出错，暂时无法添加'});
+                } else {
+                    res.end();
+                }
+            } else {
+                logger.error("visitor/v2/scrum/scrum.js -- issue/add-issue fail ..." +
+                                "error = " + error);
+                if(response != null){
+                    logger.error("visitor/v2/scrum/scrum.js -- issue/add-issue fail ..." +
+                                    "response.statuCode = " + response.statusCode + "..." +
+                                    "response.body = " + response.body);
+                }
+                res.status(500).json({error:'后台出错，暂时无法添加'});
+            }
+        });
+    }
+}
 
 module.exports = router;

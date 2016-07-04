@@ -28,6 +28,8 @@ public class User extends BaseEntity{
     private String email;
     private String phone;
 
+    private String isVip = "0"; // "1":是 ; "0":不是
+
     public User(String username, String passPhrase) {
         this.username = username;
         this.password = passPhrase;

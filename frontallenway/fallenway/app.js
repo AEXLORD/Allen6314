@@ -95,6 +95,26 @@ app.use('/admin/module',admin_module);
 app.use('/admin/message',admin_message);
 app.use('/admin/recommend',admin_recommend);
 
+//********************************************************
+//*                 exception handler                    *
+//********************************************************
+
+/*app.use(logErrors);*/
+//app.use(requestErrorHandler);
+
+//function logErrors(err,req,res,next){
+    //logger.error("this is error@");
+    //logger.error(err.stack);
+    //next(err);
+//}
+//function requestErrorHandler(err,req,res,next){
+    //res.status(500);
+        //res.render('unknowerror', {
+                //error: err
+        //});
+/*}*/
+
+
 
 //********************************************************
 //*             start (default 7000 port)                *

@@ -163,7 +163,7 @@ router.post('/addmessage',function(req,res,next){
             }
         });
     } else {
-        logger.error(error.stack);
+        logger.error(error);
          res.render('error/unknowerror');
     }
 })

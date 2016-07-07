@@ -15,6 +15,10 @@
             <groupId>com.allenway</groupId>
             <artifactId>commons</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.allenway</groupId>
+            <artifactId>infrustructure</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

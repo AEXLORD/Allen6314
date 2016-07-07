@@ -12,6 +12,8 @@ import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 
 @RestController(value = "user_login")
 @Slf4j
+//@ConditionalOnExpression("${config.oauth2.switch}")
 public class UserLoginController {
 
     @Autowired
@@ -35,6 +38,12 @@ public class UserLoginController {
 
     @Autowired
     private UserTokenService userTokenService;
+
+    @Value("${config.oauth2.switch}")
+    private String oauthSwitch;
+
+    @Value("${config.oauth2.expired_in}")
+    private String expired_in;
 
     @RequestMapping(value = {"/user/login"},method = RequestMethod.POST)
     public Object register(User user) throws IOException {
@@ -53,11 +62,19 @@ public class UserLoginController {
                 ReturnTemplate returnTemplate = new ReturnTemplate();
                 returnTemplate.addData("user",decorate(user1));
 
-                TokenEntity tokenEntity = getTokenUtils.getToken(user1.getId());
-                returnTemplate.addData("token",tokenEntity);
-
+                TokenEntity tokenEntity;
+                if("true".equals(oauthSwitch)){
+                    tokenEntity = getTokenUtils.getToken(user1.getId());
+                } else {
+                    tokenEntity = new TokenEntity.Builder()
+                                                        .access_token(user1.getId())
+                                                        .expires_in(expired_in)
+                                                        .refresh_token(null)
+                                                        .token_type("Bearer")
+                                                        .build();
+                }
                 userTokenService.save(new UserToken(user1.getId(),tokenEntity.getAccess_token()));
-
+                returnTemplate.addData("token",tokenEntity);
                 return returnTemplate;
             }
         } else {

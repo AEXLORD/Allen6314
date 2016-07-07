@@ -53,6 +53,19 @@ app.use('/visitor/aboutme',visitor_aboutme);
 app.use('/visitor/recommend',visitor_recommend);
 app.use('/visitor/messageboard',visitor_message);
 app.use('/visitor/user',visitor_user);
+
+
+var myLogger_visitor_oauth = function (req, res, next) {
+	if(mycookies.getVisitorAuthorizationCookie(req) == 'undefined'){
+ 		logger.error("cookies == undefined......");
+		res.render('visitor/v3/user/login');
+	} else {
+        next();
+    }
+};
+app.use(myLogger_visitor_oauth);
+
+
 app.use('/visitor/scrum',visitor_scrum);
 
 //********************************************************

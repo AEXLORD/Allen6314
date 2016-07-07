@@ -25,7 +25,7 @@ router.get('/login/to-login',function(req,res,next){
                 res.render('visitor/v3/user/login',{'data':returnData.data});
             }
         } else {
-            logger.error(err.stack);
+            logger.error(err);
             res.render('error/unknowerror');
         }
     });
@@ -55,20 +55,20 @@ router.post('/login/do-login',function(req,res,next){
                 if(returnData.statusCode != 0){
                     logger.error("visitor/v2/user/login.js -- user/login fail ..." +
                         "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                    res.send("/error/unknowerror");
+                    res.render("error/unknowerror");
                 } else {
                     logger.info("access token = " + returnData.data.token.access_token);
 		            res.cookie(mycookies.getVisitorAuthorization(req), returnData.data.token.access_token, { path: '/' });
                     res.redirect("/visitor/scrum/index");
                 }
             } else {
-                logger.error(err.stack);
-                res.send("/error/unknowerror");
+                logger.error(error);
+                res.render("error/unknowerror");
             }
         });
     } else {
         logger.info("visitor/v2/user/login.js -- username = validloginParam(username,password) = false");
-        res.send("/error/unknowerror");
+        res.render("error/unknowerror");
     }
 })
 
@@ -99,7 +99,7 @@ router.get('/logout',function(req,res,next){
                 res.redirect("/visitor/scrum");
             }
         } else {
-            logger.error(err.stack);
+            logger.error(err);
             res.render('error/unknowerror');
         }
     });
@@ -124,7 +124,7 @@ router.get('/register/to-register',function(req,res,next){
                 res.render('visitor/v3/user/register',{'data':returnData.data});
             }
         } else {
-            logger.error(err.stack);
+            logger.error(err);
             res.render('error/unknowerror');
         }
     });

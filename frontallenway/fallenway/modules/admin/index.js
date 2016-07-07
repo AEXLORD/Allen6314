@@ -17,7 +17,7 @@ router.get('',function(req,res,next){
 	var options = {
         url:url,
         headers:{
-            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie()
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie(req)
         }
     }
     request(options,function(error,response,body){

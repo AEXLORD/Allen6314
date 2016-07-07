@@ -4,7 +4,7 @@
     
         <style type = "text/css">
 .box{
-    min-width:25%;
+    width:25%;
     min-height:300px;
     float:left
 }
@@ -22,7 +22,7 @@
 
     <div  style = "width:100%;">
         <div style = "float:left">
-            <a href = "javascript:void(0)" onclick = "showScrumProfile()">Scrum 介绍</a>
+            <a href = "javascript:void(0)" onclick = "showScrumProfile()">Scrum 介绍【点我】</a>
         </div>
         <div style = "float:right">
             {% if data.user == null %}
@@ -53,6 +53,41 @@
         </div>
     </div>
 
+    <div style = "margin-top:15px">
+        <span style = "font-weight:bold">Issue: &nbsp;&nbsp;</span>
+        <input type = "text"id = "issue" name = "issue" class = "form-control"
+            placeholder = "name" style= "width:10%;display:inline-block"> &nbsp;&nbsp; 
+
+        <select class = "form-control" name = "color" id = "color" style= "width:10%;display:inline-block">
+            <option style = "background-color:rgb(199, 237, 204)" value = "rgb(199, 237, 204)">浅绿底色</option>
+            <option style = "background-color:rgb(255, 153, 170)" value = "rgb(255, 153, 170)">浅红底色</option>
+            <option style = "background-color:rgb(0, 204, 255)" value = "rgb(0, 204, 255)">浅蓝底色</option>
+        </select>&nbsp;&nbsp; 
+
+        <a class = "btn btn-primary btn-sm" style= "border-radius:0" href = "javascript:void(0)" 
+            onclick = "addIssue('{{data.user.id}}')">新增</a>&nbsp;&nbsp;
+
+        <span id = "addIssueError" style = "color:red"></span>
+        
+        <br/>
+
+        <span style = "font-weight:bold">Item: &nbsp;&nbsp;&nbsp; </span>
+        <input type = "text"id = "item" name = "item" class = "form-control"
+            placeholder = "name" style= "width:10%;display:inline-block"> &nbsp;&nbsp;
+
+        <select class = "form-control" name = "issueid" id = "issueid" style= "width:10%;display:inline-block">
+            {% for issue in data.issues %}
+                <option value = "{{issue.id}}">{{issue.name}}</option>
+            {% endfor %}
+        </select>&nbsp;&nbsp; 
+        
+        <a class = "btn btn-primary btn-sm" style= "border-radius:0" href = "javascript:void(0)" 
+            onclick = "addItem('{{data.user.id}}')">新增</a>&nbsp;&nbsp;
+
+        <span id = "addItemError" style = "color:red"></span>
+
+    </div>
+
 
     <div style ="margin-top:15px;">
     <div class = "text-center" style = "min-width:25%;float:left;">
@@ -72,37 +107,60 @@
     <div style = "clear:both"></div>
 
     <div>
-    <div class = "border box">
+    <div class = "border box" id = "icebox" style = "padding:5px;">
+        {% for item in data.items_icebox %}
+            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
+                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','ICE BOX')">{{item.name}}</a>
+            </div>
+            &nbsp;
+        {% endfor %}
     </div>
-    <div class = "border box">
+    <div class = "border box" id = "inprogress" style = "padding:5px;">
+        {% for item in data.items_inprogress %}
+            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
+                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','IN PROGRESS')">{{item.name}}</a>
+            </div>
+            &nbsp;
+        {% endfor %}
     </div>
-    <div class = "border box">
+    <div class = "border box" id = "testing" style = "padding:5px;">
+        {% for item in data.items_testing %}
+            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
+                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','TESTING')">{{item.name}}</a>
+            </div>
+            &nbsp;
+        {% endfor %}
     </div>
-    <div class = "border box" style = "border-right:solid 6px rgb(187, 221, 119);">
+    <div class = "border box" id = "complete"style = "padding:5px;border-right:solid 6px rgb(187, 221, 119);">
+        {% for item in data.items_complete %}
+            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
+                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','COMPLETE')">{{item.name}}</a>
+            </div>
+            &nbsp;
+        {% endfor %}
     </div>
     </div>
 
     <div style = "clear:both"></div>
 
+    <div id = "itemDetail" style = "margin-top:15px;">
+    </div>
+    <span id = "itemMoveError"></span>
+
     <div style = "margin-top:15px;">
-        <span style = "font-weight:bold">Issue:</span><br/>
+        <span style = "font-weight:bold">Issue:</span>
+        <div id = "issueShow">
+            {% for issue in data.issues %}
         <div style = "height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block">
-            <div>
-                做运动
+            <div id = "issue1" style = "display">
+                {{issue.name}}
             </div>
             <div class= "text-right" style = "width:100%">
-                <div style = "height:12px;width:40px;background-color:rgb(255, 153, 170);display:inline-block">
+                <div style = "height:12px;width:40px;background-color:{{issue.color}};display:inline-block">
                 </div>
             </div>
         </div>
-        <div style = "height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block">
-            <div>
-                看完RabbitMQ
-            </div>
-            <div class= "text-right" style = "width:100%">
-                <div style = "height:12px;width:40px;background-color:rgb(255, 238, 136);display:inline-block">
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -123,6 +181,76 @@ function showScrumProfile(){
 
 function hideScrumProfile(){
     $("#scrumProfile").css("display","none");
+}
+
+function addIssue(userid){
+    $("#addIssueError").empty();
+    var issue = $("#issue").val();
+    var color = $("#color").val();
+
+    if(issue == null || issue.trim() == '' || issue.length > 10){
+        $("#addIssueError").append("issue 不能为空 并且不能大于10个字符");
+    } else {
+        $.post('/visitor/scrum/add-issue',{"issue":issue,"userid":userid,"color":color},function(data,status){
+            if(status == "error"){
+                $("#addIssueError").append("后端出错，暂时无法添加");
+            } else {
+                window.location.href = "/visitor/scrum/index";
+            }
+        });
+    }
+}
+
+function addItem(userid){
+    var itemname = $("#item").val();
+    var issueId = $("#issueid").val();
+    if(itemname == null || itemname.trim() == '' || itemname.length > 15){
+        $("#addIssueError").append("issue 不能为空 并且不能大于15个字符");
+    } else {
+        $.post('/visitor/scrum/add-item',{"name":itemname,"userid":userid,"issueId":issueId},function(data,status){
+            if(status == "error"){
+                $("#addItemError").append("后端出错，暂时无法添加");
+            } else {
+                window.location.href = "/visitor/scrum/index";
+            }
+        });
+    }
+}
+
+function showItemDetail(itemId,itemName,nowPosition){
+    $("#itemDetail").empty();
+    $("#itemDetail").append("<span style = \"font-weight:bold\">Item Name："+ itemName +"</span> &nbsp;&nbsp;&nbsp;&nbsp;");
+
+    if(nowPosition == "ICE BOX"){
+        displayRightMove(itemId,"IN PROGRESS");
+    } else if(nowPosition == "IN PROGRESS"){
+        displayLeftMove(itemId,"ICE BOX");
+        displayRightMove(itemId,"TESTING");
+    } else if(nowPosition == "TESTING"){
+        displayLeftMove(itemId,"IN PROGRESS");
+        displayRightMove(itemId,"COMPLETE");
+    } else if(nowPosition == "COMPLETE"){
+        displayLeftMove(itemId,"TESTING");
+    }
+
+    $("#itemDetail").append("<a href = \"javascript:void(0)\">删除</a>&nbsp;&nbsp;");
+}
+
+function displayLeftMove(itemId,leftPosition){
+    $("#itemDetail").append("<a href = \"javascript:void(0)\" onclick = \"doSend('"+itemId+"','"+leftPosition+"')\">向左（"+ leftPosition +"）移动</a>&nbsp;&nbsp;");
+}
+function displayRightMove(itemId,rightPosition){
+    $("#itemDetail").append("<a href = \"javascript:void(0)\" onclick = \"doSend('"+itemId+"','"+rightPosition+"')\">向右移动（"+ rightPosition +"）</a>&nbsp;&nbsp;");
+}
+function doSend(itemId,position){
+     $.post('/visitor/scrum/update-item-type',{"itemId":itemId,"type":position},function(data,status){
+         if(status == "success"){
+             window.location.href = "/visitor/scrum/index";
+         } else {
+            $("#itemMoveError").empty();
+            $("#itemMoveError").append("后端错误，暂时无法移动！");
+         }
+     })
 }
     </script>
 {% endblock %}

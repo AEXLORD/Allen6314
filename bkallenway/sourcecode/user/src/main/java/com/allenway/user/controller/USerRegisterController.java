@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 @RestController
 @Slf4j
-public class RegisterController {
+public class UserRegisterController {
 
     @Autowired
     private UserService userService;

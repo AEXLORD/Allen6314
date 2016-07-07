@@ -23,7 +23,7 @@ router.get('',function(req,res,next){
                 res.render('visitor/v3/me/aboutme',{"data":returnData.data});
             }
         } else {
-            logger.error(error.stack);
+            logger.error(error);
             res.render('error/unknowerror');
         }
     });

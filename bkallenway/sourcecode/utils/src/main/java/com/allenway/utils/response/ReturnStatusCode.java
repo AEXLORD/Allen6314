@@ -20,7 +20,8 @@ public enum ReturnStatusCode {
      */
     USERNAME_PASSWORD_WRONG(2002), //登录的用户名密码错误
     CLASSIFY_HAS_ARTICLE_OR_SUBCLASSIFY(2003), //分类无法删除,因为有子分类或者该分类下有文章
-    USER_HAS_LOGOUT(2004);  //用户已经登出
+    USER_HAS_LOGOUT(2004), //用户已经登出
+    ISSUEHASITEMS(2005);  //该issue还有item,无法删除
 
     private int code;
 

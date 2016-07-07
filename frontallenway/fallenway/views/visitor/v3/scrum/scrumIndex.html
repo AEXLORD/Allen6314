@@ -15,6 +15,8 @@
 }
         </style>
 
+        <script src = "/javascripts/myJs/item.js" ></script>
+        <script src = "/javascripts/myJs/issue.js" ></script>
         {% endblock %}
 
 
@@ -145,6 +147,7 @@
 
     <div id = "itemDetail" style = "margin-top:15px;">
     </div>
+    &nbsp;&nbsp;
     <span id = "itemMoveError"></span>
 
     <div style = "margin-top:15px;">
@@ -153,7 +156,7 @@
             {% for issue in data.issues %}
         <div style = "height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block">
             <div id = "issue1" style = "display">
-                {{issue.name}}
+                <a href = "javascript:void(0)" onclick = "showIssueDetail('{{issue.id}}','{{issue.name}}','{{issue.color}}')">{{issue.name}}</a>
             </div>
             <div class= "text-right" style = "width:100%">
                 <div style = "height:12px;width:40px;background-color:{{issue.color}};display:inline-block">
@@ -164,6 +167,9 @@
         </div>
     </div>
 
+    <div id = "issueDetail" style = "margin-top:15px;display:inline-block">
+    </div>
+    <span id = "issueDetailError" style = "color:red"></span>
     <hr/>
 
 
@@ -181,76 +187,6 @@ function showScrumProfile(){
 
 function hideScrumProfile(){
     $("#scrumProfile").css("display","none");
-}
-
-function addIssue(userid){
-    $("#addIssueError").empty();
-    var issue = $("#issue").val();
-    var color = $("#color").val();
-
-    if(issue == null || issue.trim() == '' || issue.length > 20){
-        $("#addIssueError").append("issue 不能为空 并且不能大于20个字符");
-    } else {
-        $.post('/visitor/scrum/add-issue',{"issue":issue,"userid":userid,"color":color},function(data,status){
-            if(status == "error"){
-                $("#addIssueError").append("后端出错，暂时无法添加");
-            } else {
-                window.location.href = "/visitor/scrum/index";
-            }
-        });
-    }
-}
-
-function addItem(userid){
-    var itemname = $("#item").val();
-    var issueId = $("#issueid").val();
-    if(itemname == null || itemname.trim() == '' || itemname.length > 20){
-        $("#addIssueError").append("issue 不能为空 并且不能大于20个字符");
-    } else {
-        $.post('/visitor/scrum/add-item',{"name":itemname,"userid":userid,"issueId":issueId},function(data,status){
-            if(status == "error"){
-                $("#addItemError").append("后端出错，暂时无法添加");
-            } else {
-                window.location.href = "/visitor/scrum/index";
-            }
-        });
-    }
-}
-
-function showItemDetail(itemId,itemName,nowPosition){
-    $("#itemDetail").empty();
-    $("#itemDetail").append("<span style = \"font-weight:bold\">Item Name："+ itemName +"</span> &nbsp;&nbsp;&nbsp;&nbsp;");
-
-    if(nowPosition == "ICE BOX"){
-        displayRightMove(itemId,"IN PROGRESS");
-    } else if(nowPosition == "IN PROGRESS"){
-        displayLeftMove(itemId,"ICE BOX");
-        displayRightMove(itemId,"TESTING");
-    } else if(nowPosition == "TESTING"){
-        displayLeftMove(itemId,"IN PROGRESS");
-        displayRightMove(itemId,"COMPLETE");
-    } else if(nowPosition == "COMPLETE"){
-        displayLeftMove(itemId,"TESTING");
-    }
-
-    $("#itemDetail").append("<a href = \"javascript:void(0)\">删除</a>&nbsp;&nbsp;");
-}
-
-function displayLeftMove(itemId,leftPosition){
-    $("#itemDetail").append("<a href = \"javascript:void(0)\" onclick = \"doSend('"+itemId+"','"+leftPosition+"')\">向左移动（"+ leftPosition +"）</a>&nbsp;&nbsp;");
-}
-function displayRightMove(itemId,rightPosition){
-    $("#itemDetail").append("<a href = \"javascript:void(0)\" onclick = \"doSend('"+itemId+"','"+rightPosition+"')\">向右移动（"+ rightPosition +"）</a>&nbsp;&nbsp;");
-}
-function doSend(itemId,position){
-     $.post('/visitor/scrum/update-item-type',{"itemId":itemId,"type":position},function(data,status){
-         if(status == "success"){
-             window.location.href = "/visitor/scrum/index";
-         } else {
-            $("#itemMoveError").empty();
-            $("#itemMoveError").append("后端错误，暂时无法移动！");
-         }
-     })
 }
     </script>
 {% endblock %}

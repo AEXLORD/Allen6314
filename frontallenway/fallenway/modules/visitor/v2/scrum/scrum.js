@@ -317,7 +317,7 @@ router.post('/update-item-type',function(req,res,next){
                     "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
                 res.status(500).json({error:'后台出错，暂时无法修改'});
             } else {
-                res.send({'item':returnData.data.item});
+                res.end();
             }
         } else {
             logger.error("visitor/v2/scrum/scrum.js -- item/update-item-type fail ..." +
@@ -331,5 +331,84 @@ router.post('/update-item-type',function(req,res,next){
         }
     });
 })
+
+
+router.post('/delete-item-by-id',function(req,res,next){
+    logger.info("itemId = " + req.body.itemId);
+    var options = {
+        url:config.getBackendUrlPrefix() + "item/delete-item-by-id",
+        headers:{
+	        'Authorization': "Bearer " + mycookies.getVisitorAuthorizationCookie(req)
+        },
+        form:{'itemId':req.body.itemId}
+    }
+
+    request.post(options,function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
+            if(returnData.statusCode != 0){
+                logger.error("visitor/v2/scrum/scrum.js -- item/delete-item-by-id fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.status(500).json({error:'后台出错，暂时无法修改'});
+            } else {
+                res.end();
+            }
+        } else {
+            logger.error("visitor/v2/scrum/scrum.js -- item/delete-item-by-id fail ..." +
+                        "error = " + error);
+        if(response != null){
+            logger.error("visitor/v2/scrum/scrum.js -- item/delete-item-by-id fail ..." +
+                            "response.statuCode = " + response.statusCode + "..." +
+                            "response.body = " + response.body);
+        }
+        res.status(500).json({error:'后台出错，暂时无法删除'});
+        }
+    });
+})
+
+router.post('/delete-issue-by-id',function(req,res,next){
+    logger.info("issueId = " + req.body.issueId);
+    var options = {
+        url:config.getBackendUrlPrefix() + "issue/delete-issue-by-id",
+        headers:{
+	        'Authorization': "Bearer " + mycookies.getVisitorAuthorizationCookie(req)
+        },
+        form:{'issueId':req.body.issueId}
+    }
+
+    request.post(options,function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
+
+
+
+            logger.info(returnData.statusCode);
+            logger.info(exceptionCode.getISSUE_HAS_ITEMS());
+
+            if(returnData.statusCode == exceptionCode.getISSUE_HAS_ITEMS()){
+
+                logger.info("hello world");
+
+                res.json({error:'该 issue 还存在子 item，所以无法删除'});
+            } else if(returnData.statusCode == 0){
+                res.end();
+            } else {
+                logger.error("visitor/v2/scrum/scrum.js -- issue/delete-issue-by-id fail ..." +
+                    "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                res.status(500).json({error:'后台出错，暂时无法修改'});
+            }
+        } else {
+            logger.error("visitor/v2/scrum/scrum.js -- issue/delete-issue-by-id fail ..." +
+                        "error = " + error);
+            if(response != null){
+                logger.error("visitor/v2/scrum/scrum.js -- issue/delete-issue-by-id fail ..." +
+                                "response.statuCode = " + response.statusCode + "..." +
+                                "response.body = " + response.body);
+            }
+            res.json({error:'后台出错，暂时无法删除'});
+        }
+    });
+})
+
 
 module.exports = router;

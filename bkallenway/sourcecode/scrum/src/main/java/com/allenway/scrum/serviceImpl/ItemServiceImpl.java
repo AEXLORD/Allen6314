@@ -32,4 +32,9 @@ public class ItemServiceImpl implements ItemService {
     public Item findItemById(String itemId) {
         return itemDao.findItemById(itemId);
     }
+
+    @Override
+    public int itemNum(String issueId) {
+        return itemDao.itemNum(issueId);
+    }
 }

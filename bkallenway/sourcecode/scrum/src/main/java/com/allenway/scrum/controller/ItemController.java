@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
  * Created by wuhuachuan on 16/7/6.
  */
@@ -91,6 +89,22 @@ public class ItemController {
             }
         } else {
             throw new IllegalArgumentException("item param is invalid");
+        }
+    }
+
+    @RequestMapping(value = "/item/delete-item-by-id",method = RequestMethod.POST)
+    public Object deleteItemById(String itemId){
+        if(ValidUtils.validIdParam(itemId)){
+            Item item = itemService.findItemById(itemId);
+            if(item == null){
+                throw new DataNotFoundException("item isn't found by itemId");
+            } else {
+                item.setIsDelete("1");
+                itemService.save(item);
+                return new ReturnTemplate();
+            }
+        } else {
+            throw new IllegalArgumentException("itemId is invalid");
         }
     }
 }

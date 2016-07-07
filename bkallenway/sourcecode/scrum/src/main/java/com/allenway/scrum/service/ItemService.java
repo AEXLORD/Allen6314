@@ -16,4 +16,7 @@ public interface ItemService {
     List<Item> findAllItemsByUserIdAndType(@Param("userId") String userId, String type);
 
     Item findItemById(String itemId);
+
+    //判断该issue有多少个item
+    int itemNum(String issueId);
 }

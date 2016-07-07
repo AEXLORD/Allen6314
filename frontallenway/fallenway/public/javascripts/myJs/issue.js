@@ -13,7 +13,7 @@ function addIssue(userid){
                 var issue = data.issue;
                 $("#issueid").append("<option class = \""+issue.id+"\" value = \""+issue.id+"\">"+issue.name+"</option>");
                 $("#issueShow").append(
-                    "<div class = \""+issue.id+"\" style = \"height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block\">" +
+                    "<div class = \""+issue.id+"\" style = \"min-height:45px;min-width:120px;border:solid 1px #ddd;padding:5px;display:inline-block\">" +
                         "<div id = \"issue1\" style = \"display\">" +
                             "<a href = \"javascript:void(0)\" " +
                                 "onclick = \"showIssueDetail('"+issue.id+"','"+issue.name+"','"+issue.color+"')\">" +

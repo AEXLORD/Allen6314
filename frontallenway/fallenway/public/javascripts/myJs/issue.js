@@ -10,7 +10,23 @@ function addIssue(userid){
             if(status == "error"){
                 $("#addIssueError").append("后端出错，暂时无法添加");
             } else {
-                window.location.href = "/visitor/scrum/index";
+                var issue = data.issue;
+                $("#issueid").append("<option class = \""+issue.id+"\" value = \""+issue.id+"\">"+issue.name+"</option>");
+                $("#issueShow").append(
+                    "<div class = \""+issue.id+"\" style = \"height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block\">" +
+                        "<div id = \"issue1\" style = \"display\">" +
+                            "<a href = \"javascript:void(0)\" " +
+                                "onclick = \"showIssueDetail('"+issue.id+"','"+issue.name+"','"+issue.color+"')\">" +
+                                issue.name +
+                            "</a>" +
+                        "</div>" +
+                        "<div class= \"text-right\" style = \"width:100%\">" +
+                            "<div style = \"height:12px;width:40px;background-color:"+issue.color+";display:inline-block\">" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                    "&nbsp;&nbsp;"
+                );
             }
         });
     }
@@ -23,7 +39,9 @@ function deleteIssue(issueId){
             $("#itemMoveError").append("后端错误，暂时无法删除！");
         } else {
             if(data.error == null){
-                window.location.href = "/visitor/scrum/index";
+                $("#issueDetail").empty();
+                var iden = "." + issueId;
+                $(iden).remove();
             } else {
                 $("#issueDetailError").append(data.error);
             }

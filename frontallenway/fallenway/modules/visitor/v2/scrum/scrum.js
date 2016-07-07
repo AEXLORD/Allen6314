@@ -379,16 +379,7 @@ router.post('/delete-issue-by-id',function(req,res,next){
     request.post(options,function(error,response,body){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
-
-
-
-            logger.info(returnData.statusCode);
-            logger.info(exceptionCode.getISSUE_HAS_ITEMS());
-
             if(returnData.statusCode == exceptionCode.getISSUE_HAS_ITEMS()){
-
-                logger.info("hello world");
-
                 res.json({error:'该 issue 还存在子 item，所以无法删除'});
             } else if(returnData.statusCode == 0){
                 res.end();

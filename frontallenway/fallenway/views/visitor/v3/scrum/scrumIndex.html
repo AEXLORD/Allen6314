@@ -6,12 +6,19 @@
 .box{
     width:25%;
     min-height:300px;
-    float:left
+    float:left;
+    padding:5px;
 }
 .border{
     border-top:solid 6px rgb(187, 221, 119);
     border-bottom:solid 6px rgb(187, 221, 119);
     border-left:solid 6px rgb(187, 221, 119);
+}
+.itemBoxStyle {
+    border:solid 1px #ddd;
+    padding:5px;
+    margin-top:10px;
+    display:inline-block;
 }
         </style>
 
@@ -79,7 +86,7 @@
 
         <select class = "form-control" name = "issueid" id = "issueid" style= "width:10%;display:inline-block">
             {% for issue in data.issues %}
-                <option value = "{{issue.id}}">{{issue.name}}</option>
+            <option class = "{{issue.id}}"  value = "{{issue.id}}">{{issue.name}}</option>
             {% endfor %}
         </select>&nbsp;&nbsp; 
         
@@ -109,34 +116,38 @@
     <div style = "clear:both"></div>
 
     <div>
-    <div class = "border box" id = "icebox" style = "padding:5px;">
+    <div class = "border box" id = "icebox">
         {% for item in data.items_icebox %}
-            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
-                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','ICE BOX')">{{item.name}}</a>
+        <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
+                <a href = "javascript:void(0)" 
+                    onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','ICE BOX')">{{item.name}}</a>
             </div>
             &nbsp;
         {% endfor %}
     </div>
-    <div class = "border box" id = "inprogress" style = "padding:5px;">
+    <div class = "border box" id = "inprogress">
         {% for item in data.items_inprogress %}
-            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
-                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','IN PROGRESS')">{{item.name}}</a>
+            <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
+                <a href = "javascript:void(0)" 
+                    onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','IN PROGRESS')">{{item.name}}</a>
             </div>
             &nbsp;
         {% endfor %}
     </div>
-    <div class = "border box" id = "testing" style = "padding:5px;">
+    <div class = "border box" id = "testing">
         {% for item in data.items_testing %}
-            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
-                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','TESTING')">{{item.name}}</a>
+            <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
+                <a href = "javascript:void(0)" 
+                    onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','TESTING')">{{item.name}}</a>
             </div>
             &nbsp;
         {% endfor %}
     </div>
-    <div class = "border box" id = "complete"style = "padding:5px;border-right:solid 6px rgb(187, 221, 119);">
+    <div class = "border box" id = "complete"style = "border-right:solid 6px rgb(187, 221, 119);">
         {% for item in data.items_complete %}
-            <div style = "border:solid 1px #ddd;padding:5px;display:inline-block;background-color:{{item.color}}">
-                <a href = "javascript:void(0)" onclick = "showItemDetail('{{item.id}}','{{item.name}}','COMPLETE')">{{item.name}}</a>
+            <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
+                <a href = "javascript:void(0)" 
+                    onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','COMPLETE')">{{item.name}}</a>
             </div>
             &nbsp;
         {% endfor %}
@@ -154,9 +165,10 @@
         <span style = "font-weight:bold">Issue:</span>
         <div id = "issueShow">
             {% for issue in data.issues %}
-        <div style = "height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block">
+            <div class = "{{issue.id}}" style = "height:45px;width:120px;border:solid 1px #ddd;padding:5px;display:inline-block">
             <div id = "issue1" style = "display">
-                <a href = "javascript:void(0)" onclick = "showIssueDetail('{{issue.id}}','{{issue.name}}','{{issue.color}}')">{{issue.name}}</a>
+                <a href = "javascript:void(0)" 
+                    onclick = "showIssueDetail('{{issue.id}}','{{issue.name}}','{{issue.color}}')">{{issue.name}}</a>
             </div>
             <div class= "text-right" style = "width:100%">
                 <div style = "height:12px;width:40px;background-color:{{issue.color}};display:inline-block">

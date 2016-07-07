@@ -18,7 +18,7 @@ function addIssue(userid){
 
 function deleteIssue(issueId){
     $.post('/visitor/scrum/delete-issue-by-id',{"issueId":issueId},function(data,status){
-        $("#itemMoveError").empty();
+        $("#issueDetailError").empty();
         if(status == "error"){
             $("#itemMoveError").append("后端错误，暂时无法删除！");
         } else {

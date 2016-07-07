@@ -38,7 +38,7 @@ public class IssueController {
 
     private boolean validAddIssueParam(Issue issue) {
         String name = issue.getName();
-        if(StringUtils.isEmpty(name) || name.length() > 10){
+        if(StringUtils.isEmpty(name) || name.length() > 20){
             return false;
         } else {
             return true;

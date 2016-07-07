@@ -189,7 +189,7 @@ router.post('/add-issue',function(req,res,next){
 function validAddIssue(issue){
     if(issue == null || issue.trim() == ''){
          return false;
-    } else if(issue.length > 10) {
+    } else if(issue.length > 20) {
         return false;
     } else {
         return true;
@@ -251,7 +251,7 @@ router.post('/add-item',function(req,res,next){
 function validAddItem(item){
     if(item == null || item.trim() == ''){
          return false;
-    } else if(item.length > 15) {
+    } else if(item.length > 20) {
         return false;
     } else {
         return true;

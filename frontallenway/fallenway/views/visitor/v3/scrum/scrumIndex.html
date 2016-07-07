@@ -56,7 +56,7 @@
     <div style = "margin-top:15px">
         <span style = "font-weight:bold">Issue: &nbsp;&nbsp;</span>
         <input type = "text"id = "issue" name = "issue" class = "form-control"
-            placeholder = "name" style= "width:10%;display:inline-block"> &nbsp;&nbsp; 
+            placeholder = "name" style= "width:20%;display:inline-block"> &nbsp;&nbsp; 
 
         <select class = "form-control" name = "color" id = "color" style= "width:10%;display:inline-block">
             <option style = "background-color:rgb(199, 237, 204)" value = "rgb(199, 237, 204)">浅绿底色</option>
@@ -73,7 +73,7 @@
 
         <span style = "font-weight:bold">Item: &nbsp;&nbsp;&nbsp; </span>
         <input type = "text"id = "item" name = "item" class = "form-control"
-            placeholder = "name" style= "width:10%;display:inline-block"> &nbsp;&nbsp;
+            placeholder = "name" style= "width:20%;display:inline-block"> &nbsp;&nbsp;
 
         <select class = "form-control" name = "issueid" id = "issueid" style= "width:10%;display:inline-block">
             {% for issue in data.issues %}
@@ -188,8 +188,8 @@ function addIssue(userid){
     var issue = $("#issue").val();
     var color = $("#color").val();
 
-    if(issue == null || issue.trim() == '' || issue.length > 10){
-        $("#addIssueError").append("issue 不能为空 并且不能大于10个字符");
+    if(issue == null || issue.trim() == '' || issue.length > 20){
+        $("#addIssueError").append("issue 不能为空 并且不能大于20个字符");
     } else {
         $.post('/visitor/scrum/add-issue',{"issue":issue,"userid":userid,"color":color},function(data,status){
             if(status == "error"){
@@ -204,8 +204,8 @@ function addIssue(userid){
 function addItem(userid){
     var itemname = $("#item").val();
     var issueId = $("#issueid").val();
-    if(itemname == null || itemname.trim() == '' || itemname.length > 15){
-        $("#addIssueError").append("issue 不能为空 并且不能大于15个字符");
+    if(itemname == null || itemname.trim() == '' || itemname.length > 20){
+        $("#addIssueError").append("issue 不能为空 并且不能大于20个字符");
     } else {
         $.post('/visitor/scrum/add-item',{"name":itemname,"userid":userid,"issueId":issueId},function(data,status){
             if(status == "error"){

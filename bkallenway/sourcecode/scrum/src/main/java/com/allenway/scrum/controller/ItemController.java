@@ -49,7 +49,7 @@ public class ItemController {
 
     private boolean validAddItemParam(Item item) {
         String name = item.getName();
-        if(StringUtils.isEmpty(name) || name.length() > 15){
+        if(StringUtils.isEmpty(name) || name.length() > 20){
             return false;
         } else {
             return true;

@@ -19,6 +19,7 @@
     padding:5px;
     margin-top:10px;
     display:inline-block;
+    margin-left:5px;
 }
         </style>
 
@@ -118,11 +119,10 @@
     <div>
     <div class = "border box" id = "icebox">
         {% for item in data.items_icebox %}
-        <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
+            <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
                 <a href = "javascript:void(0)" 
                     onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','ICE BOX')">{{item.name}}</a>
             </div>
-            &nbsp;
         {% endfor %}
     </div>
     <div class = "border box" id = "inprogress">
@@ -131,7 +131,6 @@
                 <a href = "javascript:void(0)" 
                     onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','IN PROGRESS')">{{item.name}}</a>
             </div>
-            &nbsp;
         {% endfor %}
     </div>
     <div class = "border box" id = "testing">
@@ -140,7 +139,6 @@
                 <a href = "javascript:void(0)" 
                     onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','TESTING')">{{item.name}}</a>
             </div>
-            &nbsp;
         {% endfor %}
     </div>
     <div class = "border box" id = "complete"style = "border-right:solid 6px rgb(187, 221, 119);">
@@ -149,7 +147,6 @@
                 <a href = "javascript:void(0)" 
                     onclick = "showItemDetail('{{item.id}}','{{item.name}}','{{item.color}}','COMPLETE')">{{item.name}}</a>
             </div>
-            &nbsp;
         {% endfor %}
     </div>
     </div>

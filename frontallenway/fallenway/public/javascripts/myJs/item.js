@@ -53,8 +53,7 @@ function doSend(itemId,itemName,itemColor,position){
                "<div class = \"itemBoxStyle\" id = \""+itemId+"\" style = \"background-color:"+itemColor+"\">" +
                    "<a href = \"javascript:void(0)\"" +
                        "onclick = \"showItemDetail('"+itemId+"','"+itemName+"','"+itemColor+"','"+position+"')\">"+itemName+"</a>" +
-               "</div>" +
-               "&nbsp;"
+                "</div>"
             );
          } else {
             $("#itemMoveError").empty();
@@ -94,8 +93,7 @@ function addItem(userid){
                     "<div class = \"itemBoxStyle\" id = \""+item.id+"\" style = \"background-color:"+item.color+"\">" +
                         "<a href = \"javascript:void(0)\" " +
                         "onclick = \"showItemDetail('" + item.id + "','"+ item.name +"','"+item.color+"','ICE BOX')\">"+item.name+"</a>" +
-                    "</div>" +
-                    "&nbsp;&nbsp;"
+                    "</div>"
                 );
             }
         });

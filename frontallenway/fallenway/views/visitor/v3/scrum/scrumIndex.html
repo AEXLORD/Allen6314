@@ -12,7 +12,6 @@
 .border{
     border-top:solid 6px rgb(187, 221, 119);
     border-bottom:solid 6px rgb(187, 221, 119);
-    border-left:solid 6px rgb(187, 221, 119);
 }
 .itemBoxStyle {
     border:solid 1px #ddd;
@@ -117,7 +116,8 @@
     <div style = "clear:both"></div>
 
     <div>
-    <div class = "border box" id = "icebox">
+    <div class = "border box" id = "icebox" 
+        style = "border-left:solid 6px rgb(187, 221, 119);border-right:solid 3px rgb(187, 221, 119);">
         {% for item in data.items_icebox %}
             <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
                 <a href = "javascript:void(0)" 
@@ -125,7 +125,8 @@
             </div>
         {% endfor %}
     </div>
-    <div class = "border box" id = "inprogress">
+    <div class = "border box" id = "inprogress"
+        style = "border-left:solid 3px rgb(187, 221, 119);border-right:solid 3px rgb(187, 221, 119);">
         {% for item in data.items_inprogress %}
             <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
                 <a href = "javascript:void(0)" 
@@ -133,7 +134,8 @@
             </div>
         {% endfor %}
     </div>
-    <div class = "border box" id = "testing">
+    <div class = "border box" id = "testing"
+        style = "border-left:solid 3px rgb(187, 221, 119);border-right:solid 3px rgb(187, 221, 119);">
         {% for item in data.items_testing %}
             <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
                 <a href = "javascript:void(0)" 
@@ -141,7 +143,8 @@
             </div>
         {% endfor %}
     </div>
-    <div class = "border box" id = "complete"style = "border-right:solid 6px rgb(187, 221, 119);">
+    <div class = "border box" id = "complete"
+        style = "border-left:solid 3px rgb(187, 221, 119);border-right:solid 6px rgb(187, 221, 119);">
         {% for item in data.items_complete %}
             <div class = "itemBoxStyle" id = "{{item.id}}" style = "background-color:{{item.color}}">
                 <a href = "javascript:void(0)" 

@@ -9,7 +9,6 @@ var request = require('request');
 var Config = require('../../../../config/globalconfig');
 var config = new Config();
 
-
 router.get('',function(req,res,next){
     request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
         if(!error && response.statusCode == 200){

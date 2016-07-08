@@ -10,6 +10,27 @@ var Logger = require('../../../../config/logconfig');
 var logger = new Logger().getLogger();
 
 
+
+var getModule = function(callback){
+    request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
+            if(returnData.statusCode == 0){
+                callback(null,returnData.data.modules);
+            } else {
+                logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
+                    " returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
+            }
+        } else {
+            res.render('error/unknowerror');
+        }
+    });
+}
+
+
+
+
 router.get('/find-articles-by-tagid',function(req,res,next){
     logger.debug("tagid = " + req.query.id);
     async.parallel({
@@ -41,19 +62,10 @@ router.get('/find-articles-by-tagid',function(req,res,next){
             });
         },
         modules:function(callback){
-            request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
-                var returnData = JSON.parse(body);
-                if(returnData.statusCode == 0){
-                    callback(null,returnData.data.modules);
-                } else {
-                    logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
-                        " returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
-                }
-            });
+            getModule(callback);
         }
     },function(err,result){
-        if(err != null){
+        if(err == null){
             result.articles = result.articles_totalPage.articles;
             result.nowPageLeft = 0;
             result.nowPage = 1;
@@ -72,7 +84,7 @@ router.get('/find-articles-by-tagid',function(req,res,next){
             }
             res.render('visitor/v3/learning/index',{'data':result});
         } else {
-            logger.error(err.stack);
+            logger.error(err);
             res.render('error/unknowerror');
         }
     })

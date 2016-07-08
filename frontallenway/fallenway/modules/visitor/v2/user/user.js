@@ -50,8 +50,6 @@ router.post('/login/do-login',function(req,res,next){
         };
 
         request.post({url:url,form:data},function(error,response,body){
-
-
             if(!error && response.statusCode == 200){
                 var returnData = JSON.parse(body);
                 if(returnData.statusCode == 0){

@@ -12,22 +12,30 @@ var Logger = require('../../../../config/logconfig');
 var logger = new Logger().getLogger();
 
 
+var getModule = function(callback){
+    request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
+        if(!error && response.statusCode == 200){
+            var returnData = JSON.parse(body);
+            if(returnData.statusCode == 0){
+                callback(null,returnData.data);
+            } else {
+                logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
+                    " returnData.statusCode = " + returnData.statusCode);
+                res.render('error/unknowerror');
+            }
+        } else {
+            res.render('error/unknowerror');
+        }
+    });
+}
+
 /*
  * 网站 index 首页数据
  */
 router.get('', function(req, res, next) {
     async.waterfall([
         function(callback){
-            request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
-                var returnData = JSON.parse(body);
-                if(returnData.statusCode == 0){
-                    callback(null,returnData.data);
-                } else {
-                    logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
-                        " returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
-                }
-            });
+            getModule(callback);
         },function(data,callback){
             var moduleid;
             data.modules.forEach(function(entry){

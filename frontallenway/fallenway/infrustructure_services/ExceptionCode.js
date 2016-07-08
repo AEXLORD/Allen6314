@@ -1,5 +1,6 @@
 var ExceptionCode = function(){
 
+    var USERNAME_PASSWORD_WRONG = 2002;
     var USER_HAS_LOGOUT = 2004;
     var ISSUE_HAS_ITEMS = 2005;
     var PARAM_IS_INVALID = 3001;
@@ -12,6 +13,9 @@ var ExceptionCode = function(){
 	}
 	this.getISSUE_HAS_ITEMS = function(){
 		return ISSUE_HAS_ITEMS;
+	}
+	this.getUSERNAME_PASSWORD_WRONG = function(){
+		return USERNAME_PASSWORD_WRONG;
 	}
 }
 

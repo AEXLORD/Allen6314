@@ -5,10 +5,10 @@ var request = require('request');
 var async = require('async');
 var async1 = require('async');
 
-var Logger = require('../../../../config/logconfig.js');
+var Logger = require('../../../../config/logconfig');
 var logger = new Logger().getLogger();
 
-var Config = require('../../../../config/globalconfig.js');
+var Config = require('../../../../config/globalconfig');
 var config = new Config();
 
 router.get('',function(req,res,next){
@@ -21,30 +21,22 @@ router.get('/to-movies',function(req,res,next){
         modules:function(callback){
             request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
                 var returnData = JSON.parse(body);
-
-                if(returnData.statusCode != 0){
-                    logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
-                } else {
+                if(returnData.statusCode == 0){
                     callback(null,returnData.data.modules);
+                } else {
+                    logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                        " returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
                 }
             });
         },
         recommends:function(callback){
-            var url = config.getBackendUrlPrefix() + "recommend/find-recommends-by-classify?classify=movie";
-            request(url,function(error,response,body){
+            request(config.getBackendUrlPrefix() + "recommend/find-recommends-by-classify?classify=movie",function(error,response,body){
                 var returnData = JSON.parse(body);
-
-                if(returnData.statusCode != 0){
-                    logger.error("visitor/v2/recommend/recommed.js -- recommend/find-recommends-by-classify?classify=movie fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                } else {
+                if(returnData.statusCode == 0){
                     var data = {};
                     var recommends = returnData.data.recommends;
                     data.recommends_hanguo = new Array();
-
                     var m = 0;
                     for(var i = 0; i < recommends.length; ++i){
                         var other = recommends[i].other;
@@ -54,16 +46,20 @@ router.get('/to-movies',function(req,res,next){
                         }
                     }
                     callback(null,data);
+                } else {
+                    logger.error("visitor/v2/recommend/recommed.js -- recommend/find-recommends-by-classify?classify=movie fail ..." +
+                        " returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
                 }
             });
         }
     },function(err,result){
-        if(err != null){
-            logger.error(err.stack);
-            res.render('error/unknowerror');
-        } else {
+        if(err == null){
             result.recommends_hanguo = result.recommends.recommends_hanguo;
             res.render('visitor/v3/recommend/movie',{'data':result});
+        } else {
+            logger.error(err.stack);
+            res.render('error/unknowerror');
         }
     })
 })
@@ -76,26 +72,19 @@ router.get('/to-zhihu',function(req,res,next){
         modules:function(callback){
             request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
                 var returnData = JSON.parse(body);
-
-                if(returnData.statusCode != 0){
-                    logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
-                } else {
+                if(returnData.statusCode == 0){
                     callback(null,returnData.data.modules);
+                } else {
+                    logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
+                        " returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
                 }
             });
         },
         recommends:function(callback){
-            var url = config.getBackendUrlPrefix() + "recommend/find-recommends-by-classify?classify=zhihu";
-            request(url,function(error,response,body){
+            request(config.getBackendUrlPrefix() + "recommend/find-recommends-by-classify?classify=zhihu",function(error,response,body){
                 var returnData = JSON.parse(body);
-
-                if(returnData.statusCode != 0){
-                    logger.error("visitor/v2/recommend/recommed.js -- recommend/find-recommends-by-classify?classify=zhihu fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                } else {
+                if(returnData.statusCode == 0){
                     var data = {};
                     var recommends = returnData.data.recommends;
                     data.recommends_zhangzishi = new Array();
@@ -116,18 +105,22 @@ router.get('/to-zhihu',function(req,res,next){
                         }
                     }
                     callback(null,data);
+                } else {
+                    logger.error("visitor/v2/recommend/recommed.js -- recommend/find-recommends-by-classify?classify=zhihu fail ..." +
+                        " returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
                 }
             });
         }
     },function(err,result){
-        if(err != null){
-            logger.error(err.stack);
-            res.render('error/unknowerror');
-        } else {
+        if(err == null){
             result.recommends_zhangzishi = result.recommends.recommends_zhangzishi;
             result.recommends_lizhi = result.recommends.recommends_lizhi;
             result.recommends_interest = result.recommends.recommends_interest;
             res.render('visitor/v3/recommend/zhihu',{'data':result});
+        } else {
+            logger.error(err.stack);
+            res.render('error/unknowerror');
         }
     })
 })

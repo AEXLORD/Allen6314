@@ -8,6 +8,7 @@ import com.allenway.user.entity.UserToken;
 import com.allenway.user.service.UserService;
 import com.allenway.user.service.UserTokenService;
 import com.allenway.utils.encryption.DESEncryptUtil;
+import com.allenway.utils.response.ReturnStatusCode;
 import com.allenway.utils.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -54,12 +55,14 @@ public class UserLoginController {
 
             User user1 = userService.findUserByUsername(user.getUsername());
 
+            ReturnTemplate returnTemplate = new ReturnTemplate();
             if(user1 == null){
-                throw new DataNotFoundException("user isn't found by username");
+                returnTemplate.setStatusCode(ReturnStatusCode.USERNAME_PASSWORD_WRONG);
+                return returnTemplate;
             } else if(DESEncryptUtil.matchPassphrase(user1.getPassword(),user1.getSalt(),user.getPassword())){
-                throw new DataNotFoundException("user is found by username,but password is wrong");
+                returnTemplate.setStatusCode(ReturnStatusCode.USERNAME_PASSWORD_WRONG);
+                return returnTemplate;
             } else {
-                ReturnTemplate returnTemplate = new ReturnTemplate();
                 returnTemplate.addData("user",decorate(user1));
 
                 TokenEntity tokenEntity;

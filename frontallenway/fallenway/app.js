@@ -16,6 +16,8 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+var request = require('request');
+
 var Logger = require('./config/logconfig.js');
 var logger = new Logger().getLogger();
 
@@ -24,6 +26,9 @@ var mycookies = new MyCookies();
 
 var Config = require('./config/globalconfig.js');
 var config = new Config();
+
+var ExceptionCode = require('./infrustructure_services/ExceptionCode');
+var exceptionCode = new ExceptionCode();
 
 //********************************************************
 //*                      access log                      *
@@ -60,11 +65,33 @@ var myLogger_visitor_oauth = function (req, res, next) {
  		logger.error("cookies == undefined......");
 		res.render('visitor/v3/user/login');
 	} else {
-        next();
+        var options = {
+            url:config.getBackendUrlPrefix() + "user/find-user-by-token?token=" + mycookies.getVisitorAuthorizationCookie(req),
+            headers:{
+                'Authorization': "Bearer " + mycookies.getVisitorAuthorizationCookie(req)
+            }
+        }
+        request(options,function(error,response,body){
+            if(!error){
+                var returnData = JSON.parse(body);
+                logger.debug("returnData.statusCode = " + returnData.statusCode);
+                if(returnData.statusCode == exceptionCode.getUSER_HAS_LOGOUT_Code()){
+                    res.render('visitor/v3/user/login');
+                } else if(returnData.statusCode == 0){
+                    next();
+                } else {
+                    logger.error("app.js -- user/find-user-by-token?token= fail ... " +
+                          "returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                }
+            } else {
+                logger.error(error);
+                res.render('error/unknowerror');
+            }
+        })
     }
 };
 app.use(myLogger_visitor_oauth);
-
 
 app.use('/visitor/scrum',visitor_scrum);
 

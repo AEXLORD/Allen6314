@@ -1,0 +1,135 @@
+{% extends '../common/header.html' %}
+
+        {% block subIncludeFileBeforeBody %}
+
+        <style type = "text/css">
+.login_box{
+    padding:15px 20px 20px;
+    border-width:1px 0;
+    clear:both;
+    background-color:#fff;
+    border-color:#e7eaec;
+    border-image:none;
+    border-style:solid solid none;
+    max-width:530px;
+    margin: 0 auto;
+}
+.login_form{
+    margin-top:15px;
+}
+.btn-login{
+    background-color:#1ab394;
+    border-color:#1ab394;
+    color:#FFF;
+    width:100%;
+}
+.input_style{
+    background-color:rgb(250, 255, 189);
+    height:34px;
+    border-radius:1px;
+}
+
+        </style>
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)
+            },i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-77363750-1', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+        {% endblock %}
+
+{% block mainContent  %}
+        <div style = "margin:0 auto;padding:100px 20px 20px">
+            <h2 style = "text-align:center;font-weight:100;font-size:24">用户注册</h2>
+            <div class = "login_box">
+                <div class = "register">
+                    <div style = "margin-bottom:15px;">
+                        <input class = "form-control" type = "text" id = "username" name = "username" placeholder = "username"
+                            style = "border-radius:0px;">
+                    </div>
+                    <div style = "margin-bottom:15px;">
+                        <input class = "form-control" type = "password" id = "password" name = "password" placeholder = "password"
+                            style = "border-radius:0px;">
+                    </div>
+                    <div style = "margin-bottom:15px;">
+                        <input class = "form-control" type = "password" id = "password1" name = "password1" placeholder = "password again"
+                            style = "border-radius:0px;">
+                    </div>
+
+                    <div style = "margin-bottom:15px;">
+                        <span id = "registerError" style = "color:red"></span>
+                    </div>
+                    <div style = "margin-bottom:15px;">
+                        <a class = "btn btn-primary btn-login" href = "javascript:void(0)" onclick = "register()"
+                            style = "border-radius:0px;">确认</a>
+                    </div>
+                    <div style = "margin-bottom:15px;width:100%" class = "text-right">
+                        <a href = "/visitor/user/login/to-login" style = "border-radius:0px;">登录</a>
+                        &nbsp;&nbsp;
+                        <a href = "https://wuhuachuan.com" style = "border-radius:0px;">回到首页</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script type = "text/javascript">
+function register(){ 
+    $("#registerError").empty();
+    
+    var username = $("#username").val();
+    var password = $("#password").val();
+    var password1 = $("#password1").val();
+
+    if(validParam(username,password,password1)){
+        $.post("/visitor/user/register/do-register",{'username':username,'password':password,'password1':password1},
+                function(data,status){
+                    if(status == "success"){
+
+                        var form = $("<form></form>"); 
+                        form.attr('action', "/visitor/user/login/do-login");
+                        form.attr('method', 'post');
+                        form.attr('target', '_self');
+
+                        var input_username = $("<input type='hidden' name='username' />");
+                        input_username.attr('value', username);
+                        var input_password = $("<input type='hidden' name='password' />");
+                        input_password.attr('value', password);
+
+                        form.append(input_username);
+                        form.append(input_password);
+                        form.appendTo("body");
+
+                        form.submit();
+                    } else {
+                        alert("服务有误，暂时无法注册");
+                    }
+                });
+    }
+}
+
+function validParam(username,password,password1){
+    if(username == null || username.trim() == ''){
+        $("#registerError").append("username 不能为空或者只含空格");
+        return false;
+    } else if (password == null || password.trim() == ''){
+        $("#registerError").append("password 不能为空或者只含空格");
+        return false;
+    } else if (password1 == null || password1.trim() == ''){
+        $("#registerError").append("再次输入 password 不能为空或者只含空格");
+        return false;
+    } else if(password != password1) {
+        $("#registerError").append("两次输入的密码不一致");
+        return false;
+    } else {
+        return true;
+    }
+}
+        </script>
+
+{% endblock %}

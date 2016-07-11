@@ -22,7 +22,7 @@ public class ModuleServiceImpl implements ModuleService{
 
     @Override
     @CacheEvict(value = "modules",keyGenerator = "all_module")
-    public Module addModule(Module module) {
+    public Module save(Module module) {
         return moduleDao.saveAndFlush(module);
     }
 

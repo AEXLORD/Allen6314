@@ -1,0 +1,196 @@
+{% extends  '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %}
+
+    <link rel="stylesheet" href="/stylesheets/animate.css">
+    <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+    <link rel="stylesheet" href="/stylesheets/mediaelementplayer.css">
+    <link rel="stylesheet" id="color-scheme" href="/stylesheets/colors/green.css">
+    <script src = "/javascripts/modernizr.js" ></script>
+    <script src = "/javascripts/jquery.min.js" ></script>
+
+    <style type = "text/css">
+        body{
+            font-family:STFangSong, Helvetica, Arial, Vernada, Tahoma, STXihei, "Microsoft YaHei", "Songti SC", SimSun, Heiti, sans-serif;
+            font-size:18px;
+        }
+
+        .panel {
+            border:1px solid #ddd;
+            padding: 15px;
+        }
+        .list-group-item{
+            border-width:1px solid #ddd;
+        }
+        a{
+            color:#428bca;
+            text-decoration:none;
+        }
+        .articleBox{
+            margin-top:100px;
+            width:60%;
+            margin:0px auto;
+        }
+        .tagcloud a{
+            font-size:18px;
+            border-radius:0;
+        }
+    </style>
+        
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)
+        },i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-77363750-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+
+    {% block subIncludeFileBeforeBody1 %}{% endblock %}
+{% endblock %}
+
+
+{% block mainContent %}
+    <div class = "articleBox">
+        <div class = "panel">
+            <form id = "msgForm" action = "/visitor/messageboard/addmessage" method = "post">
+                <div>
+                    <input id = "username" name = "username" type = "text" placeholder = "您的联系方式" style = "width:100%">
+                </div>
+                <div style = "margin-top:10px;">
+                    <input id = "_content" name = "content" type = "text" placeholder = "欢迎留言" style = "width:100%">
+                </div>
+                <div style = "margin-top:10px;" class= "text-right">
+                    <span id = "warn" style = "color:red"></span> &nbsp;&nbsp;
+                    <a href = "javascript:void(0)" onclick = "addMessage()" 
+                        class = "btn btn-primary btn-sm" style = "width:10%">OK</a>
+                </div>
+            </form>
+            <hr/>
+            
+            {% for message in data.messages%}
+            <div>
+                <span>{{message.floor}}楼 <i>{{message.userId}}</i>&nbsp; (at {{message.createDate}}) 留言：</span><br/>
+                <span style = "padding-left:25px;">{{message.content}}</span><br/>
+            </div>
+            <hr style = "width:30%"/>
+            {% endfor %}
+            <!--<div>-->
+                <!--<span>1楼 <i>我是博主</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">我是博主我最帅！</span><br/>-->
+            <!--</div>-->
+            <!--<hr style = "width:30%"/>-->
+            <!--<div>-->
+                <!--<span>2楼 <i>QQ联系我：748227431</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">我是博主我最帅！</span><br/>-->
+            <!--</div>-->
+            <!--<hr style = "width:30%"/>-->
+            <!--<div>-->
+                <!--<span>3楼 <i>天外飞仙</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">博主你这个是怎么做的啊，帮我做一个功能啊！</span><br/>-->
+            <!--</div>-->
+            <!--<hr style = "width:30%"/>-->
+            <!--<div>-->
+                <!--<span>4楼 <i>我是轩哥啊</i> 说：</span><br/>-->
+                <!--<span style = "padding-left:25px;">你个水货，我要刷挂你的博客！！！！</span><br/>-->
+            <!--</div>-->
+
+
+            <nav class = "text-right" style = "margin-top:15px;">
+                <ul class="pagination">
+                    <li>
+                        {% if data.nowPage == 1 %}
+                        <a href="#" aria-label="Previous" class = "disabled btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/messageboard/page?pagenum={{data.nowPageLeft}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" aria-label="Previous" class = "btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% for page in data.totalPage %}
+                        {% if page == data.nowPage %}
+                        <li><a href="/visitor/messageboard/page?pagenum={{page}}" 
+                                class = "btn" style = "background-color:#ddd">{{page}}</a></li>
+                        {% else %}
+                        <li><a href="/visitor/messageboard/page?pagenum={{page}}" 
+                                class = "btn">{{page}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        {% if data.nowPage == data.totalPage.length %}
+                        <a href="#" aria-label="Next" class = "disabled btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/messageboard/page?pagenum={{data.nowPageRight}}" aria-label="Next" class = "btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block subIncludeFileAfterBody %}
+    {% block subIncludeFileAfterBody1 %}{% endblock %}
+
+        <script src="/javascripts/smoothscroll.js"></script>
+
+        <script src="/javascripts/bootstrap.min.js"></script>
+        <script src="/javascripts/jquery.hoverIntent.min.js"></script>
+        <script src="/javascripts/jquery.nicescroll.min.js"></script>
+        <script src="/javascripts/waypoints.min.js"></script>
+        <script src="/javascripts/waypoints-sticky.min.js"></script>
+        <script src="/javascripts/jquery.debouncedresize.js"></script>
+        <script src="/javascripts/retina.min.js"></script>
+        <script src="/javascripts/owl.carousel.min.js"></script>
+        <script src="/javascripts/jflickrfeed.min.js"></script>
+        <script src="/javascripts/twitter/jquery.tweet.min.js"></script>
+        <script src="/javascripts/jquery.magnific-popup.min.js"></script>
+        <script src="/javascripts/mediaelement-and-player.min.js"></script>
+        <script src="/javascripts/main.js"></script>
+
+        <script type = "text/javascript">
+function addMessage(){
+     var username = $('#username').val();
+     var content = $('#_content').val();
+    
+     $('#warn').empty();
+     if(username == null || username.trim() == ''){
+          $('#warn').append("给个联系方式呗");    
+     } else if(content == null || content.trim() == '') {
+          $('#warn').append("说点什么呗");    
+     } else if(content.length > 100 || username.length > 100){
+          $('#warn').append("字数太多了");    
+     } else if(!specialChar(username,content)){
+         $('#warn').append("不能有特殊字符，比如 \'  \"  <  >");    
+     } else {
+         $('#msgForm').submit();
+     }
+}
+function specialChar(username,content){
+    if(username.indexOf('\'') > -1 || content.indexOf('\'') > -1){
+        return false;
+    } else if(username.indexOf('\"') > -1 || content.indexOf('\"') > -1){
+        return false;
+    } else if(username.indexOf('<') > -1 || content.indexOf('<') > -1){
+        return false;
+    } else if(username.indexOf('>') > -1 || content.indexOf('>') > -1){
+        return false;
+    } else {
+         return true;
+    }
+}
+
+        </script>
+
+{% endblock %}

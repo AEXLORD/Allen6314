@@ -1,6 +1,8 @@
 package com.allenway.visitor.controller;
 
+import com.allenway.infrustructure.exception.DataNotFoundException;
 import com.allenway.utils.response.ReturnTemplate;
+import com.allenway.utils.validparam.ValidUtils;
 import com.allenway.visitor.entity.Module;
 import com.allenway.visitor.service.ModuleService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ public class ModuleController {
     @RequestMapping(value = "/auth/module/add-module",method = RequestMethod.POST)
     public Object addModule(Module module){
         ReturnTemplate returnTemplate = new ReturnTemplate();
-        returnTemplate.addData("module",moduleService.addModule(module));
+        returnTemplate.addData("module",moduleService.save(module));
         return returnTemplate;
     }
 
@@ -31,5 +33,22 @@ public class ModuleController {
         ReturnTemplate returnTemplate = new ReturnTemplate();
         returnTemplate.addData("modules",moduleService.findAllModules());
         return returnTemplate;
+    }
+
+    @RequestMapping(value = "/auth/module/delete-module-by-id",method = RequestMethod.POST)
+    public Object deleteModuleById(String id){
+        if(ValidUtils.validIdParam(id)){
+            Module module = moduleService.findModuleById(id);
+
+            if(module != null){
+                module.setIsDelete("1");
+                moduleService.save(module);
+                return new ReturnTemplate();
+            } else {
+                throw new DataNotFoundException("module isn't found");
+            }
+        } else {
+            throw new IllegalArgumentException("id is invalid");
+        }
     }
 }

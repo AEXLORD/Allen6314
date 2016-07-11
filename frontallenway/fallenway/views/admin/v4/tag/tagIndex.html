@@ -1,0 +1,143 @@
+{% extends '../common/header_leftSide.html' %}
+
+{% block subIncludeFileBeforeBody %}
+        <style type = "text/css">
+            .table tbody > tr > td {
+                padding:0;
+            }
+            .table>thead>tr>td {
+                padding:0;
+            }
+            .table tbody > tr > td:first-child {
+                padding:0px;
+            }
+        </style>
+{% endblock %}
+
+{% block subMainContent  %}
+    Tag Name : 
+    <input type = "text" class = "form-control" id = "tagName" name = "name" style = "display:inline;width:20%"> &nbsp;&nbsp;
+    <select class = "form-control" id = "moduleId" name = "moduleId" style = "width:20%;display:inline-block"
+                onchange = "findTagTypeByModuleId()">
+        <option value = ""></option>
+        {% for module in data.modules %}
+        <option value = "{{module.id}}">{{module.name}}</option>
+        {% endfor %}
+    </select>
+    <button class = "btn btn-primary btn-sm" onclick = "addTag()">Add Tag</button>
+    <span id = "addTagWarn" style = "color:red"></span>
+    <h3>Tag List</h3>
+        
+    
+    {% for module in data.modules %}
+    <h5>Module - {{module.name}}</h5>
+    <table class = "table table-striped" style = "margin-top:10px">
+        <thead>
+            <td>name</td>
+            <td>type</td>
+            <td>该分类下的文章</td>
+            <td>Operation</td>
+         </thead>
+         <tbody class = "tagItem">
+            {% for tag in data.tags %}
+            {% if tag.moduleId == module.id %}
+            <tr class = "{{tag.id}}">
+                <td>{{tag.name}}</td>
+                <td>{{tag.type}}</td>
+                <td><a href = "javascript:void(0);" onclick = "getArticleByTag('{{tag.id}}')" >{{tag.articleNum}}</a></td>
+                <td><a href = "javascript:void(0);" onclick = "deleteTag('{{tag.id}}','{{tag.articleNum}}')">Delete</a></td>
+             </tr>
+             {% endif %}
+             {% endfor %}
+        </tbody>
+    </table>
+
+    {% endfor %}
+    
+    <hr/>
+    <div class = "showArticles" style = "display:none">
+        <h3>Articles:</h3>
+        <ul class = "tagArticles">
+        </ul>
+    </div>
+<script type = "text/javascript">
+function getArticleByTag(tagId){
+    $(".tagArticles").empty();
+    $(".showArticles").css("display","block");
+    $.get("/admin/tag/get-articles-by-tag?id="+tagId,function(data,status){
+        if(status == 'success'){
+            for(var i = 1; i <= data.articles.length; ++i){
+                var article = data.articles[i-1];
+                $(".tagArticles").append("<li>"+ i + ". " + article.title + "</li>");
+            }
+        } else {
+            $(".tagArticles").append("出错了，没得到该 tag 下的文章!!!");
+        }
+    })
+}
+function addTag(){
+    
+    $('#addTagWarn').empty();
+    var name = $('#tagName').val();
+    var moduleId = $('#moduleId').val();
+    var tagType = $('#tagType').val();
+
+    if(name != null && name.trim() != "" && 
+            moduleId != null && moduleId.trim() != "" ){
+        $.post('/admin/tag/add-tag',{name:name,moduleId:moduleId,tagType:tagType},function(data,status){
+            if(status == 'success'){
+                window.location.href = "/admin/tag";
+            } else {
+                $('#addTagWarn').append("&nbsp;&nbsp;some error occurs!!!");
+            }
+        })
+    } else {
+       $('#addTagWarn').append("&nbsp;&nbsp;Tag Name or Module can not be empty!");
+    }
+}
+
+function deleteTag(tagId,articleNum){
+    if(articleNum == '0'){
+        $.post('/admin/tag/delete-tag',{id:tagId},function(data,status){
+            if(status == 'success'){
+                $("." + tagId).remove();
+            } else {
+                alert("Delete fail because some error occurs !!!");
+            }
+        }) 
+    } else {
+        alert("Delete fail because articleNum != 0 !!!");
+    }
+}
+
+function findTagTypeByModuleId(){
+    var id = $('#moduleId').val();
+
+    $("#tagType").remove();
+    if(id != null && id.trim() != ''){
+        $.get('/admin/tag/find-tagtype-by-moduleid?moduleid='+id,function(data,status){
+            if(status == "success"){
+                if(data.data != null && data.data.types != null){
+                    var types = data.data.types;
+                    $("#moduleId").after("<select class = \"form-control\" id = \"tagType\" name = \"tagType\" style = \"width:20%;display:inline-block\">");
+                    for(var i = 0; i < types.length; ++i){
+                        var type = types[i];
+                        $("#tagType").append("<option value = \""+ type +"\">"+ type+"</option>");
+                    }
+                }
+            } else {
+                alert("some error is occur in backend!  request for /admin/tag/find-tagtype-by-moduleid?id= == status= error");
+            }
+        })
+    } else {
+         alert("some error is occur! moduleid == null!");
+    }
+}
+
+
+</script>
+
+
+{% endblock %}
+
+

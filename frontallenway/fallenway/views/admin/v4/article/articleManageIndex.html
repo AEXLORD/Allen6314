@@ -1,0 +1,137 @@
+
+    {% extends  '../common/header.html' %}
+
+    {% block subIncludeFileBeforeBody %}
+        
+
+        <link rel="stylesheet" href="/stylesheets/animate.css">
+        <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+        <link rel="stylesheet" href="/stylesheets/mediaelementplayer.css">
+        <link rel="stylesheet" id="color-scheme" href="/stylesheets/colors/green.css">
+        <script src = "/javascripts/modernizr.js" ></script>
+        <script src = "/javascripts/jquery.min.js" ></script>
+
+        <style type = "text/css">
+            .table tbody > tr > td {
+                padding:0;
+            }
+            .table>thead>tr>td {
+                padding:0;
+            }
+            .table tbody > tr > td:first-child {
+                padding:0px;
+            }
+        </style>
+
+        {% block subIncludeFileBeforeBody1 %}{% endblock %}
+    {% endblock %}
+
+
+    {% block mainContent %}
+        <div class = "col-md-9 col-md-push-3">
+            <div>
+            <h4 style = "display:inline-block">Module 分类：</h4>
+            {% for module in data.modules %}
+                {% if data.moduleid == module.id %}
+                <a class = "btn btn-primary btn-large" style = "border-radius:0;margin-left:5px;">{{module.name}}</a>
+                {% else %}
+                <a class = "btn btn-default btn-large" style = "border-radius:0;margin-left:5px;">{{module.name}}</a>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <div style = "margin-top:30px;">
+            <table class = "table table-striped">
+                <thead>
+                    <td>Title</td>
+                    <td>Operation1</td>
+                    <td>Operation2</td>
+                </thead>
+                <tbody>
+                    {% for article in data.articles %}
+                    <tr>
+                        <td>{{article.title}}</td>
+                        <td><a href = "/admin/article/modifyArticle?id={{article.id}}">修改文章</a></td>
+                        <td><a href = "/admin/article/deleteArticle?id={{article.id}}">删除文章</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <nav class = "text-right" style = "margin-top:15px;">
+                <ul class="pagination">
+                    <li>
+                        {% if data.nowPage == 1 %}
+                        <a href="#" aria-label="Previous" class = "disabled btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/admin/article/page?pagenum={{data.nowPageLeft}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" aria-label="Previous" class = "btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% for page in data.totalPage %}
+                        {% if page == data.nowPage %}
+                        <li><a href="/admin/article/page?pagenum={{page}}&moduleid={{data.moduleid}}&tagid={{data.tagId}}" 
+                                class = "btn" style = "background-color:#ddd">{{page}}</a></li>
+                        {% else %}
+                        <li><a href="/admin/article/page?pagenum={{page}}&moduleid={{data.moduleid}}&tagid={{data.tagId}}" 
+                                class = "btn">{{page}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        {% if data.nowPage == data.totalPage.length %}
+                        <a href="#" aria-label="Next" class = "disabled btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/admin/article/page?pagenum={{data.nowPageRight}}&moduleid={{data.moduleid}}&tagid={{data.tagid}}" aria-label="Next" class = "btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+            </div>
+        </div>
+
+        <div class = "md60 clearfix visible-sm visible-xs"></div>
+
+        <aside class = "col-md-3 sidebar col-md-pull-9" role = "complementary">
+            <div class = "widget">
+                <h3>文章管理</h3>
+                <ul class = "links">
+                    <li><a href = "/admin/article/addArticle"><i class = "fa fa-angle-right"></i>添加文章</a></li>
+                    <li><a href = "/admin/index"><i class = "fa fa-angle-right"></i>返回</a></li>
+                </ul>
+            </div>
+        </aside>
+    {% endblock %}
+
+
+
+
+    
+    {% block subIncludeFileAfterBody %}
+        {% block subIncludeFileAfterBody1 %}{% endblock %}
+    <!-- Smoothscroll -->
+    <script src="/javascripts/smoothscroll.js"></script>
+
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.hoverIntent.min.js"></script>
+    <script src="/javascripts/jquery.nicescroll.min.js"></script>
+    <script src="/javascripts/waypoints.min.js"></script>
+    <script src="/javascripts/waypoints-sticky.min.js"></script>
+    <script src="/javascripts/jquery.debouncedresize.js"></script>
+    <script src="/javascripts/retina.min.js"></script>
+    <script src="/javascripts/owl.carousel.min.js"></script>
+    <script src="/javascripts/jflickrfeed.min.js"></script>
+    <script src="/javascripts/twitter/jquery.tweet.min.js"></script>
+    <script src="/javascripts/jquery.magnific-popup.min.js"></script>
+    <script src="/javascripts/mediaelement-and-player.min.js"></script>
+    <script src="/javascripts/main.js"></script>
+
+    {% endblock %}
+
+
+
+

@@ -3,13 +3,16 @@ package com.allenway.infrustructure.controller;
 import com.allenway.commons.token.GetTokenUtils;
 import com.allenway.commons.token.TokenEntity;
 import com.allenway.infrustructure.entity.Admin;
+import com.allenway.infrustructure.entity.AdminToken;
 import com.allenway.infrustructure.service.AdminService;
+import com.allenway.infrustructure.service.AdminTokenService;
 import com.allenway.utils.encryption.DESEncryptUtil;
 import com.allenway.utils.response.ReturnStatusCode;
 import com.allenway.utils.response.ReturnTemplate;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +32,16 @@ public class AdminLoginController {
     private AdminService adminService;
 
     @Autowired
+    private AdminTokenService adminTokenService;
+
+    @Autowired
     private GetTokenUtils getTokenUtils;
+
+    @Value("${config.oauth2.switch}")
+    private String oauthSwitch;
+
+    @Value("${config.oauth2.expired_in}")
+    private String expired_in;
 
     /**
      * 登录
@@ -49,11 +61,21 @@ public class AdminLoginController {
                 returnTemplate.setStatusCode(ReturnStatusCode.USERNAME_PASSWORD_WRONG);
                 return returnTemplate;
             } else {
-                // get oauth token
-                TokenEntity tokenEntity = getTokenUtils.getToken(ad.getId());
-                returnTemplate.addData("token",tokenEntity);
                 returnTemplate.addData("admin",ad);
 
+                TokenEntity tokenEntity;
+                if("true".equals(oauthSwitch)){
+                    tokenEntity = getTokenUtils.getToken(ad.getId());
+                } else {
+                    tokenEntity = new TokenEntity.Builder()
+                            .access_token(ad.getId())
+                            .expires_in(expired_in)
+                            .refresh_token(null)
+                            .token_type("Bearer")
+                            .build();
+                }
+                adminTokenService.save(new AdminToken(ad.getId(),tokenEntity.getAccess_token()));
+                returnTemplate.addData("token",tokenEntity);
                 return returnTemplate;
             }
 

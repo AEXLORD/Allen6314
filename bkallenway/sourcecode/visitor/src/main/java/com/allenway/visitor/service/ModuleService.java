@@ -9,8 +9,9 @@ import java.util.Set;
  */
 public interface ModuleService {
 
-    public Module addModule(Module module);
+    public Module save(Module module);
     public Set<Module> findAllModules();
 
     Module findModuleById(String moduleid);
+
 }

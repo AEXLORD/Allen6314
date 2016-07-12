@@ -145,7 +145,7 @@ router.get('/modifyArticle',function(req,res,next){
 	var optionFindArticle = {
         url:urlFindArticle,
         headers:{
-            'Authorization': "Bearer " + cookies[AdminAuthorization]
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie(req)
         }
     }
     async.waterfall([
@@ -176,10 +176,10 @@ router.get('/modifyArticle',function(req,res,next){
         }],
     function(err,result){
         if(!err){
+            res.render('admin/v4/article/add_updateArticle',{'data':result});
+        } else {
             logger.error(err.stack);
             res.render('error/unknowerror');
-        } else {
-            res.render('admin/v4/article/add_updateArticle',{'data':result});
         }
     })
 });
@@ -299,7 +299,7 @@ router.get('/page',function(req,res,next){
             var options = {
     	        url:url,
     	        headers:{
-                    'Authorization': "Bearer " + cookies['Authorization']
+                    'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie(req)
 		        },
             }
             request(options,function(error,response,body){
@@ -317,9 +317,6 @@ router.get('/page',function(req,res,next){
 
     },function(err,result){
         if(!err){
-            logger.error(err.stack);
-            res.render('error/unknowerror');
-        } else {
             result.articles = result.articles_totalPage.articles;
             result.totalPage = new Array();
 
@@ -333,6 +330,9 @@ router.get('/page',function(req,res,next){
             result.moduleid = moduleid;
 
             res.render('admin/v4/article/articleManageIndex',{'data':result});
+        } else {
+            logger.error(err);
+            res.render('error/unknowerror');
         }
     })
 });

@@ -19,10 +19,10 @@ public interface ArticleDao extends JpaRepository<Article, String> {
     @Cacheable(value = "article",keyGenerator = "article_id")
     Article findArticleById(String id);
 
-    @Query("select article from Article article where tagId = :tagId and isDelete = '0' order by createDate asc")
+    @Query("select article from Article article where tagId = :tagId and isDelete = '0' order by isTop desc")
     List<Article> findArticleByTagId(@Param("tagId") String tagId);
 
-    @Query("select article from Article article where moduleId = :moduleId and isDelete = '0' order by createDate asc")
+    @Query("select article from Article article where moduleId = :moduleId and isDelete = '0' order by isTop desc")
     List<Article> findArticleByModuleId(@Param("moduleId") String moduleId);
 
     @Query("select count(article) from Article article where moduleId=:moduleId and isDelete = '0'")

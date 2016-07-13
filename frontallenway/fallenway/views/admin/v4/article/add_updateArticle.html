@@ -45,6 +45,11 @@
 	            </select>
             </div>
             <div style = "margin-top:15px;">
+                是否置顶:&nbsp;&nbsp;
+                <input type = "radio" name = "isTop" class = "isTop" value = "1" /> 置顶
+                <input type = "radio" name = "isTop" class = "isTop" value = "0" checked = "checked" />不置顶
+            </div>
+            <div style = "margin-top:15px;">
                 <button class="btn btn-primary" onclick="doAdd()">Publish</button>
                 &nbsp;&nbsp;&nbsp;<span style = "color:red" id = "publishWarn"></span>
                 <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>&nbsp;&nbsp;
@@ -56,17 +61,21 @@
 	        var editor = editormd("editormd", {
 	            path : "/editorMd/lib/" 
 	        });
-	    })
+	    });
 
 	    function doAdd(){
 
 	    	if(validData()){
 		    	var url = "addArticle/doAdd";
+                var isTop = getIsTop();
+
+                console.log("isTop = " + isTop);
 
 		    	var data = {
 		    		"title":$('#title').val(),
 		    		"mdData":$('#mdData').val(),
 		    		"tagId":$('#tagId').val(),
+                    "isTop":isTop
 		    	}
 
                 $('#addForm').submit();
@@ -75,6 +84,15 @@
 	    	}
 	    }
 
+        function getIsTop(){
+            var radioIsTop = $(".isTop");
+
+            for(var i = 0; i < radioIsTop.length; ++i){
+                if(radioIsTop[i].checked){
+                    return radioIsTop[i].value();
+                }
+            }
+        }
 	    function validData(){
             $('#publishWarn').empty();
 	    	var valid = true;

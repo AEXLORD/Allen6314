@@ -107,8 +107,12 @@
                         onmouseover = "titleMouseOver(this)" 
                         onmouseout = "titleMouseOut(this)"
                         onclick = "getArticleDetail('{{article.id}}')">
+                        {% if article.isTop == "1" %}
+                           <span style = "color:red"> [置顶]</sapn>
+                        {% endif %}
+    
                         <a href="/visitor/learning/article/getArticleDetail?id={{article.id}}">
-                            {{article.title}}
+                            <span>{{article.title}}</span>
                         </a>
                     </li>
                 {% endfor  %}

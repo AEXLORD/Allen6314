@@ -24,4 +24,5 @@ public class Article extends BaseEntity {
     private int readNum = 0;  //阅读量
     private String tagId;   //所属 tag
     private String moduleId; //所属于module
+    private String isTop = "0"; //是否置顶
 }

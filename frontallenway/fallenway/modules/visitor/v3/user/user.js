@@ -20,7 +20,7 @@ router.get('/login/to-login',function(req,res,next){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
             if(returnData.statusCode == 0){
-                res.render('visitor/v3/user/login',{'data':returnData.data});
+                res.render('visitor/v4/user/login',{'data':returnData.data});
             } else {
                 logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
                     " but returnData.statusCode = " + returnData.statusCode);
@@ -57,7 +57,7 @@ router.post('/login/do-login',function(req,res,next){
 		            res.cookie(mycookies.getVisitorAuthorization(req), returnData.data.token.access_token, { path: '/' });
                     res.redirect("/visitor/scrum/index");
                 } else if(returnData.statusCode == exceptionCode.getUSERNAME_PASSWORD_WRONG()){
-                    res.render('visitor/v3/user/login',{"error":"用户名或者密码错误"});
+                    res.render('visitor/v4/user/login',{"error":"用户名或者密码错误"});
                 } else {
                     logger.error(error);
                     res.render("error/unknowerror");
@@ -69,7 +69,7 @@ router.post('/login/do-login',function(req,res,next){
         });
     } else {
         logger.info("visitor/v2/user/login.js -- username = validloginParam(username,password) = false");
-        res.render('visitor/v3/user/login',{"error":"用户名或者密码不能为空"});
+        res.render('visitor/v4/user/login',{"error":"用户名或者密码不能为空"});
     }
 })
 function validloginParam(username,password){
@@ -113,7 +113,7 @@ router.get('/register/to-register',function(req,res,next){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
             if(returnData.statusCode == 0){
-                res.render('visitor/v3/user/register',{'data':returnData.data});
+                res.render('visitor/v4/user/register',{'data':returnData.data});
             } else {
                 logger.error("visitor/v2/messageboard/index.js -- module/find-all-modules fail ..." +
                     " but returnData.statusCode = " + returnData.statusCode);

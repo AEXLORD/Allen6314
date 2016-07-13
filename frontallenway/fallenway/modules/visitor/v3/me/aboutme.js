@@ -14,7 +14,7 @@ router.get('',function(req,res,next){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
             if(returnData.statusCode == 0){
-                res.render('visitor/v3/me/aboutme',{"data":returnData.data});
+                res.render('visitor/v4/me/aboutme',{"data":returnData.data});
             } else {
                 logger.error("visitor/v2/visitor_learning/index.js -- module/find-all-modules fail ..." +
                     " returnData.statusCode = " + returnData.statusCode);

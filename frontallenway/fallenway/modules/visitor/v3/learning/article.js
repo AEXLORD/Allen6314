@@ -55,7 +55,7 @@ router.get('/getArticleDetail',function(req,res,next){
         }
     },function(err,results){
         if(err == null){
-            res.render('visitor/v3/learning/articleDetail',{'data':results});
+            res.render('visitor/v4/learning/articleDetail',{'data':results});
         } else {
             logger.error(err.stack);
             res.render('error/unknowerror');
@@ -85,7 +85,7 @@ router.get('/get-random-article',function(req,res,next){
         }
     },function(err,results){
         if(err == null){
-            res.render('visitor/v3/learning/articleDetail',{'data':results});
+            res.render('visitor/v4/learning/articleDetail',{'data':results});
         } else {
             logger.error(err.stack);
             res.render('error/unknowerror');
@@ -155,7 +155,7 @@ router.get('/page',function(req,res,next){
             result.nowPageRight = parseInt(pageNum) + 1;
             result.moduleid = moduleid;
             result.tagid = tagid;
-            res.render('visitor/v3/learning/index',{'data':result});
+            res.render('visitor/v4/learning/index',{'data':result});
         } else {
             logger.error(err.stack);
             res.render('error/unknowerror');

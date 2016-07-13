@@ -94,7 +94,7 @@ router.get('', function(req, res, next) {
             })
         }],function(err,result){
             if(err == null){
-                res.render('visitor/v3/learning/index',{'data':result});
+                res.render('visitor/v4/learning/index',{'data':result});
             } else {
                 logger.error(err.stack);
                 res.render('error/unknowerror');

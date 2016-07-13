@@ -82,7 +82,7 @@ router.get('/find-articles-by-tagid',function(req,res,next){
             for(var i = 1; i <= result.articles_totalPage.totalPage;i++){
                 result.totalPage[i-1] = i;
             }
-            res.render('visitor/v3/learning/index',{'data':result});
+            res.render('visitor/v4/learning/index',{'data':result});
         } else {
             logger.error(err);
             res.render('error/unknowerror');

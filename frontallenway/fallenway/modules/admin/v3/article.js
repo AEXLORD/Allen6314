@@ -54,12 +54,20 @@ router.get('/addArticle',function(req,res,next){
 
 //添加文章
 router.post('/addArticle/doAdd',function(req,res,next){
+
+    logger.info("id = " + req.body.id);
+    logger.info("title = " + req.body.title);
+    logger.info("content = " + req.body.mdData);
+    logger.info("tagId = " + req.body.tagId);
+    logger.info("isTop = " + req.body.isTop);
+
     var url = config.getBackendUrlPrefix() + "auth/article/save-article";
 	var data = {
             'id': req.body.id,
         	'title': req.body.title,
          	'content': req.body.mdData,
          	'tagId': req.body.tagId,
+         	'isTop': req.body.isTop,
     	}
     var options = {
     	url:url,

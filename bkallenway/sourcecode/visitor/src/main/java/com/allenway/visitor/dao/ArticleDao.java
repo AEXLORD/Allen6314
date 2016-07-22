@@ -22,14 +22,25 @@ public interface ArticleDao extends JpaRepository<Article, String> {
     @Query("select article from Article article where tagId = :tagId and isDelete = '0' order by isTop desc")
     List<Article> findArticleByTagId(@Param("tagId") String tagId);
 
+    @Deprecated
     @Query("select article from Article article where moduleId = :moduleId and isDelete = '0' order by isTop desc")
     List<Article> findArticleByModuleId(@Param("moduleId") String moduleId);
 
+    @Query("select article from Article article where moduleName = :moduleName and isDelete = '0' order by isTop desc")
+    List<Article> findArticleByModuleName(@Param("moduleName") String moduleName);
+
+    @Deprecated
     @Query("select count(article) from Article article where moduleId=:moduleId and isDelete = '0'")
     int sumArticlesByModuleId(@Param("moduleId") String moduleId);
 
+    @Query("select count(article) from Article article where moduleName=:moduleName and isDelete = '0'")
+    int sumArticleByModuleName(@Param("moduleName") String moduleName);
+
     @Query("select count(article) from Article article where tagId=:tagId and isDelete = '0'")
     int sumArticlesByTagId(@Param("tagId") String tagId);
+
+
+
 }
 
 

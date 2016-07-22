@@ -12,7 +12,7 @@ var Logger = require('../../../../config/logconfig');
 var logger = new Logger().getLogger();
 
 
-var getModule = function(callback){
+var getModule = function(callback,res){
     request(config.getBackendUrlPrefix() + "module/find-all-modules",function(error,response,body){
         if(!error && response.statusCode == 200){
             var returnData = JSON.parse(body);
@@ -35,7 +35,7 @@ var getModule = function(callback){
 router.get('', function(req, res, next) {
     async.waterfall([
         function(callback){
-            getModule(callback);
+            getModule(callback,res);
         },function(data,callback){
             var moduleid;
             data.modules.forEach(function(entry){

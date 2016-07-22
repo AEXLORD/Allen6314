@@ -18,6 +18,7 @@ public interface TagDao extends JpaRepository<Tag, String> {
     @Query("select tag from Tag tag where isDelete = :isDelete order by type asc")
     List<Tag> findTagByIsDelete(@Param("isDelete") String isDelete);
 
+
     Tag findTagByIdAndIsDelete(String tagId,String isDelete);
     Tag findTagByNameAndIsDelete(String tagName, String isDelete);
 
@@ -30,6 +31,5 @@ public interface TagDao extends JpaRepository<Tag, String> {
     int getArticleSumNumByTag(@Param("tagId")String tagId);
 
     List<Tag> findTagByModuleIdAndIsDelete(String moduleId, String isDelete);
-
-
+    List<Tag> findTagsByModuleNameAndIsDelete(String moduleName,String isDelete);
 }

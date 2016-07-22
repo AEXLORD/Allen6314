@@ -45,16 +45,16 @@ app.use(myLogger);
 //********************************************************
 //*                     visitor route                    *
 //********************************************************
-var visitor_learning_index = require('./modules/visitor/v3/learning/index');
-var visitor_learning_article = require('./modules/visitor/v3/learning/article');
-var visitor_learning_tag = require('./modules/visitor/v3/learning/tag');
-var visitor_aboutme = require('./modules/visitor/v3/me/aboutme');
-var visitor_user = require('./modules/visitor/v3/user/user.js');
+var visitor_learning_index = require('./modules/visitor/v5/learning/index');
+var visitor_learning_article = require('./modules/visitor/v5/learning/article');
+var visitor_learning_tag = require('./modules/visitor/v5/learning/tag');
+var visitor_aboutme = require('./modules/visitor/v5/me/aboutme');
+//var visitor_user = require('./modules/visitor/v5/user/user.js');
 app.use('/visitor/learning/index',visitor_learning_index);
 app.use('/visitor/learning/article',visitor_learning_article);
 app.use('/visitor/learning/tag',visitor_learning_tag);
 app.use('/visitor/aboutme',visitor_aboutme);
-app.use('/visitor/user',visitor_user);
+//app.use('/visitor/user',visitor_user);
 
 
 
@@ -75,18 +75,18 @@ app.use(myLogger_admin_oauth);
 //********************************************************
 //*                    admin route                       *
 //********************************************************
-var admin_index = require('./modules/admin/v3/index.js');
-var admin_article = require('./modules/admin/v3/article.js');
-var admin_login = require('./modules/admin/v3/login.js');
-var admin_tag = require('./modules/admin/v3/tag.js');
-var admin_author = require('./modules/admin/v3/author.js');
-var admin_module = require('./modules/admin/v3/module.js');
+var admin_index = require('./modules/admin/v5//index.js');
+var admin_article = require('./modules/admin/v5/article.js');
+var admin_login = require('./modules/admin/v5/login.js');
+var admin_tag = require('./modules/admin/v5/tag.js');
+//var admin_author = require('./modules/admin/v5/author.js');
+//var admin_module = require('./modules/admin/v5/module.js');
 app.use('/login',admin_login);
 app.use('/admin/index',admin_index);
 app.use('/admin/article',admin_article);
 app.use('/admin/tag',admin_tag);
-app.use('/admin/author',admin_author);
-app.use('/admin/module',admin_module);
+//app.use('/admin/author',admin_author);
+//app.use('/admin/module',admin_module);
 
 //********************************************************
 //*                 exception handler                    *

@@ -48,8 +48,14 @@ public class TagServiceImpl implements TagService {
         return tagDao.getArticleSumNumByTag(tagId);
     }
 
+    @Deprecated
     @Override
     public List<Tag> findTagsByModuleId(String moduleId) {
         return tagDao.findTagByModuleIdAndIsDelete(moduleId,"0");
+    }
+
+    @Override
+    public List<Tag> findTagsByModuleName(String moduleName) {
+        return tagDao.findTagsByModuleNameAndIsDelete(moduleName,"0");
     }
 }

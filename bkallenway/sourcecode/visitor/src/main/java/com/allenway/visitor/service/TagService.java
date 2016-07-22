@@ -20,7 +20,8 @@ public interface TagService {
     //得到该tag 下的文章数量
     int getArticleSumNumByTag(String tagId);
 
+    @Deprecated
     List<Tag> findTagsByModuleId(String moduleId);
 
-
+    List<Tag> findTagsByModuleName(String moduleName);
 }

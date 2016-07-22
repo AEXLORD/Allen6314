@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by wuhuachuan on 16/5/30.
+ *
+ * 目前暂时不用,而是采用前端写死的方式.
  */
-@RestController
+@Deprecated
 @Slf4j
+@RestController
 public class ModuleController {
 
     @Autowired

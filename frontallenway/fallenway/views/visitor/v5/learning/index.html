@@ -1,0 +1,211 @@
+{% extends  '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %}
+
+    <link rel="stylesheet" href="/stylesheets/animate.css">
+    <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+    <link rel="stylesheet" href="/stylesheets/mediaelementplayer.css">
+    <link rel="stylesheet" id="color-scheme" href="/stylesheets/colors/green.css">
+    <script src = "/javascripts/modernizr.js" ></script>
+    <script src = "/javascripts/jquery.min.js" ></script>
+
+    <style type = "text/css">
+        body{
+            font-family:STFangSong, Helvetica, Arial, Vernada, Tahoma, STXihei, "Microsoft YaHei", "Songti SC", SimSun, Heiti, sans-serif;
+            font-size:18px;
+        }
+
+        .panel {
+            border:1px solid transparent;
+            border-radius:0;
+        }
+        .list-group-item{
+            border-width:1px solid #ddd;
+        }
+        .title{
+            cursor:pointer;
+        }
+        a{
+            color:#428bca;
+            text-decoration:none;
+        }
+        .articleBox{
+            margin-top:100px;
+            width:55%;
+            margin:0px auto;
+            float:left;
+        }
+        .tagcloud a{
+            font-size:18px;
+            border-radius:0;
+        }
+    </style>
+        
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)
+        },i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-77363750-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+
+    {% block subIncludeFileBeforeBody1 %}{% endblock %}
+{% endblock %}
+
+
+{% block mainContent %}
+    
+    <div style = "float:left;width:22%">
+        <div class = "widget" style = "">
+            <span style = "font-weight:bold">随机看一篇</span>
+            <div class = "tagcloud clearfix">
+                <a href = "/visitor/learning/article/get-random-article">Just Do It</a>
+            </div>
+        </div>
+
+        <div class = "widget" style = "margin-top:20px;">
+            <span style = "font-weight:bold">Tag Cloud - base</span>
+            <div class = "tagcloud clearfix">
+                {% for tag in data.tags %}
+                {% if tag.type == "base" %}
+                <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class = "widget" style = "margin-top:20px;">
+            <span style = "font-weight:bold">Tag Cloud - frame</span>
+            <div class = "tagcloud clearfix">
+                {% for tag in data.tags %}
+                {% if tag.type == "frame" %}
+                <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class = "widget" style = "margin-top:20px;">
+            <span style = "font-weight:bold">Tag Cloud - Others</span>
+            <div class = "tagcloud clearfix">
+                {% for tag in data.tags %}
+                {% if tag.type == "other" %}
+                <a href = "/visitor/learning/tag/find-articles-by-tagid?id={{tag.id}}">{{tag.name}}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class = "articleBox">
+        <div>
+            <ul style = "padding-left:0px;margin:0px">
+                <li class = "list-group-item">Blog</li>
+                {% for article in data.articles %}
+                    <li class = "list-group-item title" 
+                        onmouseover = "titleMouseOver(this)" 
+                        onmouseout = "titleMouseOut(this)"
+                        onclick = "getArticleDetail('{{article.id}}')">
+                        {% if article.isTop == "1" %}
+                           <span style = "color:red"> [置顶]</sapn>
+                        {% endif %}
+    
+                        <a href="/visitor/learning/article/getArticleDetail?id={{article.id}}">
+                            <span>{{article.title}}</span>
+                        </a>
+                    </li>
+                {% endfor  %}
+            </ul>
+            <nav class = "text-right" style = "margin-top:15px;">
+                <ul class="pagination">
+                    <li>
+                        {% if data.nowPage == 1 %}
+                        <a href="#" aria-label="Previous" class = "disabled btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/learning/article/page?pagenum={{data.nowPageLeft}}&moduleName={{data.moduleName}}&tagid={{data.tagid}}" aria-label="Previous" class = "btn">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% for page in data.totalPage %}
+                        {% if page == data.nowPage %}
+                        <li><a href="/visitor/learning/article/page?pagenum={{page}}&moduleName={{data.moduleName}}&tagid={{data.tagid}}" 
+                                class = "btn" style = "background-color:#ddd">{{page}}</a></li>
+                        {% else %}
+                        <li><a href="/visitor/learning/article/page?pagenum={{page}}&moduleName={{data.moduleName}}&tagid={{data.tagid}}" 
+                                class = "btn">{{page}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        {% if data.nowPage == data.totalPage.length %}
+                        <a href="#" aria-label="Next" class = "disabled btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% else %}
+                        <a href="/visitor/learning/article/page?pagenum={{data.nowPageRight}}&moduleName={{data.moduleName}}&tagid={{data.tagid}}" aria-label="Next" class = "btn">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div style = "float:right;width:22%">
+        <div class = "widget" style = "">
+            <span style = "font-weight:bold">公告</span>
+            <div class = "clearfix">
+                <div style = "border:solid 1px #ddd;padding:5px">
+                    <div style = "float:left;width:5%">1.  </div>
+                    <div style = "float:right;width:93%;">如有错误，希望可以帮忙到github上提个 issue，十分感谢。</div>
+                    <div style = "clear:both"></div>
+                    <div style = "float:left;width:5%">2.  </div>
+                    <div style = "float:right;width:93%;"><a href = "https://github.com/pzxwhc" target = "_blank">https://github.com/pzxwhc</a></div>
+                    <div style = "clear:both"></div>
+                </div>
+                <!--<a href = "/visitor/learning/article/get-random-article">Just Do It</a>-->
+            </div>
+        </div>
+    </div>
+
+    <div class = "md60 clearfix visible-sm visible-xs"></div>
+{% endblock %}
+
+
+
+{% block subIncludeFileAfterBody %}
+    {% block subIncludeFileAfterBody1 %}{% endblock %}
+
+        <script src="/javascripts/smoothscroll.js"></script>
+
+        <script src="/javascripts/bootstrap.min.js"></script>
+        <script src="/javascripts/jquery.hoverIntent.min.js"></script>
+        <script src="/javascripts/jquery.nicescroll.min.js"></script>
+        <script src="/javascripts/waypoints.min.js"></script>
+        <script src="/javascripts/waypoints-sticky.min.js"></script>
+        <script src="/javascripts/jquery.debouncedresize.js"></script>
+        <script src="/javascripts/retina.min.js"></script>
+        <script src="/javascripts/owl.carousel.min.js"></script>
+        <script src="/javascripts/jflickrfeed.min.js"></script>
+        <script src="/javascripts/twitter/jquery.tweet.min.js"></script>
+        <script src="/javascripts/jquery.magnific-popup.min.js"></script>
+        <script src="/javascripts/mediaelement-and-player.min.js"></script>
+        <script src="/javascripts/main.js"></script>
+
+        <script>
+function titleMouseOver(element){
+    $(element).css("background-color","#F0F0F0");
+}    
+function titleMouseOut(element){
+    $(element).css("background-color","#fff");
+}    
+function getArticleDetail(id){
+    window.location.href = "/visitor/learning/article/getArticleDetail?id="+id;
+}
+        </script>
+
+{% endblock %}
+

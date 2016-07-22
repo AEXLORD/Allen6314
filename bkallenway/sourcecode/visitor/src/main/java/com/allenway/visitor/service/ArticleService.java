@@ -25,11 +25,19 @@ public interface ArticleService {
      * page: 需要第几页的数据
      * size: 每页有多少数据
      */
+    @Deprecated
     List<Article> findArticlesByModuleId(String moduleId,String page,String size);
+
+    List<Article> findArticlesByModuleName(String moduleName, String page, String size);
 
     Article findRandomArticle();
     Article findArticleById(String id);
 
+    @Deprecated
     int sumArticleByModuleId(String moduleId);
     int sumArticleByTagId(String tagId);
+
+    int sumArticleByModuleName(String moduleName);
+
+
 }

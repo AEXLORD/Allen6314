@@ -60,6 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
      * page: 需要第几页的数据
      * size: 每页有多少数据
      */
+    @Deprecated
     @Override
     public List<Article> findArticlesByModuleId(String moduleId,String page,String size) {
 
@@ -69,7 +70,21 @@ public class ArticleServiceImpl implements ArticleService {
         return getPageArticles(articleDao.findArticleByModuleId(moduleId),_page,_size);
     }
 
+    @Override
+    public List<Article> findArticlesByModuleName(String moduleName, String page, String size) {
+        int _page = Integer.parseInt(page);
+        int _size = Integer.parseInt(size);
+
+        return getPageArticles(articleDao.findArticleByModuleName(moduleName),_page,_size);
+    }
+
     private List<Article> getPageArticles(List<Article> articleWithOutPage, int page, int size) {
+
+        log.info("articleWithOutPage.size = {}",articleWithOutPage.size());
+        for(int i = 0;i < 5; ++i){
+            log.info("articleWithOutPage[{}].isTop = {}",i,articleWithOutPage.get(i).getIsTop());
+        }
+
         List<Article> articleWithPage  = new LinkedList<Article>();
 
         //总共有多少页
@@ -102,6 +117,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findRandomArticle();
     }
 
+    @Deprecated
     @Override
     public int sumArticleByModuleId(String moduleId) {
         return articleDao.sumArticlesByModuleId(moduleId);
@@ -110,6 +126,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public int sumArticleByTagId(String tagId) {
         return articleDao.sumArticlesByTagId(tagId);
+    }
+
+    @Override
+    public int sumArticleByModuleName(String moduleName) {
+        return articleDao.sumArticleByModuleName(moduleName);
     }
 
 }

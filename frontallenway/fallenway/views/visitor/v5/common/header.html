@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <meta charset="utf8">
+        <title>愿无岁月可回首</title>
+
+        <link rel = "stylesheet" href = "/stylesheets/bootstrap.min.css">
+        <link rel = "stylesheet" href = "/stylesheets/style.css">
+        <link rel="shortcut icon" type="image/x-icon" href="/images/chuan.ico" media="screen" />
+
+        <script src = "/javascripts/jquery.min.js" ></script>
+        
+        <style type = "text/css">
+.myheader{
+    border-bottom:1px solid #ddd;
+    font-size:20px;
+    color: #777;
+    padding:0px 20px;
+    font-family:STFangSong, Helvetica, Arial, Vernada, Tahoma, STXihei, "Microsoft YaHei", "Songti SC", SimSun, Heiti, sans-serif;
+}
+.blogShadow{
+    box-shadow:inset 0 3px 9px rgba(0,0,0,.075);
+}
+.www{
+    float:right;
+    min-height:50px;
+    padding-top:9px;
+    margin-left:20px;
+    min-width:50px;
+}
+        </style>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)
+            },i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-77363750-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        {% block subIncludeFileBeforeBody %}{% endblock %}
+    </head>
+    <body>
+        <div id = "wrapper">
+            <div id = "content" role = "main">
+                <div class = "myheader">
+                    <div style = "float:left;min-height:50px;padding-top:9px;">
+                        <a href = "http://www.wuhuachuan.com">Stay hungry, Stay foolish ......</a>
+                    </div>
+                    <div class = "www">
+                        <a href = "/visitor/aboutme">关于我</a>
+                    </div>
+                    <div class = "www">
+                        <a href = "/visitor/learning/index">Learning</a>
+                    </div>
+                    <div style = "clear:both"></div>
+                </div>
+                
+                <div id = "wrapper" style = "margin-top:50px;">
+                    <div id = "content" role = "main">
+                        <div class = "container">
+                            <div id = "row">
+                                {% block mainContent  %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class = "mb20 hidden-xs hiddden-sm"></div>
+            </div>
+        </div>
+    
+    <a href="#top" id="scroll-top" title="Back to Top"><i class="fa fa-angle-up" style = "padding-top:7px"></i></a>
+    
+    {% block subIncludeFileAfterBody %}{% endblock %}
+    </body>
+</html>
+
+
+
+

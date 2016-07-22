@@ -121,6 +121,7 @@ public class ArticleController {
      * page: 需要第几页的数据
      * size: 每页有多少数据
      */
+    @Deprecated
     @RequestMapping(value = {"/article/find-articles-by-moduleid","/auth/article/find-articles-by-moduleid"}
             ,method = RequestMethod.GET)
     public Object findArticlesByModuleId(String moduleid,String page,String size){
@@ -141,6 +142,33 @@ public class ArticleController {
             }
         } else {
             throw new IllegalArgumentException("moduleId is inValid!");
+        }
+    }
+
+    /**
+     * page: 需要第几页的数据
+     * size: 每页有多少数据
+     */
+    @RequestMapping(value = {"/article/find-articles-by-moduleName","/auth/article/find-articles-by-moduleName"}
+            ,method = RequestMethod.GET)
+    public Object findArticlesByModuleName(String moduleName,String page,String size){
+        if(ValidUtils.validIdParam(moduleName)){
+            if(ValidUtils.validPageAndSize(page,size)){
+                ReturnTemplate returnTemplate = new ReturnTemplate();
+
+                //计算总页数
+                int totleSize = articleService.sumArticleByModuleName(moduleName);
+                int totalPages = (int) Math.ceil((float)totleSize / Integer.parseInt(size));
+
+                returnTemplate.addData("articles",articleService.findArticlesByModuleName(moduleName,page,size));
+                returnTemplate.addData("totalPage",totalPages);
+
+                return  returnTemplate;
+            } else {
+                throw new IllegalArgumentException("page or size isn't valid");
+            }
+        } else {
+            throw new IllegalArgumentException("moduleName is inValid!");
         }
     }
 

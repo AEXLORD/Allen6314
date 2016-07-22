@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <meta charset="utf8">
+        <title>愿无岁月可回首</title>
+        <link rel = "stylesheet" href = "/stylesheets/bootstrap.min.css">
+        <link rel = "stylesheet" href = "/stylesheets/style.css">
+        <link rel="shortcut icon" type="image/x-icon" href="/images/chuan.ico" media="screen" />
+        <script src = "/javascripts/jquery.min.js" ></script>
+        {% block subIncludeFileBeforeBody %}{% endblock %}
+    </head>
+    <body>
+        <div id = "wrapper" stype = "background-color:#f6f6f6">
+            <div class = "container" style = "margin-top:40px;">
+                <div id = "row">
+                    {% block mainContent  %}{% endblock %}
+                </div>
+            </div>
+
+            <div class = "mb20 hidden-xs hiddden-sm"></div>
+        </div>
+    
+        <a href="#top" id="scroll-top" title="Back to Top"><i class="fa fa-angle-up" style = "padding-top:7px"></i></a>
+    
+        {% block subIncludeFileAfterBody %}{% endblock %}
+    </body>
+</html>
+
+
+
+

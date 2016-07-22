@@ -80,11 +80,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     private List<Article> getPageArticles(List<Article> articleWithOutPage, int page, int size) {
 
-        log.info("articleWithOutPage.size = {}",articleWithOutPage.size());
-        for(int i = 0;i < 5; ++i){
-            log.info("articleWithOutPage[{}].isTop = {}",i,articleWithOutPage.get(i).getIsTop());
-        }
-
         List<Article> articleWithPage  = new LinkedList<Article>();
 
         //总共有多少页

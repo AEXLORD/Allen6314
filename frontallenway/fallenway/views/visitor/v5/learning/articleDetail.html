@@ -2,11 +2,11 @@
 
 {% block subIncludeFileBeforeBody %}
 <style type = "text/css">
-a:hover{
+#topBack a:hover{
     background-color:#00796b;
     color:white;
 }
-a{
+#topBack a{
     color:7a7a7a;
     background:#eee
 }
@@ -28,6 +28,7 @@ a{
             <span id = "downNum">{{data.article.down}}</span>
         </div>
     </div>
+    <div id = "topBack">
         <a href="javascript:void(0)" id="scroll-top" title="Back to Top"onclick = "window.history.go(-1);"
             style = "opacity:1;bottom:25px;visibility:visible;">
             <span style = "font-size:10px;">Back</span>
@@ -36,7 +37,7 @@ a{
             style = "opacity:1;bottom:80px;visibility:visible;">
             <span style = "font-size:10px;">Top</span>
         </a>
-
+    </div>
 <script>
 var hasVote = false;
 function vote(type,articleId){

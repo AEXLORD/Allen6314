@@ -15880,7 +15880,7 @@ styled buttons not container for vertical centered navs*/
 -------------  29. Scroll Top Button  ----------
 ==============================================*/
 #scroll-top {
-	position:fixed;
+    position:fixed;
 	bottom:0;
 	right:25px;
 	display:block;
@@ -15893,11 +15893,11 @@ styled buttons not container for vertical centered navs*/
 	font-size:24px;
 	border-radius:50%;
 	opacity:0;
-	background: #3a3a3a;
+	/*background: #3a3a3a;*/
 	transition: all 0.35s ease-in-out;
 	-webkit-transition: all 0.35s ease-in-out;
 	text-align:center;
-	color:#fff;
+	/*color:#fff;*/
 }
 
 #scroll-top.smaller {

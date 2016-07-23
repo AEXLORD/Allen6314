@@ -26,4 +26,7 @@ public class Article extends BaseEntity {
     private String moduleId; //所属于module
     private String moduleName;
     private String isTop = "0"; //是否置顶
+
+    private int up = 0;  //赞
+    private int down = 0; //踩
 }

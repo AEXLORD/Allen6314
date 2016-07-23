@@ -119,4 +119,35 @@ router.get('/page',function(req,res,next){
     });
 })
 
+
+router.post('/vote',function(req,res,next){
+    logger.info("type = " + req.body.type);
+    logger.info("articleId = " + req.body.articleId);
+
+    var url = config.getBackendUrlPrefix() + "article/vote";
+	var data = {
+            'id': req.body.articleId,
+        	'type': req.body.type,
+    	}
+    var options = {
+    	url:url,
+	    form:data
+    }
+    request.post(options,function(error,response,body){
+        if(!error && response.statusCode == 200 ){
+            var returnData = JSON.parse(body);
+            if(returnData.statusCode == 0){
+                res.end();
+            } else {
+			    logger.log("visitor/learning/article.js -- /vote -- response.statusCode = 200, returnData.statusCode != 0 ");
+                res.status(500).end();
+            }
+        } else {
+            logger.error("visitor/learning/article.js -- /vote --  ..." + "error = " + error);
+            res.status(500).end();
+		}
+   	});
+});
+
+
 module.exports = router;

@@ -178,4 +178,29 @@ public class ArticleController {
         returnTemplate.addData("article",articleService.findRandomArticle());
         return returnTemplate;
     }
+
+    @RequestMapping(value = "/article/vote",method = RequestMethod.POST)
+    public Object vote(String type,String id){
+
+        log.info("type = {}. id = {}.",type,id);
+
+        if(ValidUtils.validIdParam(id)){
+            if("0".equals(type) || "1".equals(type)){
+                Article article = articleService.findArticleById(id);
+                if("0".equals(type))
+                   article.setDown(article.getDown() + 1);
+                else
+                    article.setUp(article.getUp() + 1);
+
+                articleService.saveArticle(article);
+                return new ReturnTemplate();
+            } else {
+                throw new IllegalArgumentException("type is invalid");
+            }
+        } else {
+            throw new IllegalArgumentException("id is invalid");
+        }
+
+
+    }
 }

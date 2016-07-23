@@ -7,12 +7,14 @@
         <div>
             {% autoescape false %}{{data.article.content}}{% endautoescape %}
         </div>
-        <div style= "width:100%">
-            <div style = "float:right">
-                <input type="button" class="btn btn-sm btn-primary" value="Back" onclick = "window.history.go(-1);">
-            </div>
-            <div style = "clear:both"></div>
-        </div>
     </div>
+    <a href="javascript:void(0)" id="scroll-top" title="Back to Top"onclick = "window.history.go(-1);"
+        style = "opacity:1;bottom:25px;visibility:visible;background:#337ab7;">
+        <span style = "font-size:10px;">Back</span>
+    </a>
+    <a href="#top" id="scroll-top" title="Back to Top"
+        style = "opacity:1;bottom:80px;visibility:visible;background:#337ab7;">
+        <span style = "font-size:10px;">top</span>
+    </a>
 {% endblock %}
 

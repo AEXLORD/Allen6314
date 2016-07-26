@@ -36,6 +36,7 @@
                 <textarea name = "mdData" style="display:none;" id="mdData" >{{data.article.content}}</textarea>
 	        </div>
 
+            {% if data.tags != null %}
             <div style = "margin-top:15px;">
                 Tag:&nbsp;&nbsp;
                 <select style="display:inline;width:100px;font-size:20px" id="tagId" name = "tagId">
@@ -44,13 +45,18 @@
                     {% endfor %}
 	            </select>
             </div>
+            {% endif  %}
+            <div style = "margin-top:15px;">
+                Module:&nbsp;&nbsp;<span id = "moduleName">{{data.moduleName}}</span>
+                <input type = "hidden" name="moduleName" value = "{{data.moduleName}}" /> 
+            </div>
             <div style = "margin-top:15px;">
                 是否置顶:&nbsp;&nbsp;
                 <input type = "radio" name = "isTop" class = "isTop" value = "1" /> 置顶
                 <input type = "radio" name = "isTop" class = "isTop" value = "0" checked = "checked" />不置顶
             </div>
             <div style = "margin-top:15px;">
-                <button class="btn btn-primary" onclick="doAdd()">Publish</button>
+                <a class="btn btn-primary" href = "javascript:void(0)" onclick="doAdd()">Publish</a>
                 &nbsp;&nbsp;&nbsp;<span style = "color:red" id = "publishWarn"></span>
                 <a class="btn btn-primary" href="/admin/article/articleManage">Back</a>&nbsp;&nbsp;
             </div>
@@ -64,35 +70,12 @@
 	    });
 
 	    function doAdd(){
-
 	    	if(validData()){
-		    	var url = "addArticle/doAdd";
-                var isTop = getIsTop();
-
-                console.log("isTop = " + isTop);
-
-		    	var data = {
-		    		"title":$('#title').val(),
-		    		"mdData":$('#mdData').val(),
-		    		"tagId":$('#tagId').val(),
-                    "isTop":isTop
-		    	}
-
                 $('#addForm').submit();
 	    	} else {
 	    		;
 	    	}
 	    }
-
-        function getIsTop(){
-            var radioIsTop = $(".isTop");
-
-            for(var i = 0; i < radioIsTop.length; ++i){
-                if(radioIsTop[i].checked){
-                    return radioIsTop[i].value();
-                }
-            }
-        }
 	    function validData(){
             $('#publishWarn').empty();
 	    	var valid = true;

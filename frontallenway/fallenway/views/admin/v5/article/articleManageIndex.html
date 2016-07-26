@@ -29,7 +29,21 @@
 
     {% block mainContent %}
         <div class = "col-md-9 col-md-push-3">
-            <h4 style = "display:inline-block">Module ：Learning</h4>
+            {% if data.moduleName == "learning" %}
+                <a href = "/admin/article/articleManage?moduleName=learning" class = "btn btn-primary" style = "border-radius:0">Learning</a>
+            {% else %}
+                <a href = "/admin/article/articleManage?moduleName=learning" class = "btn btn-default" style = "border-radius:0">Learning</a>
+            {% endif %}
+            {% if data.moduleName == "thread" %}
+                <a href = "/admin/article/articleManage?moduleName=thread" class = "btn btn-primary" style = "border-radius:0">thread</a>
+            {% else %}
+                <a href = "/admin/article/articleManage?moduleName=thread" class = "btn btn-default" style = "border-radius:0">thread</a>
+            {% endif %}
+            {% if data.moduleName == "distributed" %}
+                <a href = "/admin/article/articleManage?moduleName=distributed" class = "btn btn-primary" style = "border-radius:0">distributed</a>
+            {% else %}
+                <a href = "/admin/article/articleManage?moduleName=distributed" class = "btn btn-default" style = "border-radius:0">distributed</a>
+            {% endif %}
             <div style = "margin-top:30px;">
             <table class = "table table-striped">
                 <thead>
@@ -46,7 +60,7 @@
                             {% endif %}
                             <span style = "color:black">{{article.title}}</span>
                         </td>
-                        <td><a href = "/admin/article/modifyArticle?id={{article.id}}">修改文章</a></td>
+                        <td><a href = "/admin/article/modifyArticle?id={{article.id}}&moduleName={{data.moduleName}}">修改文章</a></td>
                         <td><a href = "/admin/article/deleteArticle?id={{article.id}}">删除文章</a></td>
                     </tr>
                     {% endfor %}
@@ -96,7 +110,7 @@
             <div class = "widget">
                 <h3>文章管理</h3>
                 <ul class = "links">
-                    <li><a href = "/admin/article/addArticle"><i class = "fa fa-angle-right"></i>添加文章</a></li>
+                    <li><a href = "/admin/article/addArticle?moduleName={{data.moduleName}}"><i class = "fa fa-angle-right"></i>添加文章</a></li>
                     <li><a href = "/admin/index"><i class = "fa fa-angle-right"></i>返回</a></li>
                 </ul>
             </div>

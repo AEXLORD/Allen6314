@@ -18,35 +18,40 @@ var logger = new Logger().getLogger();
 
 //添加文章 -- 跳到添加文章首页
 router.get('/addArticle',function(req,res,next){
+    var moduleName = req.query.moduleName;
+    if(moduleName == null) moduleName == "learning";
 
-    var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
-	var optionsTags = {
-        url:urlTags,
-        headers:{
-            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie(req)
+    logger.info("moduleName = " + moduleName);
+    if(moduleName != "learning"){
+        var data = {};
+        data.moduleName = moduleName;
+        res.render('admin/v5/article/add_updateArticle',{'data':data});
+    } else {
+        var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
+	    var optionsTags = {
+            url:urlTags,
+            headers:{
+                'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie(req)
+            }
         }
-    }
-    async.waterfall([
-        function(callback){
-            request(optionsTags,function(error,response,body){
-                var returnData = JSON.parse(body);
-                if(returnData.statusCode == 0){
-                    callback(null,returnData.data);
+        request(optionsTags,function(error,response,body){
+            if(error == null) {
+                var returndata = JSON.parse(body);
+                if(returndata.statusCode == 0){
+                    var data = returndata.data.tags;
+                    data.moduleName = moduleName;
+                    res.render('admin/v5/article/add_updateArticle',{'data':data});
                 } else {
                     logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                            "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                            "response.statuscode = 200, but returndata.statuscode = " + returndata.statuscode);
                     res.render('error/unknowerror');
                 }
-            });
-        }
-    ],function(err,result){
-        if(!err){
-            res.render('admin/v5/article/add_updateArticle',{'data':result});
-        } else {
-            logger.error(err);
-            res.render('error/unknowerror');
-        }
-    })
+            } else {
+                logger.error(error);
+                res.render('error/unknowerror');
+            }
+        });
+    }
 });
 
 
@@ -60,6 +65,7 @@ router.post('/addArticle/doAdd',function(req,res,next){
     logger.info("content = " + req.body.mdData);
     logger.info("tagId = " + req.body.tagId);
     logger.info("isTop = " + req.body.isTop);
+    logger.info("moduleName = " + req.body.moduleName);
 
     var url = config.getBackendUrlPrefix() + "auth/article/save-article";
 	var data = {
@@ -68,7 +74,7 @@ router.post('/addArticle/doAdd',function(req,res,next){
          	'content': req.body.mdData,
          	'tagId': req.body.tagId,
          	'isTop': req.body.isTop,
-         	'moduleName': "learning",
+         	'moduleName': req.body.moduleName,
     	}
     var options = {
     	url:url,
@@ -143,6 +149,10 @@ router.get('/deleteArticle',function(req,res,next){
 
 //修改文章 -- 跳到修改文章页面
 router.get('/modifyArticle',function(req,res,next){
+
+    var moduleName = req.query.moduleName;
+    if(moduleName == null) moduleName = "learning";
+
     var urlTags = config.getBackendUrlPrefix() + "auth/tag/find-all-tags";
 	var optionsTags = {
         url:urlTags,
@@ -160,20 +170,25 @@ router.get('/modifyArticle',function(req,res,next){
     async.waterfall([
         //请求tags
        function(callback){
-            request(optionsTags,function(error,response,body){
-                var returnData = JSON.parse(body);
-                if(returnData.statusCode == 0){
-                    callback(null,returnData.data);
-                } else {
-                    logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
-                        "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
-                    res.render('error/unknowerror');
-                }
-            });
-        },function(data,callback){
+           if(moduleName == "learning"){
+               request(optionsTags,function(error,response,body){
+                   var returnData = JSON.parse(body);
+                   if(returnData.statusCode == 0){
+                       callback(null,returnData.data);
+                   } else {
+                       logger.error("admin/article.js -- auth/tag/find-all-tags fail ..." +
+                           "response.statusCode = 200, but returnData.statusCode = " + returnData.statusCode);
+                       res.render('error/unknowerror');
+                   }
+               });
+           } else {
+               callback(null,null);
+           }
+       },function(data,callback){
             request(optionFindArticle,function(error,response,body){
                 var returnData = JSON.parse(body);
                 if(returnData.statusCode == 0){
+                    if(data == null) data = {};
                     data.article = returnData.data.article;
                     callback(null,data);
                 } else {
@@ -185,6 +200,7 @@ router.get('/modifyArticle',function(req,res,next){
         }],
     function(err,result){
         if(!err){
+            result.moduleName = moduleName;
             res.render('admin/v5/article/add_updateArticle',{'data':result});
         } else {
             logger.error(err.stack);
@@ -198,8 +214,10 @@ router.get('/modifyArticle',function(req,res,next){
 
 //文章管理首页
 router.get('/articleManage',function(req,res,next){
+    var moduleName = req.query.moduleName;
+    if(moduleName == null) moduleName = "learning";
     var pageSize = config.getArticleListPageSize();
-    var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleName?moduleName=learning" +
+    var url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleName?moduleName=" + moduleName +
                 "&page=1&size=" + pageSize;
     var options = {
         url:url,
@@ -224,7 +242,7 @@ router.get('/articleManage',function(req,res,next){
                 data.nowPageLeft = 0;
                 data.nowPage = 1;
                 data.nowPageRight = 2;
-                data.moduleName = "learning";
+                data.moduleName = moduleName;
                 res.render('admin/v5/article/articleManageIndex',{'data':data});
             }
         } else {
@@ -238,6 +256,8 @@ router.get('/articleManage',function(req,res,next){
 
 
 router.get('/page',function(req,res,next){
+    var moduleName = req.query.moduleName;
+    if(moduleName == null) moduleName = "learning";
     var pageNum = req.query.pagenum;
     var tagid = req.query.tagid;
     var url;
@@ -246,7 +266,7 @@ router.get('/page',function(req,res,next){
         url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-tagid?tagId=" +
                 tagid + "&page="+ pageNum +"&size=" + pageSize;
     } else {
-        url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleName?moduleName=learning" +
+        url = config.getBackendUrlPrefix() + "auth/article/find-articles-by-moduleName?moduleName=" + moduleName +
                 "&page=" + pageNum + "&size=" + pageSize;
     }
     var options = {
@@ -272,7 +292,7 @@ router.get('/page',function(req,res,next){
                 result.nowPageLeft = parseInt(pageNum) - 1;
                 result.nowPage = pageNum;
                 result.nowPageRight = parseInt(pageNum) + 1;
-                result.moduleName = "learning";
+                result.moduleName = moduleName;
                 res.render('admin/v5/article/articleManageIndex',{'data':result});
             }
         } else {

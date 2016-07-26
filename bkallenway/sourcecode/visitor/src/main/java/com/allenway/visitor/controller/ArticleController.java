@@ -35,7 +35,7 @@ public class ArticleController {
     public Object saveArticle(Article article, HttpServletRequest request){
         validArticleParam(article,request);
         //设置 moduleId
-        article.setModuleId(tagService.findTagById(article.getTagId()).getModuleId());
+//        article.setModuleId(tagService.findTagById(article.getTagId()).getModuleId());
         articleService.saveArticle(article);
         return new ReturnTemplate();
     }
@@ -51,8 +51,6 @@ public class ArticleController {
             throw new DataNotFoundException("title is not find");
         } else if(StringUtils.isEmpty(article.getContent())){
             throw new DataNotFoundException("content is not find");
-        } else if(!ValidUtils.validIdParam(request.getParameter("tagId"))){
-            throw new DataNotFoundException("tagId is not find or tagId is invalid");
         }
     }
 

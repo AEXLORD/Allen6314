@@ -1,0 +1,73 @@
+{% extends '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %}
+<style type = "text/css">
+#topBack a:hover{
+    background-color:#00796b;
+    color:white;
+}
+#topBack a{
+    color:7a7a7a;
+    background:#eee
+}
+
+</style>
+{% endblock %}
+{% block mainContent  %}
+    <div style = "width:70%;border:1px solid #ddd;padding:15px;margin:auto auto;">
+        <h2>{{data.article.title}}</h2>
+        <hr style = "background:none repeat scroll 0 0 #ddd;border:thin none;height:5px;margin-left:0px;width:15%"/>
+        <div>
+            {% autoescape false %}{{data.article.content}}{% endautoescape %}
+        </div>
+        <div style = "margin-top:50px;width:100%;" class = "text-center">
+            <span id = "upIcon" class = "glyphicon glyphicon-thumbs-up" style = "font-size:40px" onclick= "vote('1','{{data.article.id}}')"></span>
+            <span id = "upNum">{{data.article.up}}</span>
+            &nbsp;&nbsp;
+            <span id = "downIcon" class = "glyphicon glyphicon-thumbs-down downIcon" style = "font-size:40px" onclick= "vote('0','{{data.article.id}}')"></span>
+            <span id = "downNum">{{data.article.down}}</span>
+        </div>
+    </div>
+    <div id = "topBack">
+        <a href="javascript:void(0)" id="scroll-top" title="Back to Top"onclick = "window.history.go(-1);"
+            style = "opacity:1;bottom:25px;visibility:visible;">
+            <span style = "font-size:10px;">Back</span>
+        </a>
+        <a href="#top" id="scroll-top" title="Back to Top"
+            style = "opacity:1;bottom:80px;visibility:visible;">
+            <span style = "font-size:10px;">Top</span>
+        </a>
+    </div>
+<script>
+var hasVote = false;
+function vote(type,articleId){
+    if(hasVote == false){
+        $.post('/visitor/learning/article/vote',{articleId:articleId,type:type},function(data,status){
+            if(status == "success"){
+                if(type == "1"){
+                    var upNum = parseInt($('#upNum').text());
+                    upNum = upNum + 1;
+                    $('#upNum').empty();
+                    $('#upNum').append(upNum);
+                    $('#upIcon').css("color","#3399FF");
+                    $('#upNum').css("color","#3399FF");
+                } else if(type == "0"){
+                    var downNum = parseInt($('#downNum').text());
+                    downNum = downNum + 1;
+                    $('#downNum').empty();
+                    $('#downNum').append(downNum);
+                    $('#downIcon').css("color","#3399FF");
+                    $('#downNum').css("color","#3399FF");
+                }
+            } else {
+                alert("服务器未知错误，暂时无法投票");
+            }
+        });
+        hasVote = true;
+    } else {
+        alert("请勿重复投票"); 
+    }
+}
+</script>
+{% endblock %}
+

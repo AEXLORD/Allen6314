@@ -49,11 +49,15 @@ var visitor_learning_index = require('./modules/visitor/v5/learning/index');
 var visitor_learning_article = require('./modules/visitor/v5/learning/article');
 var visitor_learning_tag = require('./modules/visitor/v5/learning/tag');
 var visitor_aboutme = require('./modules/visitor/v5/me/aboutme');
+var visitor_distributed_index = require('./modules/visitor/v5/distributed/index.js');
+var visitor_thread_index = require('./modules/visitor/v5/thread/index.js');
 //var visitor_user = require('./modules/visitor/v5/user/user.js');
 app.use('/visitor/learning/index',visitor_learning_index);
 app.use('/visitor/learning/article',visitor_learning_article);
 app.use('/visitor/learning/tag',visitor_learning_tag);
 app.use('/visitor/aboutme',visitor_aboutme);
+app.use('/visitor/thread/index',visitor_thread_index);
+app.use('/visitor/distributed/index',visitor_distributed_index);
 //app.use('/visitor/user',visitor_user);
 
 

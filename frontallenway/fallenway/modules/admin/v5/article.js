@@ -38,7 +38,8 @@ router.get('/addArticle',function(req,res,next){
             if(error == null) {
                 var returndata = JSON.parse(body);
                 if(returndata.statusCode == 0){
-                    var data = returndata.data.tags;
+                    var data = {};
+                    data.tags = returndata.data.tags;
                     data.moduleName = moduleName;
                     res.render('admin/v5/article/add_updateArticle',{'data':data});
                 } else {

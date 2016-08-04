@@ -50,7 +50,16 @@
                 Module:&nbsp;&nbsp;<span id = "moduleName">{{data.moduleName}}</span>
                 <input type = "hidden" name="moduleName" value = "{{data.moduleName}}" /> 
             </div>
-            <div style = "margin-top:15px;">
+            <!--{% if data.moduleName == "learning" %}-->
+            <!--<div style = "margin-top:15px;">-->
+                <!--Tag:&nbsp;&nbsp;-->
+                <!--<select name = "tagId" id = "tagId">-->
+                    <!--{% for tag in data.tags %}-->
+                        <!--<option value = "{{tag.id}}">{{tag.name}}</option>-->
+                    <!--{% endfor %}-->
+                <!--</select>-->
+            <!--<div style = "margin-top:15px;">-->
+            <!--{% endif %}-->
                 是否置顶:&nbsp;&nbsp;
                 <input type = "radio" name = "isTop" class = "isTop" value = "1" /> 置顶
                 <input type = "radio" name = "isTop" class = "isTop" value = "0" checked = "checked" />不置顶

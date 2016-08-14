@@ -1,5 +1,6 @@
 package com.allenway.commons.token;
 
+import com.allenway.commons.utils.GsonUtils;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +17,11 @@ import java.net.URL;
  * Created by wuhuachuan on 16/6/28.
  */
 
-@Component
 @Slf4j
+@Component
 public class GetTokenUtils {
 
-    private Gson gson = new Gson();
+    private Gson gson = GsonUtils.getInstance();
 
     @Value("${config.oauth2.oauthTokenApiURL}")
     private String oauthTokenApiURL;

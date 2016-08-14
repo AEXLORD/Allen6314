@@ -10,6 +10,8 @@ import com.google.gson.Gson;
  */
 public class GsonUtils {
 
+    private GsonUtils(){}
+
     private static Gson gson = new Gson();
 
     /**

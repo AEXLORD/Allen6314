@@ -82,12 +82,6 @@ app.use('/admin/article',admin_article);
 //登录
 var admin_login = require('./modules/admin/login.js');
 app.use('/login',admin_login);
-//var admin_tag = require('./modules/admin/v5/tag.js');
-//app.use('/admin/tag',admin_tag);
-//var admin_author = require('./modules/admin/v5/author.js');
-//var admin_module = require('./modules/admin/v5/module.js');
-//app.use('/admin/author',admin_author);
-//app.use('/admin/module',admin_module);
 
 //********************************************************
 //*                 exception handler                    *

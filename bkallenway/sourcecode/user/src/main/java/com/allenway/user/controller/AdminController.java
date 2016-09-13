@@ -122,13 +122,13 @@ public class AdminController {
 
     /**
      * 获取 token.
-     * 如果 oauthSwith != on ,那么创建一个 临时的 token
+     * 如果 oauthSwitch != on ,那么创建一个 临时的 token
      */
     private String getOAuthToken(final String adminId) throws IOException {
 
         log.debug("oauthSwitch = {}",oauthSwitch);
 
-        if(OAuthSwith.ON.getKey().equals(oauthSwitch)){
+        if(OAuthSwith.TRUE.getKey().equals(oauthSwitch)){
             return GetTokenUtils.getToken(adminId).getAccess_token();
         } else {
             return "temp_access_token";

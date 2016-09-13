@@ -8,8 +8,8 @@ package com.allenway.commons.constant;
  */
 public enum OAuthSwith {
 
-    ON("on"),
-    OFF("off");
+    TRUE("true"),
+    FALSE("false");
 
     private String key;
 

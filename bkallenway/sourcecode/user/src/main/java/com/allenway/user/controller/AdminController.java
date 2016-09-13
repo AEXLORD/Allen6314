@@ -72,7 +72,7 @@ public class AdminController {
         Admin dbAdmin = adminService.findByUsername(admin.getUsername());
 
         if(dbAdmin == null || !DESEncryptUtil.matchPassphrase(dbAdmin.getPassword(),dbAdmin.getSalt(),admin.getPassword())){
-            return new ReturnTemplate<>(ReturnStatusCode.USERNAME_PASSWORD_WRONG);
+            return new ReturnTemplate<>(ReturnStatusCode.USERNAME_PASSWORD_WRONG,"username and password is wrong");
         }
 
         String tokenValue = getOAuthToken(dbAdmin.getId());

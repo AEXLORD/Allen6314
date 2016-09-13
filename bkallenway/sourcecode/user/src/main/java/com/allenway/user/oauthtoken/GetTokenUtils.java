@@ -4,6 +4,7 @@ import com.allenway.utils.json.GsonUtil;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,35 +18,36 @@ import java.net.URL;
  */
 
 @Slf4j
+@Component
 public class GetTokenUtils {
 
     private GetTokenUtils(){}
 
-    private static Gson gson = GsonUtil.getInstance();
+    private Gson gson = GsonUtil.getInstance();
 
     @Value("${config.oauth2.oauthTokenApiURL}")
-    private static String oauthTokenApiURL;
+    private String oauthTokenApiURL;
 
     @Value("${config.oauth2.clientId}")
-    private static String clientId;
+    private String clientId;
 
     @Value("${config.oauth2.clientSecret}")
-    private static String clientSecret;
+    private String clientSecret;
 
     @Value("${config.oauth2.grantType}")
-    private static String grantType;
+    private String grantType;
 
     @Value("${config.oauth2.provisionKey}")
-    private static String provisionKey;
+    private String provisionKey;
 
     @Value("${config.oauth2.scope}")
-    private static String scope;
+    private String scope;
 
     /**
      * 拿到 oauthtoken
      * @return
      */
-    public static TokenEntity getToken(final String userid) throws IOException {
+    public TokenEntity getToken(final String userid) throws IOException {
 
         //去除证书验证（注意：生产环境下需要进行证书验证）
         SSLCertificateValidation.disable();
@@ -77,7 +79,7 @@ public class GetTokenUtils {
      * @param connection
      * @throws IOException
      */
-    private static void sendConnectionParams(HttpURLConnection connection,String adminId) throws IOException {
+    private void sendConnectionParams(HttpURLConnection connection,String adminId) throws IOException {
 
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
@@ -100,7 +102,7 @@ public class GetTokenUtils {
         }
     }
 
-    private static OAuthParamEntity createOAuthParamEntity(){
+    private OAuthParamEntity createOAuthParamEntity(){
         log.info("create OAuthParamEntity ... oauthTokenApiURL = {},clientId = {}," +
                                     "clientSecret = {},grantType = {},provisionKey = {},scope = {}",
                                                                     oauthTokenApiURL,

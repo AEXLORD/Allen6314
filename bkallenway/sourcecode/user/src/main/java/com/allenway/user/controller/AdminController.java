@@ -36,6 +36,9 @@ public class AdminController {
     @Value("${config.oauth2.switch}")
     private String oauthSwitch;
 
+    @Autowired
+    private GetTokenUtils getTokenUtils;
+
     /**
      * 根据 ID 获得 admin 用户
      */
@@ -129,7 +132,7 @@ public class AdminController {
         log.debug("oauthSwitch = {}",oauthSwitch);
 
         if(OAuthSwith.TRUE.getKey().equals(oauthSwitch)){
-            return GetTokenUtils.getToken(adminId).getAccess_token();
+            return getTokenUtils.getToken(adminId).getAccess_token();
         } else {
             return "temp_access_token";
         }

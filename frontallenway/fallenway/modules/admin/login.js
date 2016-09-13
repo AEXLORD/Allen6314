@@ -33,7 +33,7 @@ router.post('/dologin',function(req,res,next){
             logger.error("url = " + url + " -- returnData.statusCode = " + returnData.statusCode);
             res.render('error/unknowerror');
         } else {
-		    res.cookie(mycookies.getAdminAuthorization(), returnData.data.token.access_token, { path: '/' });
+		    res.cookie(mycookies.getAdminAuthorization(), returnData.data.token, { path: '/' });
             res.redirect('/admin/article/index');
 
         }

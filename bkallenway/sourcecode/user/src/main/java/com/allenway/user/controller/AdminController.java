@@ -77,7 +77,7 @@ public class AdminController {
 
         String tokenValue = getOAuthToken(dbAdmin.getId());
         dbAdmin.setToken(tokenValue);
-        adminService.save(admin);
+        adminService.save(dbAdmin);
 
         return new ReturnTemplate<>(decorateTokenAndAdmin(dbAdmin,tokenValue));
     }

@@ -1,7 +1,9 @@
 package com.allenway.visitor.dao;
 
-import com.allenway.visitor.entity.Article;
-import org.springframework.cache.annotation.Cacheable;
+import com.allenway.commons.page.PageHandler;
+import com.allenway.visitor.model.Article;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,34 +15,16 @@ import java.util.List;
  */
 public interface ArticleDao extends JpaRepository<Article, String> {
 
-    @Query(value = "select * from tb_article where is_delete = '0' order by RAND() LIMIT 1",nativeQuery = true)
-    Article findRandomArticle();
+    @Query(value = "select * from tb_article order by RAND() LIMIT ?1",nativeQuery = true)
+    List<Article> findRandomArticle(final int size);
 
-    @Cacheable(value = "article",keyGenerator = "article_id")
-    Article findArticleById(String id);
+    /**
+     *  查找某 tagId 下的所有文章（分页）
+     */
+    @Query("select article from Article article where tagId=:tagId")
+    Page<Article> findByTagIdAndInPage(Pageable pageable, @Param("tagId") String tagId);
 
-    @Query("select article from Article article where tagId = :tagId and isDelete = '0' order by isTop desc")
-    List<Article> findArticleByTagId(@Param("tagId") String tagId);
-
-    @Deprecated
-    @Query("select article from Article article where moduleId = :moduleId and isDelete = '0' order by isTop desc")
-    List<Article> findArticleByModuleId(@Param("moduleId") String moduleId);
-
-    @Query("select article from Article article where moduleName = :moduleName and isDelete = '0' order by isTop desc")
-    List<Article> findArticleByModuleName(@Param("moduleName") String moduleName);
-
-    @Deprecated
-    @Query("select count(article) from Article article where moduleId=:moduleId and isDelete = '0'")
-    int sumArticlesByModuleId(@Param("moduleId") String moduleId);
-
-    @Query("select count(article) from Article article where moduleName=:moduleName and isDelete = '0'")
-    int sumArticleByModuleName(@Param("moduleName") String moduleName);
-
-    @Query("select count(article) from Article article where tagId=:tagId and isDelete = '0'")
-    int sumArticlesByTagId(@Param("tagId") String tagId);
-
-
-
+    List<Article> findByIsTop(boolean isTop);
 }
 
 

@@ -10,15 +10,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>config</module>
         <module>utils</module>
         <module>commons</module>
         <module>infrustructure</module>
         <module>visitor</module>
         <module>boot</module>
-        <module>scrum</module>
         <module>user</module>
-
     </modules>
 
     <parent>
@@ -34,11 +31,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.allenway</groupId>
-                <artifactId>config</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
             <dependency>
                 <groupId>com.allenway</groupId>
                 <artifactId>utils</artifactId>
@@ -63,11 +55,6 @@
             <dependency>
                 <groupId>com.allenway</groupId>
                 <artifactId>visitor</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.allenway</groupId>
-                <artifactId>scrum</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>

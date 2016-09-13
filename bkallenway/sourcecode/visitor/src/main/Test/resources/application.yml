@@ -1,0 +1,58 @@
+spring:
+    datasource:
+        test-on-borrow: true
+        validationQuery: SELECT 1
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/allenway?useUnicode=true&characterEncoding=UTF-8
+        password: 123456
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+            naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+        properties:
+            hibernate.globally_quoted_identifiers: true
+            hibernate.show_sql: false
+            hibernate.format_sql: true
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        pool:
+            max-total: 8
+            max-wait: 1
+            max-idle: 8
+            min-idle: 0
+        timeout: 0
+
+config:
+    # swagger:true 打开 swagger:off 关闭   /  网址http://localhost:8080/swagger-ui.html
+    swagger: off
+    oauth2:
+        switch: false
+        oauthTokenApiURL: https://127.0.0.1:8443/admin/oauth2/oauthtoken
+        clientId: whc_id
+        clientSecret: whc_secret
+        grantType: password
+        provisionKey: 0839b74077dc494ca89d3970bc0ad4c8
+        scope: whc
+        expired_in: 60
+    c3p0:
+        # 连接池中保留的最大连接数
+        max_size: 10
+        # 连接池中保留的最小连接数
+        min_size: 3
+        # 初始化连接数
+        init_size: 3
+        # 当连接池中的连接用完时，C3P0一次性创建新连接的数目
+        acquire_increment: 2
+        idle_test_period: 3600
+        max_statements: 3
+        max_idle_time: 3600
+        url: jdbc:mysql://localhost:3306/allenway?useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: 123456
+        driverClassName: com.mysql.jdbc.Driver
+
+
+
+

@@ -1,33 +1,24 @@
 package com.allenway.visitor.controller;
 
-import com.allenway.infrustructure.exception.DataNotFoundException;
-import com.allenway.utils.response.ReturnTemplate;
-import com.allenway.utils.validparam.ValidUtils;
-import com.allenway.visitor.entity.Module;
-import com.allenway.visitor.entity.Tag;
-import com.allenway.visitor.service.ArticleService;
+import com.allenway.commons.exception.OperationFailException;
+import com.allenway.commons.response.ReturnTemplate;
+import com.allenway.visitor.model.Tag;
 import com.allenway.visitor.service.ModuleService;
 import com.allenway.visitor.service.TagService;
-import com.allenway.visitor.support.TagType;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import javax.websocket.server.PathParam;
 
 /**
  * Created by wuhuachuan on 16/4/2.
  */
 
 @Slf4j
-@Data
 @RestController
 public class TagController {
 
@@ -35,152 +26,60 @@ public class TagController {
     private TagService tagService;
 
     @Autowired
-    private ArticleService articleService;
-
-    @Autowired
     private ModuleService moduleService;
 
-    @RequestMapping(value = {"/tag/find-all-tags","/auth/tag/find-all-tags"},method = RequestMethod.GET)
-    public Object findAllTags(){
-        ReturnTemplate returnTemplate = new ReturnTemplate();
+    @RequestMapping(value = "/auth/tag/new",method = RequestMethod.POST)
+    public Object addTag(final Tag tag){
 
-        List<Tag> tagList = tagService.findAllTags();
+        log.debug("tag = {}.",tag);
 
-        tagList
-                .parallelStream()
-                .forEach(param ->{
-                    param.setArticleNum(tagService.getArticleSumNumByTag(param.getId()));
-                });
-
-        returnTemplate.addData("tags",tagList);
-        return  returnTemplate;
-    }
-
-
-    @RequestMapping(value = "/auth/tag/add-tag",method = RequestMethod.POST)
-    public Object addTag(Tag tag){
-        if(ValidUtils.validIdParam(tag.getName()) || tagTypeIsValid(tag.getType())) {
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("tag", tagService.saveTag(tag));
-            return returnTemplate;
-        } else {
-            throw new IllegalArgumentException("tagName is null");
+        if(!isTagValid(tag)){
+            log.error("tag = {} ",tag);
+            throw new IllegalArgumentException("tag param is invalid");
         }
+
+        tagService.save(tag);
+        return new ReturnTemplate();
     }
 
-    private boolean tagTypeIsValid(String type) {
-        if(StringUtils.isEmpty(type)){
-            return true;
-        } else if(type.equals(TagType.BASE) || type.equals(TagType.FRAME) || type.equals(TagType.OTHER)){
-            return true;
-        } else {
+    private boolean isTagValid(final Tag tag) {
+        if(tag == null){
             return false;
         }
-    }
-
-
-    @RequestMapping(value = "/auth/tag/delete-tag-by-id",method = RequestMethod.POST)
-    public Object deleteTagById(String id){
-
-        if(ValidUtils.validIdParam(id)){
-            Tag tag = tagService.findTagById(id);
-
-            if(tagService.getArticleSumNumByTag(id) == 0){
-                tagService.deleteTag(tag);
-                return new ReturnTemplate();
-            } else {
-                throw new IllegalArgumentException("there are some articles belong to this tag,so delete failed");
-            }
-        } else {
-            throw new IllegalArgumentException("id is invalid(null or sql attack)");
+        if(StringUtils.isEmpty(tag.getName())) {
+            return false;
         }
-    }
-
-    @Deprecated
-    @RequestMapping(value = {"/tag/find-tags-by-moduleid","/auth/tag/find-tags-by-moduleid"},method = RequestMethod.GET)
-    public Object findTagsByModuleId(String moduleid){
-
-        if(ValidUtils.validIdParam(moduleid)){
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("tags",tagService.findTagsByModuleId(moduleid));
-            return returnTemplate;
-        } else {
-            throw new IllegalArgumentException("module is invalid!");
+        if(StringUtils.isEmpty(tag.getModuleId())) {
+            return false;
         }
+        return moduleService.findById(tag.getModuleId()) != null;
     }
 
-    @RequestMapping(value = {"/tag/find-tags-by-moduleName","/auth/tag/find-tags-by-moduleName"},method = RequestMethod.GET)
-    public Object findTagsByModuleName(String moduleName){
+    @RequestMapping(value = "/auth/tag/delete",method = RequestMethod.POST)
+    public Object deleteTagById(final @PathParam("id") String id){
 
-        if(ValidUtils.validIdParam(moduleName)){
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("tags",tagService.findTagsByModuleName(moduleName));
-            return returnTemplate;
-        } else {
-            throw new IllegalArgumentException("module name is invalid!");
+        log.debug("id = {}.",id);
+
+        if(StringUtils.isEmpty(id)){
+            throw new IllegalArgumentException("id is null or empty");
         }
-    }
 
+        Tag tag = tagService.findById(id);
 
-    @RequestMapping(value = {"/tag/find-all-tags-by-some-tag","/auth/tag/find-all-tags-by-some-tag"},method = RequestMethod.GET)
-    public Object findAllTagsBySomeTagId(String tagId){
-        ReturnTemplate returnTemplate = new ReturnTemplate();
-
-        if(ValidUtils.validIdParam(tagId)){
-            Tag tag = tagService.findTagById(tagId);
-            if(tag == null){
-                throw new DataNotFoundException("tag is not found!");
-            } else {
-                returnTemplate.addData("tags",findTagListByModuleName(tag.getModuleName()));
-                return  returnTemplate;
-            }
-        } else {
-            throw new IllegalArgumentException("tagid is invalid!");
+        if(tag == null){
+            log.error("id = {}",id);
+            throw new IllegalArgumentException("tag is null based on the id");
         }
-    }
-
-    private List<Tag> findTagListByModuleName(String moduleName) {
-        List<Tag> tagList = tagService.findTagsByModuleName(moduleName);
-        tagList
-                .parallelStream()
-                .forEach(param ->{
-                    param.setArticleNum(tagService.getArticleSumNumByTag(param.getId()));
-                });
-        return tagList;
-    }
-
-    @RequestMapping(value = {"/tag/find-tag-by-id","/auth/tag/find-tag-by-id"},method = RequestMethod.GET)
-    public Object findTagById(String tagid){
-
-        if(ValidUtils.validIdParam(tagid)){
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            returnTemplate.addData("tag",tagService.findTagById(tagid));
-            return returnTemplate;
-        } else {
-            throw new IllegalArgumentException("module is invalid!");
+        if(tag.getArticleNum() != 0){
+            throw new OperationFailException("article num != 0");
         }
+
+        tagService.delete(tag);
+        return new ReturnTemplate();
     }
 
-    @RequestMapping(value = "/auth/tag/find-tagtype-by-moduleid",method = RequestMethod.GET)
-    public Object findTagTypeByModuleId(@RequestParam String moduleid){
-
-        log.info("findTagTypeByModuleId function ... moduleid = {}",moduleid);
-
-        if(ValidUtils.validIdParam(moduleid)){
-            Module module = moduleService.findModuleById(moduleid);
-
-            ReturnTemplate returnTemplate = new ReturnTemplate();
-            if(module.getName().equals("Learning")){
-                List<String> list = new LinkedList<String>();
-                list.add(TagType.BASE.getType());
-                list.add(TagType.FRAME.getType());
-                list.add(TagType.OTHER.getType());
-                returnTemplate.addData("types",list);
-            }
-            return returnTemplate;
-        } else {
-            throw new IllegalArgumentException("moduleid == null!");
-        }
+    @RequestMapping(value = "/tag/findall",method = RequestMethod.GET)
+    public Object findall(){
+        return new ReturnTemplate(tagService.findall());
     }
-
 }

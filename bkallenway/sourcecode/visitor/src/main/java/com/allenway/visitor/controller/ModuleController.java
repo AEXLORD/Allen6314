@@ -1,22 +1,22 @@
 package com.allenway.visitor.controller;
 
-import com.allenway.infrustructure.exception.DataNotFoundException;
-import com.allenway.utils.response.ReturnTemplate;
-import com.allenway.utils.validparam.ValidUtils;
-import com.allenway.visitor.entity.Module;
+import com.allenway.commons.exception.DataNotFoundException;
+import com.allenway.commons.response.ReturnTemplate;
+import com.allenway.visitor.model.Module;
 import com.allenway.visitor.service.ModuleService;
+import com.allenway.visitor.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by wuhuachuan on 16/5/30.
- *
- * 目前暂时不用,而是采用前端写死的方式.
  */
-@Deprecated
+
 @Slf4j
 @RestController
 public class ModuleController {
@@ -24,34 +24,67 @@ public class ModuleController {
     @Autowired
     private ModuleService moduleService;
 
-    @RequestMapping(value = "/auth/module/add-module",method = RequestMethod.POST)
-    public Object addModule(Module module){
-        ReturnTemplate returnTemplate = new ReturnTemplate();
-        returnTemplate.addData("module",moduleService.save(module));
-        return returnTemplate;
-    }
+    @Autowired
+    private TagService tagService;
 
-    @RequestMapping(value = {"/auth/module/find-all-modules","/module/find-all-modules"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/module"},method = RequestMethod.GET)
     public Object findAllModules(){
-        ReturnTemplate returnTemplate = new ReturnTemplate();
-        returnTemplate.addData("modules",moduleService.findAllModules());
-        return returnTemplate;
+        return new ReturnTemplate(moduleService.findAllModules());
     }
 
-    @RequestMapping(value = "/auth/module/delete-module-by-id",method = RequestMethod.POST)
-    public Object deleteModuleById(String id){
-        if(ValidUtils.validIdParam(id)){
-            Module module = moduleService.findModuleById(id);
+    /**
+     * 查找 某个 module 下的 所有 tag
+     * @param moduleName
+     * @return
+     */
+    @RequestMapping(value = {"/module/{moduleName}/tag"},method = RequestMethod.GET)
+    public Object findTagsByModuleName(final @PathVariable("moduleName")String moduleName){
 
-            if(module != null){
-                module.setIsDelete("1");
-                moduleService.save(module);
-                return new ReturnTemplate();
-            } else {
-                throw new DataNotFoundException("module isn't found");
-            }
-        } else {
-            throw new IllegalArgumentException("id is invalid");
+        log.debug("moduleName = {}.",moduleName);
+
+        if(StringUtils.isEmpty(moduleName)){
+            log.error("moduleName = {}.",moduleName);
+            throw new IllegalArgumentException("moduleName is invalid");
         }
+        Module module = moduleService.findByName(moduleName);
+
+        if(module == null){
+            log.error("moduleName = {}.",moduleName);
+            throw new DataNotFoundException();
+        }
+
+        return new ReturnTemplate(tagService.findByModuleId(module.getId()));
+    }
+
+    private boolean isModuleIdValid(final String moduleId) {
+        if(StringUtils.isEmpty(moduleId)){
+            return false;
+        }
+        return moduleService.findById(moduleId) != null;
+    }
+
+    /**
+     * 新增 module
+     */
+    @RequestMapping(value = {"/auth/module/new"},method = RequestMethod.POST)
+    public Object addModule(final Module module){
+
+        log.debug("module = {}.",module);
+
+        if(!isModuleValid(module)){
+            log.error("module = {}",module);
+            throw new IllegalArgumentException("param is invalid");
+        }
+
+        moduleService.save(module);
+
+        return new ReturnTemplate();
+    }
+
+    private boolean isModuleValid(final Module module) {
+        if(StringUtils.isEmpty(module.getName())){
+            return false;
+        }
+        return true;
     }
 }

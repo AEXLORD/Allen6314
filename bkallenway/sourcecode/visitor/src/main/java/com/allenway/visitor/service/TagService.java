@@ -1,6 +1,6 @@
 package com.allenway.visitor.service;
 
-import com.allenway.visitor.entity.Tag;
+import com.allenway.visitor.model.Tag;
 
 import java.util.List;
 
@@ -8,20 +8,17 @@ import java.util.List;
  * Created by wuhuachuan on 16/4/2.
  */
 public interface TagService {
-    List<Tag> findAllTags();
 
-    Tag findTagById(String tagId);
-    Tag findTagByName(String tagName);
+    void save(final Tag tag);
+    Tag saveAndFlush(final Tag tag);
 
-    Tag saveTag(Tag tag);
+    List<Tag> findByModuleId(final String moduleId);
+    Tag findById(final String tagId);
+    Tag findByName(String name);
+    List<Tag> findall();
 
-    void deleteTag(Tag tag);
+    void delete(final Tag tag);
 
-    //得到该tag 下的文章数量
-    int getArticleSumNumByTag(String tagId);
 
-    @Deprecated
-    List<Tag> findTagsByModuleId(String moduleId);
 
-    List<Tag> findTagsByModuleName(String moduleName);
 }

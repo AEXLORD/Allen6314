@@ -1,0 +1,18 @@
+{% extends '../common/header.html' %}
+
+{% block mainContent  %}
+    <div style = "width:600px;margin-left:auto;margin-right:auto">
+        <div style = "float:left;width:150px">
+            <a href = "/admin/article/tonew">添加文章</a>
+        </div>
+        <div style = "float:left;width:450px">
+            {% for article in data %}
+            <a href = "/visitor/read/article/{{article.id}}" target = "_blank">{{loop.index}}. {{article.title}}</a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href = "/admin/article/update/{{article.id}}">修改文章</a>
+                <br/>
+            {% endfor %}
+        </div>
+        <div style = "clear:both"></div>
+    </div>
+{% endblock %}
+

@@ -1,7 +1,6 @@
 package com.allenway.visitor.dao;
 
-import com.allenway.visitor.entity.Article;
-import org.springframework.stereotype.Service;
+import com.allenway.visitor.model.Article;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

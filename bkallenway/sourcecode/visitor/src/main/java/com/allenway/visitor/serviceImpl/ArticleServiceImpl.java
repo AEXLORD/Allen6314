@@ -1,14 +1,14 @@
 package com.allenway.visitor.serviceImpl;
 
+import com.allenway.commons.page.PageHandler;
 import com.allenway.visitor.dao.ArticleDao;
-import com.allenway.visitor.entity.Article;
+import com.allenway.visitor.model.Article;
 import com.allenway.visitor.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,110 +22,42 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
 
-//    @Autowired
-//    private ExtendCrudDao extendCrudDao;
-
     @Override
-    @CacheEvict(value = "article",keyGenerator = "article_id")
-    public Article saveArticle(Article article) {
-        return articleDao.saveAndFlush(article);
-    }
-
-    @Override
-    @CacheEvict(value = "article",keyGenerator = "article_id")
-    public void deleteArticle(Article article) {
-        article.setIsDelete("1");
+    public void save(final Article article) {
         articleDao.save(article);
     }
 
     @Override
-    public Article findArticleById(String id) {
-        return articleDao.findArticleById(id);
+    public void delete(final Article article) {
+        article.setDelete(true);
+        articleDao.save(article);
+    }
+
+    @Override
+    public Article findById(final String id) {
+        return articleDao.findOne(id);
+    }
+
+    @Override
+    public List<Article> findByIsTop() {
+        return articleDao.findByIsTop(true);
+    }
+
+    @Override
+    public List<Article> findRandomArticle(final int size) {
+        return articleDao.findRandomArticle(size);
+    }
+
+    @Override
+    public List<Article> findall() {
+        return articleDao.findAll();
     }
 
     /**
-     * page: 需要第几页的数据
-     * size: 每页有多少数据
+     * 查找某 tagId 下的所有文章（分页）
      */
     @Override
-    public List<Article> findArticlesByTagId(String tagId,String page,String size) {
-
-        int _page = Integer.parseInt(page);
-        int _size = Integer.parseInt(size);
-
-        return getPageArticles(articleDao.findArticleByTagId(tagId),_page,_size);
+    public Page<Article> findByTagIdAndInPage(PageHandler pageHandler, final String tagId) {
+        return articleDao.findByTagIdAndInPage(pageHandler,tagId);
     }
-
-    /**
-     * page: 需要第几页的数据
-     * size: 每页有多少数据
-     */
-    @Deprecated
-    @Override
-    public List<Article> findArticlesByModuleId(String moduleId,String page,String size) {
-
-        int _page = Integer.parseInt(page);
-        int _size = Integer.parseInt(size);
-
-        return getPageArticles(articleDao.findArticleByModuleId(moduleId),_page,_size);
-    }
-
-    @Override
-    public List<Article> findArticlesByModuleName(String moduleName, String page, String size) {
-        int _page = Integer.parseInt(page);
-        int _size = Integer.parseInt(size);
-
-        return getPageArticles(articleDao.findArticleByModuleName(moduleName),_page,_size);
-    }
-
-    private List<Article> getPageArticles(List<Article> articleWithOutPage, int page, int size) {
-
-        List<Article> articleWithPage  = new LinkedList<Article>();
-
-        //总共有多少页
-        int totalPages = (int) Math.ceil((float)articleWithOutPage.size() / size);
-
-        if(page > totalPages || page <= 0){
-            return null;
-        } else if(totalPages == 1){
-            return articleWithOutPage;
-        } else {
-            int begin = (page - 1) * size ;
-            int end;
-
-            if( (articleWithOutPage.size() - begin) < size){
-                end = articleWithOutPage.size();
-            } else {
-                end = begin + size;
-            }
-
-            for (int i = begin; i < end; i++) {
-                articleWithPage.add(articleWithOutPage.get(i));
-            }
-            return articleWithPage;
-        }
-    }
-
-    @Override
-    public Article findRandomArticle() {
-//        return (Article) extendCrudDao.findRandomArticle();
-        return articleDao.findRandomArticle();
-    }
-
-    @Deprecated
-    @Override
-    public int sumArticleByModuleId(String moduleId) {
-        return articleDao.sumArticlesByModuleId(moduleId);
-    }
-
-    @Override
-    public int sumArticleByTagId(String tagId) {
-        return articleDao.sumArticlesByTagId(tagId);
-    }
-
-    @Override
-    public int sumArticleByModuleName(String moduleName) {
-        return articleDao.sumArticleByModuleName(moduleName);
-    }
-
 }

@@ -1,17 +1,19 @@
 package com.allenway.visitor.service;
 
-import com.allenway.visitor.entity.Module;
+import com.allenway.visitor.model.Module;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by wuhuachuan on 16/5/30.
  */
 public interface ModuleService {
 
-    public Module save(Module module);
-    public Set<Module> findAllModules();
+    void save(final Module module);
+    Module saveAndFlush(Module module);
 
-    Module findModuleById(String moduleid);
+    Module findById(final String moduleId);
+    Module findByName(String name);
 
+    List<Module> findAllModules();
 }

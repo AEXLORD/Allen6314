@@ -21,10 +21,6 @@
     <dependencies>
         <dependency>
             <groupId>com.allenway</groupId>
-            <artifactId>config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.allenway</groupId>
             <artifactId>utils</artifactId>
         </dependency>
         <dependency>
@@ -38,10 +34,6 @@
         <dependency>
             <groupId>com.allenway</groupId>
             <artifactId>visitor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.allenway</groupId>
-            <artifactId>scrum</artifactId>
         </dependency>
         <dependency>
             <groupId>com.allenway</groupId>

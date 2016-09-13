@@ -1,7 +1,7 @@
 package com.allenway.visitor.serviceImpl;
 
 import com.allenway.visitor.dao.TagDao;
-import com.allenway.visitor.entity.Tag;
+import com.allenway.visitor.model.Tag;
 import com.allenway.visitor.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,44 +18,38 @@ public class TagServiceImpl implements TagService {
     private TagDao tagDao;
 
     @Override
-    public List<Tag> findAllTags() {
-        return tagDao.findTagByIsDelete("0");
+    public void save(final Tag tag) {
+        tagDao.save(tag);
     }
 
     @Override
-    public Tag findTagById(String tagId) {
-        return tagDao.findTagByIdAndIsDelete(tagId, "0");
-    }
-
-    @Override
-    public Tag findTagByName(String tagName) {
-        return tagDao.findTagByNameAndIsDelete(tagName, "0");
-    }
-
-    @Override
-    public Tag saveTag(Tag tag) {
+    public Tag saveAndFlush(final Tag tag) {
         return tagDao.saveAndFlush(tag);
     }
 
     @Override
-    public void deleteTag(Tag tag) {
-        tag.setIsDelete("1");
-        tagDao.saveAndFlush(tag);
+    public List<Tag> findByModuleId(final String moduleId) {
+        return tagDao.findByModuleId(moduleId);
     }
 
     @Override
-    public int getArticleSumNumByTag(String tagId) {
-        return tagDao.getArticleSumNumByTag(tagId);
-    }
-
-    @Deprecated
-    @Override
-    public List<Tag> findTagsByModuleId(String moduleId) {
-        return tagDao.findTagByModuleIdAndIsDelete(moduleId,"0");
+    public Tag findById(final String tagId) {
+        return tagDao.findOne(tagId);
     }
 
     @Override
-    public List<Tag> findTagsByModuleName(String moduleName) {
-        return tagDao.findTagsByModuleNameAndIsDelete(moduleName,"0");
+    public Tag findByName(String name) {
+        return tagDao.findByName(name);
+    }
+
+    @Override
+    public List<Tag> findall() {
+        return tagDao.findAll();
+    }
+
+    @Override
+    public void delete(final Tag tag) {
+        tag.setDelete(true);
+        this.save(tag);
     }
 }

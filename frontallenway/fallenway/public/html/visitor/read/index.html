@@ -1,0 +1,28 @@
+{% extends  '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %}
+    {% block subIncludeFileBeforeBody1 %}{% endblock %}
+{% endblock %}
+
+
+{% block mainContent %}
+    <div style = "width:600px;margin-left:auto;margin-right:auto">
+        <div style = "float:left;width:150px">
+            {% for tag in data.tags %}
+            <a href = "" style = "text-decoration:none">{{tag.name}}</a>
+            {% endfor %}
+        </div>
+        <div style = "float:left;width:450px">
+            {% for article in data.articles %}
+            <a href = "/visitor/read/article/{{article.id}}"> {{loop.index}}. {{article.title}}</a><br/>
+            {% endfor %}
+        </div>
+        <div style = "clear:both"></div>
+    </div>
+{% endblock %}
+
+
+{% block subIncludeFileAfterBody %}
+    {% block subIncludeFileAfterBody1 %}{% endblock %}
+{% endblock %}
+

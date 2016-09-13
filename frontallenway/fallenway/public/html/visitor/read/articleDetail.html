@@ -1,0 +1,14 @@
+{% extends '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %}
+{% endblock %}
+{% block mainContent  %}
+    <div style = "width:700px;margin:auto auto;">
+        <span style = "font-size:18px;">{{data.title}}</span>
+        <hr style = "background:none repeat scroll 0 0 #ddd;border:thin none;height:5px;margin-left:0px;width:15%"/>
+        <div>
+            {% autoescape false %}{{data.content}}{% endautoescape %}
+        </div>
+    </div>
+{% endblock %}
+

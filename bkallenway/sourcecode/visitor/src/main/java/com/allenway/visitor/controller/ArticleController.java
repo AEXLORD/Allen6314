@@ -6,6 +6,7 @@ import com.allenway.commons.page.PageHandler;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtil;
 import com.allenway.visitor.entity.Article;
+import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ArticleService;
 import com.allenway.visitor.service.TagService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,12 @@ public class ArticleController {
         if(!isArticleValid(article)){
             log.error("article = {}.",article);
             throw new IllegalArgumentException("article is invalid");
+        }
+
+        if(StringUtils.isEmpty(article.getId())){
+            Tag tag = tagService.findById(article.getTagId());
+            tag.setArticleNum(tag.getArticleNum() + 1);
+            tagService.save(tag);
         }
 
         articleService.save(article);
@@ -83,6 +90,10 @@ public class ArticleController {
             throw new DataNotFoundException("article is null based on id");
         }
 
+        Tag tag = tagService.findById(article.getTagId());
+        tag.setArticleNum(tag.getArticleNum() - 1);
+        tagService.save(tag);
+
         articleService.delete(article);
         return new ReturnTemplate();
     }
@@ -102,6 +113,9 @@ public class ArticleController {
             log.error("id = {}.",id);
             throw new DataNotFoundException("article is null based on id");
         }
+
+        article.setReadNum(article.getReadNum() + 1);
+        articleService.save(article);
 
         return new ReturnTemplate(article);
     }

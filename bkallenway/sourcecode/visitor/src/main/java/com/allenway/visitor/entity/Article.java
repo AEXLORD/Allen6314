@@ -1,4 +1,4 @@
-package com.allenway.visitor.model;
+package com.allenway.visitor.entity;
 
 import com.allenway.commons.entity.BaseEntity;
 import lombok.Data;

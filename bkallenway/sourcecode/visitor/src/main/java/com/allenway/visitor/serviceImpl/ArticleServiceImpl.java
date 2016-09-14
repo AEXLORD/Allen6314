@@ -2,7 +2,7 @@ package com.allenway.visitor.serviceImpl;
 
 import com.allenway.commons.page.PageHandler;
 import com.allenway.visitor.dao.ArticleDao;
-import com.allenway.visitor.model.Article;
+import com.allenway.visitor.entity.Article;
 import com.allenway.visitor.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

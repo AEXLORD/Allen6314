@@ -2,7 +2,7 @@ package com.allenway.visitor.controller;
 
 import com.allenway.commons.exception.DataNotFoundException;
 import com.allenway.commons.response.ReturnTemplate;
-import com.allenway.visitor.model.Module;
+import com.allenway.visitor.entity.Module;
 import com.allenway.visitor.service.ModuleService;
 import com.allenway.visitor.service.TagService;
 import lombok.extern.slf4j.Slf4j;

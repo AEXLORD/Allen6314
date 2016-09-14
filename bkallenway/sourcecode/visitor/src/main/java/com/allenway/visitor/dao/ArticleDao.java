@@ -1,7 +1,6 @@
 package com.allenway.visitor.dao;
 
-import com.allenway.commons.page.PageHandler;
-import com.allenway.visitor.model.Article;
+import com.allenway.visitor.entity.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

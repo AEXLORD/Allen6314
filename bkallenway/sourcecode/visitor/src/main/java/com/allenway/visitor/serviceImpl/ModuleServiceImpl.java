@@ -1,7 +1,7 @@
 package com.allenway.visitor.serviceImpl;
 
 import com.allenway.visitor.dao.ModuleDao;
-import com.allenway.visitor.model.Module;
+import com.allenway.visitor.entity.Module;
 import com.allenway.visitor.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.allenway.visitor.dao;
 
-import com.allenway.visitor.model.Tag;
+import com.allenway.visitor.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

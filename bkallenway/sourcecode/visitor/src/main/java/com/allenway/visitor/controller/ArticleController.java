@@ -5,7 +5,7 @@ import com.allenway.commons.exception.DataNotFoundException;
 import com.allenway.commons.page.PageHandler;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtil;
-import com.allenway.visitor.model.Article;
+import com.allenway.visitor.entity.Article;
 import com.allenway.visitor.service.ArticleService;
 import com.allenway.visitor.service.TagService;
 import lombok.extern.slf4j.Slf4j;

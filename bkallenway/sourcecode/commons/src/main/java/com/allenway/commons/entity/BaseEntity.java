@@ -27,7 +27,7 @@ public class BaseEntity {
     @Id
     @GeneratedValue(generator = "systemUUID")
     @GenericGenerator(name="systemUUID",strategy="uuid2")
-    protected String id;
+    private String id;
 
     /**
      * 操作时间

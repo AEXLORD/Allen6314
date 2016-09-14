@@ -2,7 +2,7 @@ package com.allenway.visitor.service;
 
 
 import com.allenway.commons.page.PageHandler;
-import com.allenway.visitor.model.Article;
+import com.allenway.visitor.entity.Article;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.allenway.visitor.service;
 
-import com.allenway.visitor.model.Module;
+import com.allenway.visitor.entity.Module;
 
 import java.util.List;
 

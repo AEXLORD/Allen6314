@@ -1,6 +1,6 @@
 package com.allenway.visitor.dao;
 
-import com.allenway.visitor.model.Article;
+import com.allenway.visitor.entity.Article;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

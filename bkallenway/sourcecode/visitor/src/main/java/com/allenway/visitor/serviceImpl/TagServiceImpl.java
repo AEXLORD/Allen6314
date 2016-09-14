@@ -1,7 +1,7 @@
 package com.allenway.visitor.serviceImpl;
 
 import com.allenway.visitor.dao.TagDao;
-import com.allenway.visitor.model.Tag;
+import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -112,6 +112,6 @@ public class TagControllerTest {
 
         tagController.deleteTagById(t.getId());
 
-        assertTrue(tagService.findByName(tag.getName()).isDelete() == true);
+        assertTrue(tagService.findByName(tag.getName()).getIsDelete() == true);
     }
 }

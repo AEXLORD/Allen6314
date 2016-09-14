@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void delete(final Article article) {
-        article.setDelete(true);
+        article.setIsDelete(true);
         articleDao.save(article);
     }
 

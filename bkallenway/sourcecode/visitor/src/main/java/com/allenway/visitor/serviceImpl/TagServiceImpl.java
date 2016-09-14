@@ -49,7 +49,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void delete(final Tag tag) {
-        tag.setDelete(true);
+        tag.setIsDelete(true);
         this.save(tag);
     }
 }

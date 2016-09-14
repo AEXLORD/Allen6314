@@ -5,7 +5,6 @@ import com.allenway.commons.dbconverter.CustomLocalDateTimeSerializer;
 import com.allenway.commons.dbconverter.LocalDateTimeTimestampConverter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.joda.time.LocalDateTime;
@@ -20,9 +19,8 @@ import javax.persistence.MappedSuperclass;
  */
 
 @MappedSuperclass
-@Data
 @ToString
-public class BaseEntity {
+public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(generator = "systemUUID")
@@ -37,8 +35,34 @@ public class BaseEntity {
     @Convert(converter=LocalDateTimeTimestampConverter.class)
     private LocalDateTime operationTime;
 
+    public BaseEntity(){
+        this.operationTime = LocalDateTime.now();
+        this.isDelete = false;
+    }
+
     /**
      *  true:已删除  false:未删除
      */
-    private boolean isDelete = false;
+    private boolean isDelete;
+
+    public void setId(String id){
+        this.id = id;
+    }
+    public String getId(){
+        return this.id;
+    }
+
+    public void setOperationTime(LocalDateTime operationTime){
+        this.operationTime = operationTime;
+    }
+    public LocalDateTime getOperationTime(){
+        return this.operationTime;
+    }
+
+    public void setIsDelete(boolean isDelete){
+        this.isDelete = isDelete;
+    }
+    public boolean getIsDelete(){
+        return this.isDelete;
+    }
 }

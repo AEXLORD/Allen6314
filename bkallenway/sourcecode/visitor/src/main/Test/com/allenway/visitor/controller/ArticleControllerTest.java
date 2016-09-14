@@ -166,7 +166,7 @@ public class ArticleControllerTest {
 
         articleController.deleteArticleById(articleId);
 
-        assertTrue(articleService.findById(articleId).isDelete() == true);
+        assertTrue(articleService.findById(articleId).getIsDelete() == true);
     }
 
     /**

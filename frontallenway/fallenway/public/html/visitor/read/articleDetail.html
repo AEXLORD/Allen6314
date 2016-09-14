@@ -5,7 +5,13 @@
 
 {% block mainContent  %}
     <div style = "width:700px;margin:auto auto;">
-        <span style = "font-size:18px;">{{data.title}}</span>
+        <div>
+            <span style = "font-size:18px;">{{data.title}}</span>
+        </div>
+        <div class = "text-right">
+            <span style = "font-size:13px;">阅读量：{{data.readNum}} 次</span><br/>
+            <span style = "font-size:13px;">发布时间：{{data.operationTime}} </span>
+        </div>
         <hr style = "background:none repeat scroll 0 0 #ddd;border:thin none;height:5px;margin-left:0px;width:15%"/>
         <div>
             {% autoescape false %}{{data.content}}{% endautoescape %}

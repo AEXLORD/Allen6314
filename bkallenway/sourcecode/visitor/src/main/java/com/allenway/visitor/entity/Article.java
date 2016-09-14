@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,7 +19,6 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true,exclude = "content")
-@NoArgsConstructor
 public class Article extends BaseEntity {
     private String title;
     private String content;
@@ -27,4 +27,8 @@ public class Article extends BaseEntity {
     private int readNum = 0;
     private int up = 0;
     private int down = 0;
+
+    public Article(){
+        this.setOperationTime(LocalDateTime.now());
+    }
 }

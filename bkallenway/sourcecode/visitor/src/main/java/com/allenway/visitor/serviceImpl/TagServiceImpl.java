@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by wuhuachuan on 16/4/2.
  */
+
 @Service
 public class TagServiceImpl implements TagService {
 
@@ -38,7 +39,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findByName(String name) {
+    public Tag findByName(final String name) {
         return tagDao.findByName(name);
     }
 

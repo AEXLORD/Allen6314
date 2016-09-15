@@ -10,10 +10,10 @@ import java.util.List;
 public interface ModuleService {
 
     void save(final Module module);
-    Module saveAndFlush(Module module);
+    Module saveAndFlush(final Module module);
 
     Module findById(final String moduleId);
-    Module findByName(String name);
+    Module findByName(final String name);
 
     List<Module> findAllModules();
 }

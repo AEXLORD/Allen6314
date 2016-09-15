@@ -1,6 +1,6 @@
 package com.allenway.visitor.controller;
 
-import com.allenway.commons.exception.DataNotFoundException;
+import com.allenway.commons.exception.ex.DataNotFoundException;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.visitor.entity.Module;
 import com.allenway.visitor.service.ModuleService;
@@ -27,6 +27,9 @@ public class ModuleController {
     @Autowired
     private TagService tagService;
 
+    /**
+     * 查找所有的 module
+     */
     @RequestMapping(value = {"/module"},method = RequestMethod.GET)
     public Object findAllModules(){
         return new ReturnTemplate(moduleService.findAllModules());
@@ -34,15 +37,13 @@ public class ModuleController {
 
     /**
      * 查找 某个 module 下的 所有 tag
-     * @param moduleName
-     * @return
      */
     @RequestMapping(value = {"/module/{moduleName}/tag"},method = RequestMethod.GET)
     public Object findTagsByModuleName(final @PathVariable("moduleName")String moduleName){
 
         log.debug("moduleName = {}.",moduleName);
 
-        if(StringUtils.isEmpty(moduleName)){
+        if(!StringUtils.hasText(moduleName)){
             log.error("moduleName = {}.",moduleName);
             throw new IllegalArgumentException("moduleName is invalid");
         }
@@ -54,13 +55,6 @@ public class ModuleController {
         }
 
         return new ReturnTemplate(tagService.findByModuleId(module.getId()));
-    }
-
-    private boolean isModuleIdValid(final String moduleId) {
-        if(StringUtils.isEmpty(moduleId)){
-            return false;
-        }
-        return moduleService.findById(moduleId) != null;
     }
 
     /**
@@ -82,7 +76,7 @@ public class ModuleController {
     }
 
     private boolean isModuleValid(final Module module) {
-        if(StringUtils.isEmpty(module.getName())){
+        if(!StringUtils.hasText(module.getName())){
             return false;
         }
         return true;

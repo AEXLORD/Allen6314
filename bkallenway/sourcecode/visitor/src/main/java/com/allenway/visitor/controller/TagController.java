@@ -1,6 +1,6 @@
 package com.allenway.visitor.controller;
 
-import com.allenway.commons.exception.OperationFailException;
+import com.allenway.commons.exception.ex.OperationFailException;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ModuleService;
@@ -28,6 +28,9 @@ public class TagController {
     @Autowired
     private ModuleService moduleService;
 
+    /**
+     * 新增 tag
+     */
     @RequestMapping(value = "/auth/tag/new",method = RequestMethod.POST)
     public Object addTag(final Tag tag){
 
@@ -42,34 +45,25 @@ public class TagController {
         return new ReturnTemplate();
     }
 
-    private boolean isTagValid(final Tag tag) {
-        if(tag == null){
-            return false;
-        }
-        if(StringUtils.isEmpty(tag.getName())) {
-            return false;
-        }
-        if(StringUtils.isEmpty(tag.getModuleId())) {
-            return false;
-        }
-        return moduleService.findById(tag.getModuleId()) != null;
-    }
-
+    /**
+     * 删除 tag
+     */
     @RequestMapping(value = "/auth/tag/delete",method = RequestMethod.POST)
     public Object deleteTagById(final @PathParam("id") String id){
 
         log.debug("id = {}.",id);
 
-        if(StringUtils.isEmpty(id)){
+        if(!StringUtils.hasText(id)){
             throw new IllegalArgumentException("id is null or empty");
         }
 
         Tag tag = tagService.findById(id);
-
         if(tag == null){
             log.error("id = {}",id);
             throw new IllegalArgumentException("tag is null based on the id");
         }
+
+        //如果 tag 底下还有文章,那么不能删除
         if(tag.getArticleNum() != 0){
             throw new OperationFailException("article num != 0");
         }
@@ -78,8 +72,25 @@ public class TagController {
         return new ReturnTemplate();
     }
 
+    /**
+     * 查找所有的 tag
+     * @return
+     */
     @RequestMapping(value = "/tag/findall",method = RequestMethod.GET)
     public Object findall(){
         return new ReturnTemplate(tagService.findall());
+    }
+
+    private boolean isTagValid(final Tag tag) {
+        if(tag == null){
+            return false;
+        }
+        if(!StringUtils.hasText(tag.getName())) {
+            return false;
+        }
+        if(!StringUtils.hasText(tag.getModuleId())) {
+            return false;
+        }
+        return moduleService.findById(tag.getModuleId()) != null;
     }
 }

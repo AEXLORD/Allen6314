@@ -1,12 +1,11 @@
-package com.allenway.commons.exception;
-
-import lombok.NoArgsConstructor;
+package com.allenway.commons.exception.ex;
 
 /**
- * Created by wuhuachuan on 16/3/29.
+ * OperationFailException :
+ *
+ * @author wuhuachuan712@163.com
+ * @date 16/9/15
  */
-
-@NoArgsConstructor
 public class OperationFailException extends RuntimeException{
     public OperationFailException(final String message){
         super(message);

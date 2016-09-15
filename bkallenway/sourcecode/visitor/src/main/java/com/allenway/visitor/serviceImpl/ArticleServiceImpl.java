@@ -4,7 +4,6 @@ import com.allenway.commons.page.PageHandler;
 import com.allenway.visitor.dao.ArticleDao;
 import com.allenway.visitor.entity.Article;
 import com.allenway.visitor.service.ArticleService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import java.util.List;
  */
 
 @Service
-@Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
@@ -25,6 +23,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void save(final Article article) {
         articleDao.save(article);
+    }
+
+    @Override
+    public Article saveAndFlush(final Article article) {
+        return articleDao.saveAndFlush(article);
     }
 
     @Override
@@ -38,26 +41,47 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findOne(id);
     }
 
+    /**
+     * 给游客使用
+     */
+    @Override
+    public List<Article> findall() {
+        return articleDao.findByIsDelete(false);
+    }
+
+    /**
+     * 给管理员使用
+     */
+    @Override
+    public List<Article> findallForAdmin() {
+        return articleDao.findAll();
+    }
+
+    /**
+     * 查找某 tagId 下的所有文章（分页）给游客使用
+     */
+    @Override
+    public Page<Article> findByTagIdAndInPage(PageHandler pageHandler, final String tagId) {
+        return articleDao.findByTagIdAndInPage(pageHandler,tagId,false);
+    }
+
+    /**
+     * 查找某 tagId 下的所有文章（分页）给管理员使用
+     */
+    @Override
+    public Page<Article> findByTagIdAndInPageForAdmin(PageHandler pageHandler,final String tagId) {
+        return articleDao.findByTagIdAndInPageForAdmin(pageHandler,tagId);
+    }
+
+    @Deprecated
     @Override
     public List<Article> findByIsTop() {
         return articleDao.findByIsTop(true);
     }
 
+    @Deprecated
     @Override
     public List<Article> findRandomArticle(final int size) {
         return articleDao.findRandomArticle(size);
-    }
-
-    @Override
-    public List<Article> findall() {
-        return articleDao.findAll();
-    }
-
-    /**
-     * 查找某 tagId 下的所有文章（分页）
-     */
-    @Override
-    public Page<Article> findByTagIdAndInPage(PageHandler pageHandler, final String tagId) {
-        return articleDao.findByTagIdAndInPage(pageHandler,tagId);
     }
 }

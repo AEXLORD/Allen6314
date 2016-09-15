@@ -1,7 +1,7 @@
 package com.allenway.visitor.controller;
 
 import Boot.MyTestBoot;
-import com.allenway.commons.exception.DataNotFoundException;
+import com.allenway.commons.exception.ex.DataNotFoundException;
 import com.allenway.commons.page.PageHandler;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.visitor.entity.Article;

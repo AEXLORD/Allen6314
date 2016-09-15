@@ -14,11 +14,8 @@ public interface TagService {
 
     List<Tag> findByModuleId(final String moduleId);
     Tag findById(final String tagId);
-    Tag findByName(String name);
+    Tag findByName(final String name);
     List<Tag> findall();
 
     void delete(final Tag tag);
-
-
-
 }

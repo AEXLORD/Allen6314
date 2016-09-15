@@ -24,7 +24,7 @@ public class ModuleServiceImpl implements ModuleService{
     }
 
     @Override
-    public Module saveAndFlush(Module module) {
+    public Module saveAndFlush(final Module module) {
         return moduleDao.saveAndFlush(module);
     }
 
@@ -34,7 +34,7 @@ public class ModuleServiceImpl implements ModuleService{
     }
 
     @Override
-    public Module findByName(String name) {
+    public Module findByName(final String name) {
         return moduleDao.findByName(name);
     }
 

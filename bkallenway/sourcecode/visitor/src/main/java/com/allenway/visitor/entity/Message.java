@@ -10,24 +10,17 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Created by wuhuachuan on 16/4/2.
+ * Message : 留言板的留言 （不是文章评论,文章评论为 Comment 类）
+ *
+ * @author wuhuachuan712@163.com
+ * @date 16/9/14
  */
 
 @Entity
-@Table(name = "tb_tag")
+@Table(name = "tb_message")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class Tag extends BaseEntity {
-
-    private String name;
-    private String moduleId;
-    private int articleNum;
-
-    public Tag(final String name,
-               final String moduleId){
-        this.name = name;
-        this.moduleId = moduleId;
-    }
+public class Message extends BaseEntity {
 }

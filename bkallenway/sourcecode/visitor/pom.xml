@@ -24,6 +24,10 @@
             <groupId>com.allenway</groupId>
             <artifactId>infrustructure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.allenway</groupId>
+            <artifactId>user</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

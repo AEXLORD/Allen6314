@@ -10,7 +10,6 @@ import java.util.List;
  * Created by wuhuachuan on 16/4/2.
  */
 public interface TagDao extends JpaRepository<Tag, String> {
-    List<Tag> findByModuleId(String moduleId);
-
-    Tag findByName(String name);
+    List<Tag> findByModuleId(final String moduleId);
+    Tag findByName(final String name);
 }

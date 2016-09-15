@@ -18,9 +18,12 @@ public enum ReturnStatusCode {
     /**
      * 业务逻辑出错
      */
-    USERNAME_PASSWORD_WRONG(2001), //登录的用户名密码错误
-    USER_HAS_LOGOUT(2002), //用户已经登出
-    OPERATION_FAIL(2003);  //该issue还有item,无法删除
+    //用户相关
+    USERNAME_PASSWORD_WRONG(2001), //帐号密码错误
+    USER_EXIST(2002),  //用户已经存在
+
+    //其他
+    OPERATION_FAIL(3001); //该操作不能执行
 
     private int code;
 

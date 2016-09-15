@@ -45,21 +45,21 @@ public abstract class BaseEntity {
      */
     private boolean isDelete;
 
-    public void setId(String id){
+    public void setId(final String id){
         this.id = id;
     }
     public String getId(){
         return this.id;
     }
 
-    public void setOperationTime(LocalDateTime operationTime){
+    public void setOperationTime(final LocalDateTime operationTime){
         this.operationTime = operationTime;
     }
     public LocalDateTime getOperationTime(){
         return this.operationTime;
     }
 
-    public void setIsDelete(boolean isDelete){
+    public void setIsDelete(final boolean isDelete){
         this.isDelete = isDelete;
     }
     public boolean getIsDelete(){

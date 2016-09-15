@@ -1,4 +1,4 @@
-package com.allenway.commons.exception;
+package com.allenway.commons.exception.ex;
 
 import lombok.NoArgsConstructor;
 

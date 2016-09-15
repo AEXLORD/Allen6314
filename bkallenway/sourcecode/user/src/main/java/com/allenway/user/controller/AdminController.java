@@ -1,7 +1,7 @@
 package com.allenway.user.controller;
 
 import com.allenway.commons.constant.OAuthSwith;
-import com.allenway.commons.exception.DataNotFoundException;
+import com.allenway.commons.exception.ex.DataNotFoundException;
 import com.allenway.commons.response.ReturnStatusCode;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.user.entity.Admin;

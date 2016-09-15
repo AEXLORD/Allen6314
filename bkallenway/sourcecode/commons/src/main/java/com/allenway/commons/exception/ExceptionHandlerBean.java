@@ -1,5 +1,9 @@
 package com.allenway.commons.exception;
 
+import com.allenway.commons.exception.ex.DataNotFoundException;
+import com.allenway.commons.exception.ex.OperationFailException;
+import com.allenway.commons.exception.ex.UserExistException;
+import com.allenway.commons.exception.ex.UsernamePasswordWrongException;
 import com.allenway.commons.response.ReturnStatusCode;
 import com.allenway.commons.response.ReturnTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -37,19 +41,24 @@ public class ExceptionHandlerBean extends ResponseEntityExceptionHandler {
         return getResponseEntity(ex,request,ReturnStatusCode.DataNotFoundException);
     }
 
-    @ExceptionHandler({ IllegalArgumentException.class })
+    @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<Object> handleIllegalArgumentException(final RuntimeException ex,final WebRequest request) throws IOException {
         return getResponseEntity(ex,request, ReturnStatusCode.IllegalArgumentException);
     }
 
-    @ExceptionHandler({UserLogoutException.class})
-    public ResponseEntity<Object> userLogoutException(final RuntimeException ex,final WebRequest request) throws IOException {
-        return getResponseEntity(ex,request, ReturnStatusCode.USER_HAS_LOGOUT);
+    @ExceptionHandler({UsernamePasswordWrongException.class})
+    public ResponseEntity<Object> handleUsernamePasswordWrongException(final RuntimeException ex,final WebRequest request) throws IOException {
+        return getResponseEntity(ex,request, ReturnStatusCode.USERNAME_PASSWORD_WRONG);
+    }
+
+    @ExceptionHandler({UserExistException.class})
+    public ResponseEntity<Object> handleUserExistException(final RuntimeException ex,final WebRequest request) throws IOException {
+        return getResponseEntity(ex,request, ReturnStatusCode.USER_EXIST);
     }
 
     @ExceptionHandler({OperationFailException.class})
     public ResponseEntity<Object> handleOperationFailException(final RuntimeException ex,final WebRequest request) throws IOException {
-        return getResponseEntity(ex,request,ReturnStatusCode.OPERATION_FAIL);
+        return getResponseEntity(ex,request, ReturnStatusCode.OPERATION_FAIL);
     }
 
     /**

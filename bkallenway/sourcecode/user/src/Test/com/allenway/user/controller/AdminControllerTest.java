@@ -1,7 +1,7 @@
 package com.allenway.user.controller;
 
 import Boot.MyTestBoot;
-import com.allenway.commons.exception.DataNotFoundException;
+import com.allenway.commons.exception.ex.DataNotFoundException;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.user.entity.Admin;
 import com.allenway.user.service.AdminService;

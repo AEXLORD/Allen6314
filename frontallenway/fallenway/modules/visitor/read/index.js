@@ -30,6 +30,7 @@ router.get('', function(req, res, next) {
                 if(returnData.statusCode != 0){
                     logger.error("url = " + url + " --- returnData.statusCode = " + returnData.statusCode);
                     res.render('error/unknowerror');
+                    return ;
                 }
 
                 var data = {};
@@ -56,6 +57,7 @@ router.get('', function(req, res, next) {
                     if(returnData.statusCode != 0){
                         logger.error("url = " + url + " --- returnData.statusCode = " + returnData.statusCode);
                         res.render('error/unknowerror');
+                        return ;
                     }
 
                     data.articles = returnData.data;

@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by wuhuachuan on 16/5/30.
  */
 public interface ModuleDao extends JpaRepository<Module,String>{
-    Module findByName(String name);
+    Module findByName(final String name);
 }

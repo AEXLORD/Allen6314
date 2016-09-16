@@ -1,5 +1,6 @@
 package com.allenway.visitor.controller;
 
+import com.allenway.commons.exception.ex.DataNotFoundException;
 import com.allenway.commons.exception.ex.UsernamePasswordWrongException;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.user.entity.User;
@@ -56,10 +57,7 @@ public class CommentController {
             throw new UsernamePasswordWrongException("");
         }
 
-        //保存 comment
-        commentService.save(comment);
-
-        return new ReturnTemplate<>();
+        return new ReturnTemplate<>(commentService.saveAndFlush(comment));
     }
 
     /**
@@ -68,6 +66,22 @@ public class CommentController {
     @RequestMapping(value = "/auth/comment/findall",method = RequestMethod.GET)
     public Object findall(){
         return new ReturnTemplate<>(commentService.findall());
+    }
+
+    /**
+     * 找到评论的对话部分
+     */
+    @RequestMapping(value = "/comment/conversation",method = RequestMethod.POST)
+    public Object conversation(final String username1,final String username2){
+        if(!StringUtils.hasText(username1) || !StringUtils.hasText(username2)){
+            throw new IllegalArgumentException();
+        }
+
+        if(userService.findByUsername(username1) == null || userService.findByUsername(username2) == null){
+            throw new DataNotFoundException();
+        }
+
+        return new ReturnTemplate<>(commentService.findConversation(username1,username2));
     }
 
     /**

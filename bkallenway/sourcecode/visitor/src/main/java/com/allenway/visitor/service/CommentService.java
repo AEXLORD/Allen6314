@@ -13,6 +13,7 @@ import java.util.List;
 public interface CommentService {
 
     void save(final Comment comment);
+    Comment saveAndFlush(final Comment comment);
     void saveall(final List<Comment> comments);
 
     Comment findById(final String id);
@@ -21,4 +22,6 @@ public interface CommentService {
 
     //管理员使用该放方法
     List<Comment> findall();
+
+    List<Comment> findConversation(final String username1,final String username2);
 }

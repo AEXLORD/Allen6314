@@ -26,6 +26,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public Comment saveAndFlush(Comment comment) {
+        return commentDao.saveAndFlush(comment);
+    }
+
+    @Override
     public void saveall(final List<Comment> comments) {
         commentDao.save(comments);
     }
@@ -57,5 +62,16 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<Comment> findall() {
         return commentDao.findAll();
+    }
+
+    @Override
+    public List<Comment> findConversation(final String username1, final String username2) {
+        List<Comment> comments = commentDao.findConversation(username1,username2);
+
+        //由于上面查出的都是对话,没有一开始的源头这一条,所以以下加上
+        Comment commentFirst = this.findById(comments.get(0).getSourceCommentId());
+        comments.add(0,commentFirst);
+
+        return comments;
     }
 }

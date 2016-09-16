@@ -40,9 +40,14 @@ public class Comment extends BaseEntity{
     private String content;
 
     /**
-     * 回复给谁（如果是条回复评论的话）
+     * 用于回复评论,表示回复给谁
      */
     private String replyTo;
+
+    /**
+     * 用于回复评论,表示回复哪一条评论
+     */
+    private String sourceCommentId;
 
     public Comment(final String username,
                    final String articleId,

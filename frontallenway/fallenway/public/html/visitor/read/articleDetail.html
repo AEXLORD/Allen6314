@@ -3,14 +3,17 @@
 {% block subIncludeFileBeforeBody %} 
 
 <style type = "text/css">
-
-.commentInputStyle {
-    outline:none; 
-    border:0px;
-    border-bottom:1px solid #DDDDDD;
-    width:100%;
-}
+    .commentInputStyle {
+        outline:none; 
+        border:0px;
+        border-bottom:1px solid #DDDDDD;
+        width:100%;
+    }
 </style>
+
+<script src = "/javascripts/myJs/read/comment.js" ></script>
+<script src = "/javascripts/myJs/read/reply.js" ></script>
+
 
 {% endblock %}
 
@@ -33,7 +36,9 @@
             </div>
         </div>
 
-        <div id = "publishComment" style = "margin-top:30px;">
+        <div style = "margin-top:30px;"><a href = "javascript:void(0)" onclick = "showComments()">{{data.commentSize}} 条评论</a></div>
+
+        <div id = "publishComment" style = "margin-top:30px;display:none">
             <h5>发表评论</h5>
             <div style = "width:24%;display:inline-block;float:left">
                 <input type = "text" id = "username" class = "commentInputStyle" placeholder = "您的联系方式（邮箱）">
@@ -46,36 +51,63 @@
             <div style = "width:90%;display:inline-block;float:left">
                 <input type = "text" id = "content" class = "commentInputStyle" placeholder = "评论内容">
             </div>
-            <div style = "width:7%;display:inline-block;float:right;margin-top:5px">
+            <div style = "width:4%;display:inline-block;float:right;margin-top:5px;margin-right:10px">
                 <a href = "javascript:void(0)" onclick = "comment()">发表</a>
             </div>
             <div style = "clear:both"></div>
             <div id = "commentWarn"></div>
         </div>
 
-        <div id = "displayComment">
+        <div id = "displayComment" style = "margin-top:30px;display:none">
             {% for comment in data.commentList %} 
             <div style = "margin-top:15px;padding:10px;box-shadow: 1px 2px 2px 2px #DDDDDD">
             
                 {% if comment.replyTo == null || comment.replyTo == "" %}
-                <span>{{comment.username}}：</span>
+                <span style = "color:#259">{{comment.username}}：</span>
                 {% else %}
-                <span>{{comment.username}}&nbsp;&nbsp;回复&nbsp;&nbsp;{{comment.replyTo}} :</span>
+                <span style = "color:#259">{{comment.username}}&nbsp;&nbsp;</span>
+                <span style = "color:#999">回复&nbsp;&nbsp;</span>
+                <span style = "color:#259">{{comment.replyTo}} :</span>
                 {% endif %}
                 <br/>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{comment.content}}</span>
                 <br/>
-                <div class = "text-right">
-                    {% if comment.replyTo == null || comment.replyTo == "" %}
-                        <a href = "javascript:void(0)" onclick = "reply()">回复</a>
-                    {% else %}
-                        <a href = "javascript:void(0)" onclick = "reply()">回复</a> &nbsp;&nbsp; <a href = "">查看对话</a>
-                    {% endif %}
+                <div>
+                    <div style = "float:left">
+                        <span style = "color:#999">{{comment.operationTime}}</span>
+                    </div>
+                    <div style = "float:right">
+                        {% if comment.replyTo == null || comment.replyTo == "" %}
+                        <a href = "javascript:void(0)" onclick = "reply('{{comment.id}}','{{comment.username}}',this)">回复</a>
+                        {% else %}
+                        <a href = "javascript:void(0)" onclick = "reply('{{comment.id}}','{{comment.username}}',this)">回复</a> &nbsp;&nbsp; 
+                        <a data-toggle="modal" data-target="#myModal" onclick = "showConversation('{{comment.username}}','{{comment.replyTo}}')">查看对话</a>
+                        {% endif %}
+                    </div>
+                    <div style = "clear:both"></div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    查看对话
+                </h4>
+            </div>
+            <div class="modal-body">
+                <span id = "content"></span>
+                <!--在这里添加一些文本-->
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
     
 
@@ -83,96 +115,74 @@
 
 <script type = "text/javascript">
 
-function comment(){
-    var articleId = $("#articleId").val();
-    var username = $("#username").val();
-    var password = $("#password").val();
-    var content = $("#content").val();
-
-    console.log("articleId = " + articleId);
-    console.log("username = " + username);
-    console.log("password = " + password);
-    console.log("content = " + content);
-
-    if(!validComment(username,password,content)){
-        if(articleId == null){
-            alert("发布评论失败：请刷新一下该页面");
-            return ;
-        }
-        $("#commentWarn").empty();
-        $("#commentWarn").append("<span style = \"color:red\">发表评论失败：非空 && （联系方式 <= 30字符） && （评论内容 <= 70字符） && （密码.length == 6）</span>");
-        return;
-    } 
-    
-    sendCommentRequest(articleId,username,password,content);
+function showComments(){
+    if($("#publishComment").css("display") == "none"){
+        $("#publishComment").css("display","block");
+        $("#displayComment").css("display","block");
+    } else {
+        $("#publishComment").css("display","none");
+        $("#displayComment").css("display","none");
+    }
 }
 
-function validComment(username,password,content){
-    if( (username == null) || (username.trim() == "") || (username.length > 30)){
-        return false;
-    }
-
-    if( (password == null) || (password.length != 6)){
-        return false;
-    }
-
-    if( (content == null) || (content.trim() == "") || content.trim() > 70){
-        return false;
-    }
-
-    return true;
-}
-
-function sendCommentRequest(articleId,username,password,content){
+function showConversation(username1,username2){
      $.ajax({
         type: 'POST',
-        url: 'comment',
+        url: 'showConversation',
         data: {
-             "articleId": articleId,
-             "username": username,
-             "password": password,
-             "content": content
+             "username1": username1,
+             "username2": username2
         },
-        success: function(){
-            displayNewComment(username,content);
+        success: function(data){
+            var html = getDiv0(data[0].username,data[0].content,data[0].operationTime);
+            for(var i = 1; i < data.length; ++i){
+                if(data[i].username == username1){
+                    html = html + getDiv(data[i].username,
+                                         data[i].replyTo,
+                                         data[i].content,
+                                         data[i].operationTime);
+                } else {
+                     html = html + getDiv(data[i].username,
+                                          data[i].replyTo,
+                                          data[i].content,
+                                          data[i].operationTime);
+                }
+            }
+
+            $("#myModalLabel").text("查看对话");
+            $(".modal-body").html(html);
         },
         error: function(err){
-            if(err.status == 1002){
-                $("#commentWarn").empty();
-                $("#commentWarn").append("<span style = \"color:red\">发表评论失败：非空 &&（联系方式 <= 30字符） && （评论内容 <= 70字符） && （密码.length == 6）</span>");
-                return;
-            }
-            if(err.status == 2001){
-                $("#commentWarn").empty();
-                $("#commentWarn").append("<span style = \"color:red\">发表评论失败：该用户名的6位密码有误</span>");
-                return;
-            }
-            $("#commentWarn").empty();
-            $("#commentWarn").append("<span style = \"color:red\">后端服务报错，暂时无法发表评论</span>");
+            alert("后端服务报错，获取对话失败，请稍候再试");
         }
     })
 }
 
-function displayNewComment(username,content){
-
-    $("#username").val("");
-    $("#password").val("");
-    $("#content").val("");
-    $("#commentWarn").empty();
-    $("#commentWarn").append("<span style = \"color:blue\">发表评论成功</span>");
-
-    $("#displayComment").append(
-            "<div style = \"margin-top:15px;padding:10px;box-shadow: 1px 2px 2px 2px #DDDDDD\">" +
-                "<span>"+ username +" :</span><br/>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"+content+"</span>" +
-                "<br/>" +
-                "<div class = \"text-right\">" +
-                    "<a href = \"\">回复</a>" +
-                "</div>" +
-            "</div>"
-        );
+function getDiv0(username,content,time){
+    var html = 
+        "<div>" +
+            "<span style = \"color:#259\">"+username+"：</span>" +
+            "<br/>" +
+            "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+content+"</span>" +
+            "<br/>" +
+            "<span style = \"color:#999\">"+time+"</span>" +
+        "<div>";
+    return html;
+}
+function getDiv(username1,username2,content,time){
+    var html = 
+        "<hr/>" + 
+        "<div>" +
+            "<span style = \"color:#259\">"+username1+"&nbsp;&nbsp;</span>" +
+            "<span style = \"color:#999\">回复&nbsp;&nbsp;</span>" +
+            "<span style = \"color:#259\">"+username2+" :</span>" +
+            "<br/>" +
+            "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+content+"</span>" +
+            "<br/>" +
+            "<span style = \"color:#999\">"+time+"</span>" +
+        "<div>";
+    return html;
 }
 
 </script>
 {% endblock %}
-

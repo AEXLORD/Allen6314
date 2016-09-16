@@ -1,0 +1,159 @@
+{% extends '../common/header.html' %}
+
+{% block subIncludeFileBeforeBody %} 
+
+<style type = "text/css">
+    .messageInputStyle {
+        outline:none; 
+        border:0px;
+        border-bottom:1px solid #DDDDDD;
+        width:100%;
+    }
+    a {
+        cursor:pointer;
+    }
+</style>
+
+<script src = "/javascripts/myJs/message/message.js" ></script>
+<script src = "/javascripts/myJs/message/reply.js" ></script>
+{% endblock %}
+
+{% block mainContent  %}
+    <div style = "width:730px;margin:auto auto;">
+        
+        <div id = "publishMessage" style = "margin-top:30px;">
+            <h5>留言</h5>
+            <div style = "width:24%;display:inline-block;float:left">
+                <input type = "text" id = "username" class = "messageInputStyle" placeholder = "您的联系方式（邮箱）">
+            </div>
+            <div style = "width:1%;display:inline-block;float:left">:</div> 
+            <div style = "width:26%;display:inline-block">
+                <input type = "password" id = "password" class = "messageInputStyle" placeholder = "6位密文">
+            </div>
+            <div style = "clear:both"></div>
+            <div style = "width:90%;display:inline-block;float:left">
+                <input type = "text" id = "content" class = "messageInputStyle" placeholder = "留言内容">
+            </div>
+            <div style = "width:4%;display:inline-block;float:right;margin-top:5px;margin-right:10px">
+                <a href = "javascript:void(0)" onclick = "message()">发表</a>
+            </div>
+            <div style = "clear:both"></div>
+            <div id = "messageWarn"></div>
+        </div>
+
+        <div id = "displayMessage" style = "margin-top:30px;">
+            {% for message in data %} 
+            <div style = "margin-top:15px;padding:10px;box-shadow: 1px 2px 2px 2px #DDDDDD">
+            
+                {% if message.replyTo == null || message.replyTo == "" %}
+                <span style = "color:#259">{{message.username}}：</span>
+                {% else %}
+                <span style = "color:#259">{{message.username}}&nbsp;&nbsp;</span>
+                <span style = "color:#999">回复&nbsp;&nbsp;</span>
+                <span style = "color:#259">{{message.replyTo}} :</span>
+                {% endif %}
+                <br/>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{message.content}}</span>
+                <br/>
+                <div>
+                    <div style = "float:left">
+                        <span style = "color:#999">{{message.operationTime}}</span>
+                    </div>
+                    <div style = "float:right">
+                        {% if message.replyTo == null || message.replyTo == "" %}
+                        <a href = "javascript:void(0)" onclick = "reply('{{message.id}}','{{message.username}}',this)">回复</a>
+                        {% else %}
+                        <a href = "javascript:void(0)" onclick = "reply('{{message.id}}','{{message.username}}',this)">回复</a> &nbsp;&nbsp; 
+                        <a data-toggle="modal" data-target="#myModal" onclick = "showConversation('{{message.username}}','{{message.replyTo}}')">查看对话</a>
+                        {% endif %}
+                    </div>
+                    <div style = "clear:both"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        查看对话
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <span id = "content"></span>
+                    <!--在这里添加一些文本-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block subIncludeFileAfterBody %}
+<script type = "text/javascript">
+
+function showConversation(username1,username2){
+     $.ajax({
+        type: 'POST',
+        url: '/visitor/message/showConversation',
+        data: {
+             "username1": username1,
+             "username2": username2
+        },
+        success: function(data){
+            var html = getDiv0(data[0].username,data[0].content,data[0].operationTime);
+            for(var i = 1; i < data.length; ++i){
+                if(data[i].username == username1){
+                    html = html + getDiv(data[i].username,
+                                         data[i].replyTo,
+                                         data[i].content,
+                                         data[i].operationTime);
+                } else {
+                     html = html + getDiv(data[i].username,
+                                          data[i].replyTo,
+                                          data[i].content,
+                                          data[i].operationTime);
+                }
+            }
+
+            $("#myModalLabel").text("查看对话");
+            $(".modal-body").html(html);
+        },
+        error: function(err){
+            alert("后端服务报错，获取对话失败，请稍候再试");
+        }
+    })
+}
+function getDiv0(username,content,time){
+    var html = 
+        "<div>" +
+            "<span style = \"color:#259\">"+username+"：</span>" +
+            "<br/>" +
+            "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+content+"</span>" +
+            "<br/>" +
+            "<span style = \"color:#999\">"+time+"</span>" +
+        "<div>";
+    return html;
+}
+function getDiv(username1,username2,content,time){
+    var html = 
+        "<hr/>" + 
+        "<div>" +
+            "<span style = \"color:#259\">"+username1+"&nbsp;&nbsp;</span>" +
+            "<span style = \"color:#999\">回复&nbsp;&nbsp;</span>" +
+            "<span style = \"color:#259\">"+username2+" :</span>" +
+            "<br/>" +
+            "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+content+"</span>" +
+            "<br/>" +
+            "<span style = \"color:#999\">"+time+"</span>" +
+        "<div>";
+    return html;
+}
+
+</script>
+{% endblock %}

@@ -9,6 +9,9 @@
         border-bottom:1px solid #DDDDDD;
         width:100%;
     }
+    a {
+        cursor:pointer;
+    }
 </style>
 
 <script src = "/javascripts/myJs/read/comment.js" ></script>
@@ -45,7 +48,7 @@
             </div>
             <div style = "width:1%;display:inline-block;float:left">:</div> 
             <div style = "width:26%;display:inline-block">
-                <input type = "password" id = "password" class = "commentInputStyle" placeholder = "6位密文（您的专属回复帐号）">
+                <input type = "password" id = "password" class = "commentInputStyle" placeholder = "6位密文">
             </div>
             <div style = "clear:both"></div>
             <div style = "width:90%;display:inline-block;float:left">
@@ -109,7 +112,6 @@
     </div>
 </div>
 {% endblock %}
-    
 
 {% block subIncludeFileAfterBody %}
 

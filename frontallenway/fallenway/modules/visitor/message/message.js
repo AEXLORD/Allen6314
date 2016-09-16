@@ -14,8 +14,8 @@ var logger = new Logger().getLogger();
 var ExceptionCode = require('../../../commons/exception/ExceptionCode.js');
 var exceptionCode = new ExceptionCode();
 
-router.get('/:id',function(req,res,next){
-    var url = serverConstant.getBackendUrlPrefix() + "/article/" + req.params.id;
+router.get('/index',function(req,res,next){
+    var url = serverConstant.getBackendUrlPrefix() + "/message/findall";
     request(url,function(error,response,body){
 
         if(error != null){
@@ -31,27 +31,25 @@ router.get('/:id',function(req,res,next){
             res.render('error/unknowerror');
             return ;
         }
-        returnData.data.content = md(returnData.data.content);
-        returnData.data.commentSize = returnData.data.commentList.length;
-        res.render('visitor/read/articleDetail',{'data':returnData.data});
+
+        returnData.data.messageSize = returnData.data.length;
+        res.render('visitor/message/index',{'data':returnData.data});
     });
 });
 
-router.post('/comment',function(req,res,next){
+router.post('/new',function(req,res,next){
 
-    var articleId = req.body.articleId;
     var username = req.body.username;
     var password = req.body.password;
     var content = req.body.content;
 
-    if(!validComment(articleId,username,password,content)){
+    if(!validMessage(username,password,content)){
         res.status(exceptionCode.getParamIsInvalid()).end();
         return ;
     }
 
-    var url = serverConstant.getBackendUrlPrefix() + "/comment/new";
+    var url = serverConstant.getBackendUrlPrefix() + "/message/new";
     var data = {
-            'articleId': articleId,
         	'username': username,
         	'password': password,
          	'content': content,
@@ -61,39 +59,39 @@ router.post('/comment',function(req,res,next){
 	    form:data
     }
 
-    doSendCommentRequest(options,res);
+    doSendMessageRequest(options,res);
 });
 
-router.post('/commentReply',function(req,res,next){
+router.post('/messageReply',function(req,res,next){
 
-    var articleId = req.body.articleId;
     var username = req.body.username;
     var password = req.body.password;
     var content = req.body.content;
     var replyTo = req.body.replyTo;
-    var sourceCommentId = req.body.sourceCommentId;
+    var sourceMessageId = req.body.sourceMessageId;
 
-    if(!validCommentReply(articleId,username,password,content,replyTo)){
+    if(!validMessageReply(username,password,content,replyTo)){
         res.status(exceptionCode.getParamIsInvalid()).end();
         return ;
     }
 
-    var url = serverConstant.getBackendUrlPrefix() + "/comment/new";
+    var url = serverConstant.getBackendUrlPrefix() + "/message/new";
     var data = {
-            'articleId': articleId,
-        	'username': username,
-        	'password': password,
-         	'content': content,
-         	'replyTo': replyTo,
-            'sourceCommentId':sourceCommentId
-    	}
+            'username': username,
+            'password': password,
+             'content': content,
+             'replyTo': replyTo,
+            'sourceMessageId':sourceMessageId
+        }
     var options = {
-    	url:url,
-	    form:data
+        url:url,
+        form:data
     }
 
-    doSendCommentRequest(options,res);
+    doSendMessageRequest(options,res);
 })
+
+
 router.post('/showConversation',function(req,res,next){
     var username1 = req.body.username1;
     var username2 = req.body.username2;
@@ -107,7 +105,7 @@ router.post('/showConversation',function(req,res,next){
             'username1': username1,
             'username2': username2
     	}
-    var url = serverConstant.getBackendUrlPrefix() + "/comment/conversation";
+    var url = serverConstant.getBackendUrlPrefix() + "/message/conversation";
     var options = {
     	url:url,
 	    form:data
@@ -132,7 +130,7 @@ router.post('/showConversation',function(req,res,next){
     });
 })
 
-function doSendCommentRequest(options,res){
+function doSendMessageRequest(options,res){
      request.post(options,function(error,response,body){
         if(error != null){
             logger.error(error);
@@ -152,18 +150,15 @@ function doSendCommentRequest(options,res){
     });
 }
 
-function validCommentReply(articleId,username,password,content,replyTo){
-    if(validComment(articleId,username,password,content)){
+function validMessageReply(username,password,content,replyTo){
+    if(validMessage(username,password,content)){
          return (replyTo != null) && (replyTo.length != 0);
     } else {
         return false;
     }
 }
 
-function validComment(articleId,username,password,content){
-    if( (articleId == null) || (articleId.trim() == "")){
-        return false;
-    }
+function validMessage(username,password,content){
     if( (password == null) || (password.length != 6)){
         return false;
     }

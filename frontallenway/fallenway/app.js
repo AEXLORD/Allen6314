@@ -52,6 +52,11 @@ app.use('/visitor/read/index',visitor_read_index);
 var visitor_read_article = require('./modules/visitor/read/article.js');
 app.use('/visitor/read/article',visitor_read_article);
 
+//留言板
+var visitor_message = require('./modules/visitor/message/message.js');
+app.use('/visitor/message',visitor_message);
+
+
 //博主
 var visitor_aboutme = require('./modules/visitor/me/aboutme.js');
 app.use('/visitor/aboutme',visitor_aboutme);

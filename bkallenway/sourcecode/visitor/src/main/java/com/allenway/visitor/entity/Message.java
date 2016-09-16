@@ -23,4 +23,24 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class Message extends BaseEntity {
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 留言内容
+     */
+    private String content;
+
+    /**
+     * 用于回复留言,表示留言给谁
+     */
+    private String replyTo;
+
+    /**
+     * 用于回复留言,表示回复哪一条留言
+     */
+    private String sourceMessageId;
 }

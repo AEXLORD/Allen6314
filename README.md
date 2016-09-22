@@ -10,7 +10,7 @@
 类似前后端分离的一个结构。其他在服务器的一些组件有：
 
 - nginx：主要功能是 静态文件 和 https。
-- kong：用于做 api gateway。这里结合 oauth 用于做管理员登录。
+- kong：网址 ：[点这里](https://getkong.org/)。用于做 api gateway。这里结合 oauth 用于做管理员登录。
 - redis：后端缓存，前端没有用。
 - mysql
 

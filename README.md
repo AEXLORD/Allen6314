@@ -14,7 +14,7 @@
 - redis：后端缓存，前端没有用。
 - mysql
 
-运维上用的 docker 分离上面的组建。不过持续集成上之前用的 jenkins，用着感觉还不如直接去服务器上更新，所以现在更新代码就是直接去服务器docker里面， git fetch，merge，supervisorctl restart，就完事了。前端就 node app.js，倒没有用 pm2，懒得弄了。
+运维上用的 docker 分离上面的组件。不过持续集成上之前用的 jenkins，用着感觉还不如直接去服务器上更新，所以现在更新代码就是直接去服务器docker里面， git fetch，merge，supervisorctl restart，就完事了。前端就 node app.js，倒没有用 pm2，懒得弄了。
 
 其实前端估计要接个 redis，现在后端还是有状态的，管理员登录的 token 在数据库中有 token-user 的绑定，没做到完全的无状态，等以后把这个放在 kong 这层来做后端就能完全无状态了，不过到时候得用 lua 开发，表示对 lua 不感冒（囧ing）。
 

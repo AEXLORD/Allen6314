@@ -14,9 +14,9 @@ var moduleName = "read";
 
 router.get('', function(req, res, next) {
 
-    async.waterfall([
+    async.parallel({
         //请求tags
-        function(callback){
+        tags:function(callback){
             var url = serverConstant.getBackendUrlPrefix() + "/module/" + moduleName + "/tag";
 
             request(url,function(error,response,body){
@@ -33,44 +33,33 @@ router.get('', function(req, res, next) {
                     return ;
                 }
 
-                var data = {};
-                data.tags = returnData.data;
-                callback(null,data)
+                callback(null,returnData.data)
             });
 
             //请求文章数据
-        },function(data,callback){
+        },
+        page:function(callback){
+            var url = serverConstant.getBackendUrlPrefix() + "/module/" + moduleName + "/article?page=1&size=100";
 
-            var tag = data.tags[0];
+            request(url,function(error,response,body){
+                if(error != null){
+                    callback(error,null);
+                }
 
-            if(tag != null){
-                var url = serverConstant.getBackendUrlPrefix() + "/tag/" + tag.id + "/article";
+                var returnData = JSON.parse(body);
 
-                request(url,function(error,response,body){
+                if(returnData.statusCode != 0){
+                    logger.error("url = " + url + " --- returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                    return ;
+                }
 
-                    if(error != null){
-                        callback(error,data)
-                    }
-
-                    var returnData = JSON.parse(body);
-
-                    if(returnData.statusCode != 0){
-                        logger.error("url = " + url + " --- returnData.statusCode = " + returnData.statusCode);
-                        res.render('error/unknowerror');
-                        return ;
-                    }
-
-                    data.articles = returnData.data;
-                    callback(null,data)
-                });
-            } else {
-                callback(null,data);
-            }
-        }],
-    function(err,result){
-        console.log(result);
+                callback(null,returnData.data);
+            });
+        }
+    },function(err,results){
         if(!err){
-            res.render('visitor/read/index',{'data':result});
+            res.render('visitor/read/index',{'data':results});
         } else {
             logger.error(err.stack);
             res.render('error/unknowerror');

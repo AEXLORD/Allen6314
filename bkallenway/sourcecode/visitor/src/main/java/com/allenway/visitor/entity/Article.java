@@ -25,6 +25,7 @@ public class Article extends BaseEntity {
     private String title;
     private String content;
     private String tagId;
+    private String moduleId;
     private boolean isTop = false;
     private int readNum = 0;
     private int up = 0;

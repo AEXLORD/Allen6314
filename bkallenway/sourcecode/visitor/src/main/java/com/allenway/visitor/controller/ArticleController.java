@@ -10,6 +10,7 @@ import com.allenway.visitor.entity.Comment;
 import com.allenway.visitor.entity.Tag;
 import com.allenway.visitor.service.ArticleService;
 import com.allenway.visitor.service.CommentService;
+import com.allenway.visitor.service.ModuleService;
 import com.allenway.visitor.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class ArticleController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private ModuleService moduleService;
+
     /**
      * 新增一篇文章
      */
@@ -62,33 +66,6 @@ public class ArticleController {
         articleService.save(article);
         return new ReturnTemplate();
     }
-
-    /**
-     * 查找全部的文章 ( isDelete = false ) 主要给用户调用
-     * @return
-     */
-    @RequestMapping(value = "/article/findall",method = RequestMethod.GET)
-    public Object findall(){
-
-        List<Article> articles = articleService.findall();
-        setCommentsForArticles(articles);
-
-        return new ReturnTemplate(articles);
-    }
-
-    /**
-     * 查找全部的文章 ( isDelete = false and true ) 主要给管理员调用
-     * @return
-     */
-    @RequestMapping(value = "/auth/article/findall",method = RequestMethod.GET)
-    public Object findallForAdmin(){
-
-        List<Article> articles = articleService.findallForAdmin();
-        setCommentsForArticles(articles);
-
-        return new ReturnTemplate(articles);
-    }
-
 
     /**
      * 删除文章
@@ -156,6 +133,30 @@ public class ArticleController {
     }
 
     /**
+     * 查找某个 module 下的 article （分页）(isDelete = false) 主要给用户使用
+     */
+    @RequestMapping(value = {"/module/{moduleName}/article"},method = RequestMethod.GET)
+    public Object findAllArticlesByModuleName(final @PathVariable("moduleName") String moduleName,
+                                              final @RequestParam(value="page",required=false,defaultValue="1") int page,
+                                              final @RequestParam(value="size",required=false,defaultValue="10") int size){
+
+        log.debug("moduleName = {}. page = {}. size = {}.",moduleName,page,size);
+
+        if(!isModuleNameValid(moduleName)){
+            log.error("moduleName = {}.",moduleName);
+            throw new IllegalArgumentException("moduleName is invalid");
+        }
+
+        if(!ValidUtil.validPageAndSize(page,size)){
+            log.error("page = {}.size = {}.",page,size);
+            throw new IllegalArgumentException("page or size is invalid");
+        }
+
+        return new ReturnTemplate(articleService.findByModuleIfAndInPage(new PageHandler(size,page),
+                                                                         moduleService.findByName(moduleName).getId()));
+    }
+
+    /**
      * 查找某个 tag 下的 article （分页）(isDelete = false) 主要给用户使用
      */
     @RequestMapping(value = {"/tag/{tagId}/article"},method = RequestMethod.GET)
@@ -171,14 +172,11 @@ public class ArticleController {
         }
 
         if(!ValidUtil.validPageAndSize(page,size)){
-            log.error("page = {}.size = {}.",tagId);
-            throw new IllegalArgumentException("tagId is invalid");
+            log.error("page = {}.size = {}.",page,size);
+            throw new IllegalArgumentException("page or size is invalid");
         }
 
-        List<Article> articles = articleService.findByTagIdAndInPage(new PageHandler(size,page),tagId).getContent();
-        setCommentsForArticles(articles);
-
-        return new ReturnTemplate(articles);
+        return new ReturnTemplate(articleService.findByTagIdAndInPage(new PageHandler(size,page),tagId).getContent());
     }
 
     /**
@@ -201,11 +199,20 @@ public class ArticleController {
             throw new IllegalArgumentException("tagId is invalid");
         }
 
-        List<Article> articles = articleService.findByTagIdAndInPageForAdmin(new PageHandler(size,page),tagId).getContent();
+        return new ReturnTemplate(articleService.findByTagIdAndInPageForAdmin(new PageHandler(size,page),tagId).getContent());
+    }
 
-        setCommentsForArticles(articles);
-
-        return new ReturnTemplate(articles);
+    /**
+     * 检查 moduleName 是否合理
+     */
+    private boolean isModuleNameValid(final String moduleName) {
+        if(!StringUtils.hasText(moduleName)){
+            return false;
+        }
+        if(moduleService.findByName(moduleName) == null){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -306,10 +313,31 @@ public class ArticleController {
         return new ReturnTemplate(returnData);
     }
 
+    /**
+     * 查找全部的文章 ( isDelete = false ) 主要给用户调用
+     * @return
+     */
+    @Deprecated
+    @RequestMapping(value = "/article/findall",method = RequestMethod.GET)
+    public Object findall(){
+        return new ReturnTemplate(articleService.findall());
+    }
+
+    /**
+     * 查找全部的文章 ( isDelete = false and true ) 主要给管理员调用
+     * @return
+     */
+    @Deprecated
+    @RequestMapping(value = "/auth/article/findall",method = RequestMethod.GET)
+    public Object findallForAdmin(){
+        return new ReturnTemplate(articleService.findallForAdmin());
+    }
+
     private void setCommentsForArticle(Article article){
         article.setCommentList(commentService.findByArticleId(article.getId()));
     }
 
+    @Deprecated
     private void setCommentsForArticles(List<Article> articles){
         if(!CollectionUtils.isEmpty(articles)){
             articles.parallelStream().forEach(article -> {

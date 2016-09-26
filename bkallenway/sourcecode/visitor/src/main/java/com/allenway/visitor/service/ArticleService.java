@@ -21,11 +21,13 @@ public interface ArticleService {
     List<Article> findall(); // 给游客使用
     List<Article> findallForAdmin();  // 给管理员使用
 
+    Page<Object> findByModuleIfAndInPage(PageHandler pageHandler,final String moduleId);
+
     /**
      * 查找某 tagId 下的所有文章（分页）
      */
-    Page<Article> findByTagIdAndInPage(PageHandler pageHandler, final String tagId); // 给游客使用
-    Page<Article> findByTagIdAndInPageForAdmin(PageHandler pageHandler,final String tagId); // 给管理员使用
+    Page<Object> findByTagIdAndInPage(PageHandler pageHandler, final String tagId); // 给游客使用
+    Page<Object> findByTagIdAndInPageForAdmin(PageHandler pageHandler,final String tagId); // 给管理员使用
 
     @Deprecated
     List<Article> findByIsTop();

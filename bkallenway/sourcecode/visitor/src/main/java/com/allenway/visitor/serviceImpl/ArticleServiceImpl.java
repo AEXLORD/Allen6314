@@ -57,11 +57,16 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findAll();
     }
 
+    @Override
+    public Page<Object> findByModuleIfAndInPage(PageHandler pageHandler,final String moduleId) {
+        return articleDao.findByModuleIdAndInPage(pageHandler,moduleId,false);
+    }
+
     /**
      * 查找某 tagId 下的所有文章（分页）给游客使用
      */
     @Override
-    public Page<Article> findByTagIdAndInPage(PageHandler pageHandler, final String tagId) {
+    public Page<Object> findByTagIdAndInPage(PageHandler pageHandler, final String tagId) {
         return articleDao.findByTagIdAndInPage(pageHandler,tagId,false);
     }
 
@@ -69,7 +74,7 @@ public class ArticleServiceImpl implements ArticleService {
      * 查找某 tagId 下的所有文章（分页）给管理员使用
      */
     @Override
-    public Page<Article> findByTagIdAndInPageForAdmin(PageHandler pageHandler,final String tagId) {
+    public Page<Object> findByTagIdAndInPageForAdmin(PageHandler pageHandler,final String tagId) {
         return articleDao.findByTagIdAndInPageForAdmin(pageHandler,tagId);
     }
 
@@ -84,4 +89,6 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> findRandomArticle(final int size) {
         return articleDao.findRandomArticle(size);
     }
+
+
 }

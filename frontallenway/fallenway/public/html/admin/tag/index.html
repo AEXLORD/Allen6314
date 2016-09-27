@@ -1,0 +1,79 @@
+{% extends '../common/header.html' %}
+
+{% block mainContent  %}
+    <div style = "width:600px;margin-left:auto;margin-right:auto">
+        <div>
+            <div style = "float:left;width:150px">
+                添加tag
+            </div>
+            <div style = "float:left;width:450px">
+                <input type = "text" id = "tagName" name="tagName" placeholder = "tag name">
+                <select id = "moduleId">
+                {% for module in data.modules %}
+                    <option value = "{{module.id}}">{{module.name}}</option>
+                {% endfor %}
+                </select>
+                <input type = "button" onclick = "add()" value = "确认">
+            </div>
+            <div style = "clear:both"></div>
+        </div>
+        <br/>
+        <div>
+            <div style = "float:left;width:150px">
+                现有tag列表
+            </div>
+            <div style = "float:left;width:450px">
+                {% for tag in data.tags %}
+                {{loop.index}}. {{tag.name}} ，有 {{tag.articleNum}} 篇文章.  &nbsp;&nbsp;&nbsp;&nbsp;
+                    <!--<a href = "/admin/tag/update/{{tag.id}}">修改</a>-->
+                    {% if tag.articleNum == 0 %}
+                    <a href = "javascript:void(0)" onclick = "deleteTag('{{tag.id}}')">删除</a>
+                    {% endif %}
+                    <br/>
+                {% endfor %}
+            </div>
+            <div style = "clear:both"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block subIncludeFileAfterBody %}
+<script>
+function add(){
+     $.ajax({
+        type: 'POST',
+        url: '/admin/tag/new',
+        data: {
+             "tagName":$("#tagName").val(),
+             "moduleId":$("#moduleId").val()
+        },
+        success: function(data){
+            window.location.href="/admin/tag/index"; 
+        },
+        error: function(err){
+            alert("add error");
+        }
+    })
+}
+function deleteTag(id){
+    console.log("id = " + id);
+    if(id == null || id.trim() == ""){
+        alert("delete fail. refresh again.");
+    }
+     $.ajax({
+        type: 'POST',
+        url: '/admin/tag/delete',
+        data: {
+             "id":id,
+        },
+        success: function(data){
+            window.location.href="/admin/tag/index"; 
+        },
+        error: function(err){
+            alert("delete error");
+        }
+    })
+}
+</script>
+{% endblock %}
+

@@ -80,9 +80,13 @@ app.use(myLogger_admin_oauth);
 //*                    admin route                       *
 //********************************************************
 
-//后台首页
+//后台文章管理首页
 var admin_article = require('./modules/admin/article.js');
 app.use('/admin/article',admin_article);
+
+//后台tag管理首页
+var admin_tag = require('./modules/admin/tag.js');
+app.use('/admin/tag',admin_tag);
 
 //登录
 var admin_login = require('./modules/admin/login.js');

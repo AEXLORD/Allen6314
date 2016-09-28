@@ -63,6 +63,8 @@ public class ArticleController {
             tagService.save(tag);
         }
 
+        article.setModuleId(tagService.findById(article.getTagId()).getModuleId());
+
         articleService.save(article);
         return new ReturnTemplate();
     }

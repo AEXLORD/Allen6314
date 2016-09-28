@@ -14,6 +14,74 @@ var logger = new Logger().getLogger();
 var ExceptionCode = require('../../../commons/exception/ExceptionCode.js');
 var exceptionCode = new ExceptionCode();
 
+/****************
+ 跳到某类文章首页
+ ****************/
+router.get('/module/:type', function(req, res, next) {
+    var moduleName = req.params.type;
+
+    if((moduleName != "work") && (moduleName != "read") ){
+        logger.error("moduleName = " + moduleName);
+        res.render('error/unknowerror');
+        return ;
+    }
+
+    async.parallel({
+        //请求tags
+        tags:function(callback){
+            var url = serverConstant.getBackendUrlPrefix() + "/module/" + moduleName + "/tag";
+
+            request(url,function(error,response,body){
+
+                if(error != null){
+                    callback(error,data);
+                }
+
+                var returnData = JSON.parse(body);
+
+                if(returnData.statusCode != 0){
+                    logger.error("url = " + url + " --- returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                    return ;
+                }
+
+                callback(null,returnData.data)
+            });
+
+            //请求该module的文章
+        },
+        page:function(callback){
+            var url = serverConstant.getBackendUrlPrefix() + "/module/" + moduleName + "/article?page=1&size=100";
+
+            request(url,function(error,response,body){
+                if(error != null){
+                    callback(error,null);
+                }
+
+                var returnData = JSON.parse(body);
+
+                if(returnData.statusCode != 0){
+                    logger.error("url = " + url + " --- returnData.statusCode = " + returnData.statusCode);
+                    res.render('error/unknowerror');
+                    return ;
+                }
+
+                callback(null,returnData.data);
+            });
+        }
+    },function(err,results){
+        if(!err){
+            res.render('visitor/article/index',{'data':results});
+        } else {
+            logger.error(err.stack);
+            res.render('error/unknowerror');
+        }
+    })
+})
+
+/****************
+ 查找某个文章
+ ****************/
 router.get('/:id',function(req,res,next){
     var url = serverConstant.getBackendUrlPrefix() + "/article/" + req.params.id;
     request(url,function(error,response,body){
@@ -33,10 +101,14 @@ router.get('/:id',function(req,res,next){
         }
         returnData.data.content = md(returnData.data.content);
         returnData.data.commentSize = returnData.data.commentList.length;
-        res.render('visitor/read/articleDetail',{'data':returnData.data});
+        res.render('visitor/article/articleDetail',{'data':returnData.data});
     });
 });
 
+
+/****************
+ 发表评论
+ ****************/
 router.post('/comment',function(req,res,next){
 
     var articleId = req.body.articleId;
@@ -64,6 +136,9 @@ router.post('/comment',function(req,res,next){
     doSendCommentRequest(options,res);
 });
 
+/****************
+ 回复评论
+ ****************/
 router.post('/commentReply',function(req,res,next){
 
     var articleId = req.body.articleId;
@@ -94,6 +169,10 @@ router.post('/commentReply',function(req,res,next){
 
     doSendCommentRequest(options,res);
 })
+
+/****************
+ 显示评论对话
+ ****************/
 router.post('/showConversation',function(req,res,next){
     var username1 = req.body.username1;
     var username2 = req.body.username2;

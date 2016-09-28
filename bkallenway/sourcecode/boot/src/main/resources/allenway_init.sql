@@ -4,4 +4,5 @@ INSERT INTO tb_admin(id,is_delete,password,salt,username) VALUES ('aaac4e63-da8b
 # 初始化模块
 INSERT INTO tb_module(id,is_delete,name) VALUES ('d5ff88b6-c8a4-436c-81f8-561a9c35950e',false,"read");
 INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408fb5311',false,"about me");
+INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408fb5312',false,"work");
 

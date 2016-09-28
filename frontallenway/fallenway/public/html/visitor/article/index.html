@@ -14,20 +14,21 @@
         <!--</div>-->
         <!--<div style = "float:left;width:450px">-->
             <!--{% for article in data.articles %}-->
-            <!--<a href = "/visitor/read/article/{{article.id}}"> {{loop.index}}. {{article.title}}</a><br/>-->
+            <!--<a href = "/visitor/article/{{article.id}}"> {{loop.index}}. {{article.title}}</a><br/>-->
             <!--{% endfor %}-->
         <!--</div>-->
         <!--<div style = "clear:both"></div>-->
 
         {% for tag in data.tags %}
             <div style = "float:left;width:150px">
-                <a href = "" style = "text-decoration:none">{{tag.name}}</a>
+                <!--<a href = "" style = "text-decoration:none">{{tag.name}}</a>-->
+                {{tag.name}}
             </div>
             <div style = "float:left;width:450px">
                 {% set index = 1 %}
                 {% for article in data.page.content %}
                     {% if article[2] == tag.id %}
-                        <a href = "/visitor/read/article/{{article[0]}}"> {{index}}. {{article[1]}}</a><br/>
+                        <a href = "/visitor/article/{{article[0]}}"> {{index}}. {{article[1]}}</a><br/>
                         {% set index = index + 1 %}
                     {% endif %}
                 {% endfor %}

@@ -7,7 +7,7 @@
         </div>
         <div style = "float:left;width:450px">
             {% for article in data %}
-            <a href = "/visitor/read/article/{{article.id}}" target = "_blank">{{loop.index}}. {{article.title}}</a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href = "/visitor/article/{{article.id}}" target = "_blank">{{loop.index}}. {{article.title}}</a> &nbsp;&nbsp;&nbsp;&nbsp;
             <a href = "/admin/article/update/{{article.id}}">修改文章</a>
                 <br/>
             {% endfor %}

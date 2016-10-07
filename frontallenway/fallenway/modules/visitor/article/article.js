@@ -20,7 +20,7 @@ var exceptionCode = new ExceptionCode();
 router.get('/module/:type', function(req, res, next) {
     var moduleName = req.params.type;
 
-    if((moduleName != "work") && (moduleName != "read") ){
+    if((moduleName != "work") && (moduleName != "read") && (moduleName != "learn")){
         logger.error("moduleName = " + moduleName);
         res.render('error/unknowerror');
         return ;
@@ -34,7 +34,7 @@ router.get('/module/:type', function(req, res, next) {
             request(url,function(error,response,body){
 
                 if(error != null){
-                    callback(error,data);
+                    callback(error,null);
                 }
 
                 var returnData = JSON.parse(body);

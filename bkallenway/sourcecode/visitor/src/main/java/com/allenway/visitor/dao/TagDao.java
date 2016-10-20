@@ -18,6 +18,6 @@ public interface TagDao extends JpaRepository<Tag, String> {
 
     Tag findByName(final String name);
 
-    @Query(value = "select tag from Tag tag where isDelete = false order by moduleId")
+    @Query(value = "select tag from Tag tag order by moduleId")
     List<Tag> findAllTags();
 }

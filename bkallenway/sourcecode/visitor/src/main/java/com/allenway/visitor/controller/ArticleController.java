@@ -2,6 +2,7 @@ package com.allenway.visitor.controller;
 
 import com.allenway.commons.constant.ArticleVote;
 import com.allenway.commons.exception.ex.DataNotFoundException;
+import com.allenway.commons.exception.ex.OperationFailException;
 import com.allenway.commons.page.PageHandler;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.utils.validparam.ValidUtil;
@@ -73,12 +74,16 @@ public class ArticleController {
      * 删除文章
      */
     @RequestMapping(value = "/auth/article/delete",method = RequestMethod.POST)
-    public Object deleteArticleById(final @PathParam("id") String id){
+    public Object deleteArticleById(final @PathParam("id") String id,
+                                    final @PathParam("status") String status){
 
-        log.debug("id = {}",id);
+        log.debug("id = {},status = {}",id,status);
 
-        if(!StringUtils.hasText(id)){
-            throw new IllegalArgumentException("id is null or empty");
+        if(!StringUtils.hasText(id) || !StringUtils.hasText(status)){
+            throw new IllegalArgumentException("id or status is null or empty");
+        }
+        if(!status.equals("true") && !status.equals("false")){
+            throw new IllegalArgumentException("status is illegal");
         }
 
         Article article = articleService.findById(id);
@@ -88,21 +93,46 @@ public class ArticleController {
             throw new DataNotFoundException("article is null based on id");
         }
 
-        //设置 tag 的 文章数量 - 1
-        Tag tag = tagService.findById(article.getTagId());
-        tag.setArticleNum(tag.getArticleNum() - 1);
-        tagService.save(tag);
+        if(status.equals("true")){
+            //设置 tag 的 文章数量 - 1
+            Tag tag = tagService.findById(article.getTagId());
+            tag.setArticleNum(tag.getArticleNum() - 1);
+            tagService.save(tag);
 
-        //删除该 article 下的所有评论
-        List<Comment> comments = commentService.findByArticleId(id);
-        if(!CollectionUtils.isEmpty(comments)){
-            comments.parallelStream().forEach(comment ->{
-                comment.setIsDelete(true);
-            });
+            //删除该 article 下的所有评论
+            List<Comment> comments = commentService.findByArticleId(id);
+            if(!CollectionUtils.isEmpty(comments)){
+                comments.parallelStream().forEach(comment ->{
+                    comment.setIsDelete(true);
+                });
+            }
+            commentService.saveall(comments);
+
+            article.setIsDelete(true);
+        } else {
+            //设置 tag 的 文章数量 + 1
+            Tag tag = tagService.findById(article.getTagId());
+
+            if(tag.getIsDelete() == true){
+                throw new OperationFailException("tag is delete");
+            }
+
+            tag.setArticleNum(tag.getArticleNum() + 1);
+            tagService.save(tag);
+
+            //恢复该 article 下的所有评论
+            List<Comment> comments = commentService.findByArticleIdIgnoreIsDelete(id);
+            if(!CollectionUtils.isEmpty(comments)){
+                comments.parallelStream().forEach(comment ->{
+                    comment.setIsDelete(false);
+                });
+            }
+            commentService.saveall(comments);
+
+            article.setIsDelete(false);
         }
-        commentService.saveall(comments);
 
-        articleService.delete(article);
+        articleService.save(article);
         return new ReturnTemplate();
     }
 
@@ -184,7 +214,7 @@ public class ArticleController {
     /**
      * 查找某个 tag 下的 article （分页）(isDelete = false and true) 主要给管理员使用
      */
-    @RequestMapping(value = {"/auth/tag/{tagId}/article"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/auth/tag/{tagId}/articles"},method = RequestMethod.GET)
     public Object findAllArticlesByTagIdForAdmin(final @PathVariable("tagId") String tagId,
                                                  final @RequestParam(value="page",required=false,defaultValue="1") int page,
                                                  final @RequestParam(value="size",required=false,defaultValue="30") int size){

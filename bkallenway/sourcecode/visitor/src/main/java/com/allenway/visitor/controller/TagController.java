@@ -50,12 +50,16 @@ public class TagController {
      * 删除 tag
      */
     @RequestMapping(value = "/auth/tag/delete",method = RequestMethod.POST)
-    public Object deleteTagById(final @PathParam("id") String id){
+    public Object deleteTagById(final @PathParam("id") String id,
+                                final @PathParam("status") String status){
 
-        log.debug("id = {}.",id);
+        log.debug("id = {}. status = {}.",id,status);
 
-        if(!StringUtils.hasText(id)){
+        if(!StringUtils.hasText(id) || !StringUtils.hasText(status)){
             throw new IllegalArgumentException("id is null or empty");
+        }
+        if(!status.equals("true") && !status.equals("false")){
+            throw new IllegalArgumentException("status is invalid");
         }
 
         Tag tag = tagService.findById(id);
@@ -69,7 +73,13 @@ public class TagController {
             throw new OperationFailException("article num != 0");
         }
 
-        tagService.delete(tag);
+        if(status.equals("true")){
+            tag.setIsDelete(true);
+        } else {
+            tag.setIsDelete(false);
+        }
+
+        tagService.save(tag);
         return new ReturnTemplate();
     }
 
@@ -77,7 +87,7 @@ public class TagController {
      * 查找所有的 tag - 主要给管理员使用
      * @return
      */
-    @RequestMapping(value = "/tag/findall",method = RequestMethod.GET)
+    @RequestMapping(value = "/auth/tag/findall",method = RequestMethod.GET)
     public Object findall(){
 
         List<Tag> tagList = tagService.findall();

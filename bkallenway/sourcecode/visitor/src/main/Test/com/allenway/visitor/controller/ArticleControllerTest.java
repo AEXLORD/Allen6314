@@ -120,7 +120,7 @@ public class ArticleControllerTest {
     public void deleteArticleById() {
         //测试 id 为空
         try {
-            articleController.deleteArticleById(null);
+            articleController.deleteArticleById(null,"true");
             assertFalse(true);
         }catch (IllegalArgumentException e){
             assertTrue(true);
@@ -128,7 +128,7 @@ public class ArticleControllerTest {
 
         //测试 id 不对
         try {
-            articleController.deleteArticleById(UUID.randomUUID().toString());
+            articleController.deleteArticleById(UUID.randomUUID().toString(),"true");
             assertFalse(true);
         }catch (DataNotFoundException e){
             assertTrue(true);
@@ -164,7 +164,7 @@ public class ArticleControllerTest {
             assertFalse(true);
         }
 
-        articleController.deleteArticleById(articleId);
+        articleController.deleteArticleById(articleId,"true");
 
         assertTrue(articleService.findById(articleId).getIsDelete() == true);
     }

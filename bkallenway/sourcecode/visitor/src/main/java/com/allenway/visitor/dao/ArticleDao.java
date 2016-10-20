@@ -33,7 +33,7 @@ public interface ArticleDao extends JpaRepository<Article, String> {
     /**
      *  查找某 tagId 下的所有文章（分页）给管理员使用
      */
-    @Query("select article.id,article.title,article.tagId from Article article where tagId=:tagId order by operationTime")
+    @Query("select article.id,article.title,article.tagId,article.isDelete from Article article where tagId=:tagId order by operationTime")
     Page<Object> findByTagIdAndInPageForAdmin(Pageable pageable,
                                                final @Param("tagId") String tagId);
 

@@ -54,7 +54,7 @@ router.get('/update/:id',function(req,res,next){
 
     var id = req.params.id;
 
-    var urlTags = serverConstant.getBackendUrlPrefix() + "/tag/findall";
+    var urlTags = serverConstant.getBackendUrlPrefix() + "/auth/tag/findall";
 	var optionsTags = {
         url:urlTags,
         headers:{
@@ -115,7 +115,8 @@ router.get('/update/:id',function(req,res,next){
 router.post('/delete',function(req,res,next){
     var url = serverConstant.getBackendUrlPrefix() + "/auth/tag/delete";
 	var data = {
-            'id':req.body.id
+            'id':req.body.id,
+            'status':req.body.status
     	}
     var options = {
     	url:url,
@@ -147,7 +148,7 @@ router.post('/delete',function(req,res,next){
 router.get('/index',function(req,res,next){
 
     var url = serverConstant.getBackendUrlPrefix() + "/module";
-    var url1 = serverConstant.getBackendUrlPrefix() + "/tag/findall";
+    var url1 = serverConstant.getBackendUrlPrefix() + "/auth/tag/findall";
     var options = {
         url:url,
         headers:{
@@ -194,17 +195,30 @@ router.get('/index',function(req,res,next){
         }
     },
     function(err, results) {
-        logger.info(results);
         res.render('admin/tag/index',{'data':results});
     });
 });
 
-//得到 tag 底下的文章
+//得到 tag 底下的文章 - 和用户一样
 router.get('/articles',function(req,res,next){
 
     var tagId = req.query.id;
-
     var url = serverConstant.getBackendUrlPrefix() + "/tag/" + tagId + "/articles";
+
+    doGetArticlesByTagId(url,tagId,req,res);
+})
+
+//得到 tag 底下的文章 - 给管理员使用
+router.get('/articles1',function(req,res,next){
+
+    var tagId = req.query.id;
+    var url = serverConstant.getBackendUrlPrefix() + "/auth/tag/" + tagId + "/articles";
+
+    doGetArticlesByTagId(url,tagId,req,res);
+})
+
+function doGetArticlesByTagId(url,tagId,req,res){
+
 	var data = {
             'tagId':tagId
     	}
@@ -232,7 +246,6 @@ router.get('/articles',function(req,res,next){
         }
         res.json(returnData.data).status(200).end();
    	});
-
-})
+}
 
 module.exports = router;

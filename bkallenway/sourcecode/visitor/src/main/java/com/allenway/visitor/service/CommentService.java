@@ -19,6 +19,7 @@ public interface CommentService {
     Comment findById(final String id);
     List<Comment> findByUsername(final String username);
     List<Comment> findByArticleId(final String articleId);
+    List<Comment> findByArticleIdIgnoreIsDelete(final String articleId);
 
     //管理员使用该放方法
     List<Comment> findall();

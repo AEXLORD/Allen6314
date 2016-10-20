@@ -57,6 +57,14 @@ public class CommentServiceImpl implements CommentService{
     }
 
     /**
+     * 默认查找 isDelete = false
+     */
+    @Override
+    public List<Comment> findByArticleIdIgnoreIsDelete(final String articleId) {
+        return commentDao.findByArticleIdAndIsDeleteIgnoreIsDelete(articleId);
+    }
+
+    /**
      * 管理员使用,查找 isDelete = false and true
      */
     @Override

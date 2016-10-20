@@ -1,18 +1,111 @@
 {% extends '../common/header.html' %}
 
 {% block mainContent  %}
-    <div style = "width:600px;margin-left:auto;margin-right:auto">
-        <div style = "float:left;width:150px">
-            <a href = "/admin/article/tonew">添加文章</a>
-        </div>
-        <div style = "float:left;width:450px">
-            {% for article in data %}
-            <a href = "/visitor/article/{{article.id}}" target = "_blank">{{loop.index}}. {{article.title}}</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href = "/admin/article/update/{{article.id}}">修改文章</a>
+    <div>
+        <h3><a href = "/admin/article/tonew">1. 添加文章</a></h3>
+        <h3>2. 查看，修改文章</h3>
+        <div>
+            {% for module in data.modules %}
+                {{module.name}}&nbsp;:&nbsp;
+                {% for tag in data.tags %}
+                    {% if tag.module.id == module.id %}
+                    <a href = "javascript:void(0)" onclick = "getArticlesByTagId('{{tag.id}}','{{tag.name}}')">{{tag.name}}</a>&nbsp;
+                    {% endif %}
+                {% endfor %}
                 <br/>
             {% endfor %}
         </div>
+        <div class = "articles"></div>
         <div style = "clear:both"></div>
     </div>
 {% endblock %}
 
+{% block subIncludeFileAfterBody %}
+<script>
+function getArticlesByTagId(id,tagName){
+    if(id == null || id.trim() == "" || tagName == null || tagName == ""){
+        alert("getArticles fail. refresh again.");
+    }
+     $.ajax({
+        type: 'GET',
+        url: '/admin/tag/articles1',
+        data: {
+             "id":id,
+        },
+        success: function(data){
+
+            var content = "";
+
+            for(var i = 0; i < data.length; ++i){
+                content = content + 
+                    "<tr>" + 
+                        "<td>" + (i+1) + "</td>" + 
+                        "<td>" + data[i][1] + "</td>" +
+                        "<td>" + "<a href = \"/admin/article/update/"+ data[i][0] +"\">修改文章</a>" + "</td>" ;
+
+                if(data[i][3] == true){
+                     content = content + 
+                         "<td><a href = \"javascript:void(0)\" onclick = \"setIsDelete('"+data[i][0]+"','false',this)\">恢复正常</a></td>" ;
+                } else {
+                     content = content + 
+                         "<td><a href = \"javascript:void(0)\" onclick = \"setIsDelete('"+data[i][0]+"','true',this)\">删除</a></td>" ;
+                }
+                
+                content = content + "</tr>"; 
+            }
+
+            $(".articles").empty();
+            $(".articles").append("<br/><br/>");
+            $(".articles").append("<h5>" + tagName + "&nbsp;&nbsp;文章列表：</h5>");
+            $(".articles").append(
+                "<table class = \"table\" style = \"font-size:13px\">" + 
+                    "<tr>" +
+                        "<td>#</td>" + 
+                        "<td>文章名称</td>" +
+                        "<td>修改</td>" +
+                        "<td>操作</td>" + 
+                    "</tr>" + 
+                    content + 
+                "</table>"
+            );
+        },
+        error: function(err){
+            alert("后端未知错误");
+        }
+     })
+}
+
+function setIsDelete(id,status,element){
+    if(status != "false" && status != "true"){
+        alert("operation fail. refresh again.");
+    }
+     $.ajax({
+        type: 'POST',
+        url: '/admin/article/delete',
+        data: {
+             "id":id,
+             "status":status
+        },
+        success: function(data){
+            var e = $(element).parent();
+            $(element).remove();
+            if(status == "true"){
+                e.append("<td><a href = \"javascript:void(0)\" onclick = \"setIsDelete('"+id+"','false',this)\">恢复正常</a></td>");
+            } else {
+                e.append("<td><a href = \"javascript:void(0)\" onclick = \"setIsDelete('"+id+"','true',this)\">删除</a></td>");
+            }
+        },
+        error: function(err){
+            if(err.status == 1002){
+                 alert("参数有错误");
+            } else if (err.status == 3001){
+                 alert("tag 已经删除，无法恢复");
+            } else {
+                alert("后端未知错误");
+            }
+        }
+     })
+}
+
+</script>
+{% endblock %}

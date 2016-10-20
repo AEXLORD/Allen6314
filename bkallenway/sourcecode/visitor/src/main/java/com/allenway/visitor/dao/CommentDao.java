@@ -23,9 +23,14 @@ public interface CommentDao extends JpaRepository<Comment, String> {
     List<Comment> findByArticleIdAndIsDelete(final @Param("articleId") String articleId,
                                              final @Param("isDelete") boolean isDelete);
 
+    @Query("select comment from Comment comment where articleId=:articleId order by operationTime")
+    List<Comment> findByArticleIdAndIsDeleteIgnoreIsDelete(final @Param("articleId") String articleId);
+
     @Query("select comment from Comment comment where (username=:username1 and replyTo=:username2) or " +
                                                      "(username=:username2 and replyTo=:username1) " +
                                                      "order by operationTime")
     List<Comment> findConversation(final @Param("username1") String username1,
                                    final @Param("username2") String username2);
+
+
 }

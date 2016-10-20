@@ -86,7 +86,7 @@ public class TagControllerTest {
     public void deleteTagById() throws Exception {
         //测试 id 为空
         try {
-            tagController.deleteTagById(null);
+            tagController.deleteTagById(null,"true");
             assertFalse(true);
         } catch (IllegalArgumentException e){
             assertTrue(true);
@@ -94,7 +94,7 @@ public class TagControllerTest {
 
         //测试 id 为错误的id
         try {
-            tagController.deleteTagById(UUID.randomUUID().toString());
+            tagController.deleteTagById(UUID.randomUUID().toString(),"true");
             assertFalse(true);
         } catch (IllegalArgumentException e){
             assertTrue(true);
@@ -110,7 +110,7 @@ public class TagControllerTest {
         Tag t = tagService.findByName(tag.getName());
         assertNotNull(t);
 
-        tagController.deleteTagById(t.getId());
+        tagController.deleteTagById(t.getId(),"true");
 
         assertTrue(tagService.findByName(tag.getName()).getIsDelete() == true);
     }

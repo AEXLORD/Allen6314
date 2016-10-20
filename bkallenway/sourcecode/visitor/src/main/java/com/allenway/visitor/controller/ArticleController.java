@@ -161,7 +161,7 @@ public class ArticleController {
     /**
      * 查找某个 tag 下的 article （分页）(isDelete = false) 主要给用户使用
      */
-    @RequestMapping(value = {"/tag/{tagId}/article"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/tag/{tagId}/articles"},method = RequestMethod.GET)
     public Object findAllArticlesByTagId(final @PathVariable("tagId") String tagId,
                                          final @RequestParam(value="page",required=false,defaultValue="1") int page,
                                          final @RequestParam(value="size",required=false,defaultValue="30") int size){
@@ -187,7 +187,7 @@ public class ArticleController {
     @RequestMapping(value = {"/auth/tag/{tagId}/article"},method = RequestMethod.GET)
     public Object findAllArticlesByTagIdForAdmin(final @PathVariable("tagId") String tagId,
                                                  final @RequestParam(value="page",required=false,defaultValue="1") int page,
-                                                 final @RequestParam(value="size",required=false,defaultValue="10") int size){
+                                                 final @RequestParam(value="size",required=false,defaultValue="30") int size){
 
         log.debug("tagId = {}. page = {}. size = {}.",tagId,page,size);
 

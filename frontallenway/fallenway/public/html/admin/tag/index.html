@@ -1,7 +1,7 @@
 {% extends '../common/header.html' %}
 
 {% block mainContent  %}
-    <div style = "width:600px;margin-left:auto;margin-right:auto">
+    <div>
         <div>
             <div style = "float:left;width:150px">
                 添加tag
@@ -23,16 +23,34 @@
                 现有tag列表
             </div>
             <div style = "float:left;width:450px">
-                {% for tag in data.tags %}
-                {{loop.index}}. {{tag.name}} ，有 {{tag.articleNum}} 篇文章.  &nbsp;&nbsp;&nbsp;&nbsp;
-                    <!--<a href = "/admin/tag/update/{{tag.id}}">修改</a>-->
-                    {% if tag.articleNum == 0 %}
-                    <a href = "javascript:void(0)" onclick = "deleteTag('{{tag.id}}')">删除</a>
-                    {% endif %}
-                    <br/>
-                {% endfor %}
+                <table class = "table" style = "font-size:13px">
+                    <tr>
+                        <td>#</td>
+                        <td>tag名称</td>
+                        <td>tag所属module</td>
+                        <td>文章数量</td>
+                        <td>操作</td>
+                    </tr>
+                    {% for tag in data.tags %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{tag.name}}</td>
+                            <td>{{tag.module.name}}</td>
+                            <td><a href= "javascript:void(0)" onclick = "getArticlesByTagId('{{tag.id}}',this)">{{tag.articleNum}}</a></td>
+                            <td>
+                                {% if tag.isDelete == false %}
+                                <a href = "javascript:void(0)" onclick = "deleteTag('{{tag.id}}')">删除</a>
+                                {% else %}
+                                    <a href = "javascript:void(0)">恢复正常</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
             <div style = "clear:both"></div>
+            <div class = "articles">
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -56,7 +74,6 @@ function add(){
     })
 }
 function deleteTag(id){
-    console.log("id = " + id);
     if(id == null || id.trim() == ""){
         alert("delete fail. refresh again.");
     }
@@ -70,9 +87,38 @@ function deleteTag(id){
             window.location.href="/admin/tag/index"; 
         },
         error: function(err){
-            alert("delete error");
+            if(err.status == 3001){
+                 alert("该 tag 底下还有文章，无法删除。");
+            } else {
+                alert("后端未知错误");
+            }
         }
-    })
+     })
+}
+function getArticlesByTagId(id,element){
+    if(id == null || id.trim() == ""){
+        alert("getArticles fail. refresh again.");
+    }
+     $.ajax({
+        type: 'GET',
+        url: '/admin/tag/articles',
+        data: {
+             "id":id,
+        },
+        success: function(data){
+            console.log(data);
+            $(".articles").empty();
+            $(".articles").append($(element).parent().prev().prev().text() + "&nbsp;&nbsp;的文章有：<br/>");
+            for(var i = 0; i < data.length; ++i){
+                $(".articles").append("<a href = \"/visitor/article/" + data[i][0] + "\" target = \"_blank\">" 
+                        + (i + 1) + ". " + data[i][1] + "</a><br/>");
+            }
+        },
+        error: function(err){
+            alert("后端未知错误");
+        }
+     })
+
 }
 </script>
 {% endblock %}

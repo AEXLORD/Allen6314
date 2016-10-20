@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
+import java.util.List;
 
 /**
  * Created by wuhuachuan on 16/4/2.
@@ -73,12 +74,18 @@ public class TagController {
     }
 
     /**
-     * 查找所有的 tag
+     * 查找所有的 tag - 主要给管理员使用
      * @return
      */
     @RequestMapping(value = "/tag/findall",method = RequestMethod.GET)
     public Object findall(){
-        return new ReturnTemplate(tagService.findall());
+
+        List<Tag> tagList = tagService.findall();
+        tagList.parallelStream().forEach(tag ->{
+            tag.setModule(moduleService.findById(tag.getModuleId()));
+        });
+
+        return new ReturnTemplate(tagList);
     }
 
     private boolean isTagValid(final Tag tag) {

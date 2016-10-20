@@ -25,6 +25,8 @@ public class Tag extends BaseEntity {
     private String moduleId;
     private int articleNum;
 
+    private transient Module module;
+
     public Tag(final String name,
                final String moduleId){
         this.name = name;

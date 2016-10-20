@@ -14,6 +14,7 @@ import java.util.List;
  */
 public interface ArticleDao extends JpaRepository<Article, String> {
 
+    @Deprecated
     @Query(value = "select * from tb_article order by RAND() LIMIT ?1 order by operationTime",nativeQuery = true)
     List<Article> findRandomArticle(final int size);
 

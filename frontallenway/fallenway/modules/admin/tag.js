@@ -137,7 +137,7 @@ router.post('/delete',function(req,res,next){
 			    res.render('admin/login');
 		    }
             logger.error("url = " + url + " -- returnData.statuCode = " + returnData.statusCode);
-            res.render('error/unknowerror');
+            res.status(returnData.statusCode).end();
         }
         res.status(200).end();
    	});
@@ -198,5 +198,41 @@ router.get('/index',function(req,res,next){
         res.render('admin/tag/index',{'data':results});
     });
 });
+
+//得到 tag 底下的文章
+router.get('/articles',function(req,res,next){
+
+    var tagId = req.query.id;
+
+    var url = serverConstant.getBackendUrlPrefix() + "/tag/" + tagId + "/articles";
+	var data = {
+            'tagId':tagId
+    	}
+    var options = {
+    	url:url,
+    	headers:{
+            'Authorization': "Bearer " + mycookies.getAdminAuthorizationCookie(req)
+		},
+	    form:data
+    }
+    request(options,function(error,response,body){
+        if(error != null){
+            logger.error(error);
+            res.render('error/unknowerror');
+        }
+
+        var returnData = JSON.parse(body);
+
+        if(returnData.statusCode != 0){
+            if(response.statusCode == 401){
+			    res.render('admin/login');
+		    }
+            logger.error("url = " + url + " -- returnData.statuCode = " + returnData.statusCode);
+            res.status(returnData.statusCode).end();
+        }
+        res.json(returnData.data).status(200).end();
+   	});
+
+})
 
 module.exports = router;

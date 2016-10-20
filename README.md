@@ -19,7 +19,6 @@
 ![blog](http://oag791r8q.bkt.clouddn.com/blog_structure.png)
 
 # 管理员界面
----
 
 ![blogback1](http://7xrzlm.com1.z0.glb.clouddn.com/blogback1.png)
 

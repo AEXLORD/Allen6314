@@ -16,6 +16,7 @@ import com.allenway.visitor.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +66,16 @@ public class ArticleController {
         }
 
         article.setModuleId(tagService.findById(article.getTagId()).getModuleId());
+
+        //如果是更新操作,那么 opertionTime 需要重新设置.
+        if(StringUtils.hasText(article.getId())){
+            Article dbArticle = articleService.findById(article.getId());
+            if(!ObjectUtils.isEmpty(dbArticle)){
+                article.setOperationTime(dbArticle.getOperationTime());
+            } else {
+                throw new IllegalArgumentException("article id is invalid");
+            }
+        }
 
         articleService.save(article);
         return new ReturnTemplate();

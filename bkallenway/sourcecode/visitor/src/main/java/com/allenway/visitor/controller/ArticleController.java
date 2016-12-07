@@ -72,6 +72,7 @@ public class ArticleController {
             Article dbArticle = articleService.findById(article.getId());
             if(!ObjectUtils.isEmpty(dbArticle)){
                 article.setOperationTime(dbArticle.getOperationTime());
+                article.setReadNum(dbArticle.getReadNum());
             } else {
                 throw new IllegalArgumentException("article id is invalid");
             }

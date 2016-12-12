@@ -5,7 +5,7 @@ import com.allenway.commons.exception.ex.DataNotFoundException;
 import com.allenway.commons.response.ReturnStatusCode;
 import com.allenway.commons.response.ReturnTemplate;
 import com.allenway.user.entity.Admin;
-import com.allenway.user.oauthtoken.GetTokenUtils;
+import com.allenway.user.kongoauth.GetTokenUtils;
 import com.allenway.user.service.AdminService;
 import com.allenway.utils.encryption.DESEncryptUtil;
 import com.allenway.utils.validparam.ValidUtil;
@@ -27,13 +27,14 @@ import java.util.Map;
  */
 
 @Slf4j
-@RestController
+//@RestController
+@Deprecated
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
-    @Value("${config.oauth2.switch}")
+    @Value("${config.springoauth.switch}")
     private String oauthSwitch;
 
     @Autowired

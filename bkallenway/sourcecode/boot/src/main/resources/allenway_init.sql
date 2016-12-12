@@ -7,3 +7,5 @@ INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408
 INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408fb5312',false,"work");
 INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408fb5313',false,"learn");
 
+# oauth
+INSERT INTO `oauth_client_details` VALUES ('whcid','','whcsecret','whcallenway','password','http://localhost:8080/redirect','',90000,NULL,'{}','admin');

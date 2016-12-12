@@ -16,26 +16,36 @@ router.get('',function(req,res,next){
 });
 
 router.post('/dologin',function(req,res,next){
-    var url = serverConstant.getBackendUrlPrefix() + "/login";
+
+    var url = serverConstant.getBackendUrlPrefix() + "/oauth/token";
     var data = {
         "username":req.body.username,
-        "password":req.body.password
+        "password":req.body.password,
+        "grant_type":serverConstant.getGrantType()
     };
+    var headers = {
+        "Authorization":"Basic " +
+            new Buffer(serverConstant.getClientId() + ":" + serverConstant.getClientSecret()).toString('base64')
+    }
 
-    request.post({url:url,form:data},function(error,response,body){
-        if((error != null) || (response.statusCode != 200)){
+    request.post({url:url,form:data,headers:headers},function(error,response,body){
+        if(error != null){
             logger.error(error);
             res.render('error/unknowerror');
         }
 
         var returnData = JSON.parse(body);
-        if(returnData.statusCode != 0){
-            logger.error("url = " + url + " -- returnData.statusCode = " + returnData.statusCode);
-            res.render('error/unknowerror');
-        } else {
-		    res.cookie(mycookies.getAdminAuthorization(), returnData.data.token, { path: '/' });
-            res.redirect('/admin/article/index');
 
+        console.log("returnData.access_token = " + returnData.access_token);
+
+        if(returnData.access_token == null || returnData.access_token == "undefined"){
+            logger.error(returnData.error);
+            logger.error(returnData.error_description);
+            res.render('admin/login.html');
+        } else {
+            console.log("1hello world");
+	        res.cookie(mycookies.getAdminAuthorization(), returnData.access_token, { path: '/' });
+            res.redirect('/admin/article/index');
         }
     });
 })

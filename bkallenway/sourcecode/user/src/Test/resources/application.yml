@@ -21,7 +21,7 @@ config:
     oauth2:
         # on:开启  off:关闭
         switch: off
-        oauthTokenApiURL: https://127.0.0.1:8443/admin/oauth2/oauthtoken
+        oauthTokenApiURL: https://127.0.0.1:8443/admin/springoauth/kongoauth
         clientId: whc_id
         clientSecret: whc_secret
         grantType: password

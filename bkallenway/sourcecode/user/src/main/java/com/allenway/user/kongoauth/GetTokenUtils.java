@@ -1,4 +1,4 @@
-package com.allenway.user.oauthtoken;
+package com.allenway.user.kongoauth;
 
 import com.allenway.utils.json.GsonUtil;
 import com.google.gson.Gson;
@@ -18,33 +18,34 @@ import java.net.URL;
  */
 
 @Slf4j
-@Component
+//@Component
+@Deprecated
 public class GetTokenUtils {
 
     private GetTokenUtils(){}
 
     private Gson gson = GsonUtil.getInstance();
 
-    @Value("${config.oauth2.oauthTokenApiURL}")
+    @Value("${config.springoauth.oauthTokenApiURL}")
     private String oauthTokenApiURL;
 
-    @Value("${config.oauth2.clientId}")
+    @Value("${config.springoauth.clientId}")
     private String clientId;
 
-    @Value("${config.oauth2.clientSecret}")
+    @Value("${config.springoauth.clientSecret}")
     private String clientSecret;
 
-    @Value("${config.oauth2.grantType}")
+    @Value("${config.springoauth.grantType}")
     private String grantType;
 
-    @Value("${config.oauth2.provisionKey}")
+    @Value("${config.springoauth.provisionKey}")
     private String provisionKey;
 
-    @Value("${config.oauth2.scope}")
+    @Value("${config.springoauth.scope}")
     private String scope;
 
     /**
-     * 拿到 oauthtoken
+     * 拿到 kongoauth
      * @return
      */
     public TokenEntity getToken(final String userid) throws IOException {

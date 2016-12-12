@@ -1,4 +1,4 @@
-package com.allenway.user.oauthtoken;
+package com.allenway.user.kongoauth;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 @Data
 @NoArgsConstructor
+@Deprecated
 public class OAuthParamEntity {
 
     private String oauthTokenApiURL;

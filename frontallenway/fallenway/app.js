@@ -62,15 +62,15 @@ app.use('/visitor/aboutme',visitor_aboutme);
 //********************************************************
 //*                admin oauth validation                *
 //********************************************************
-var myLogger_admin_oauth = function (req, res, next) {
-    if(mycookies.getAdminAuthorizationCookie(req) == 'undefined'){
-         logger.error("cookies == undefined......");
-        res.render('admin/login');
-    } else {
-        next();
-    }
-};
-app.use(myLogger_admin_oauth);
+/*var myLogger_admin_oauth = function (req, res, next) {*/
+    //if(mycookies.getAdminAuthorizationCookie(req) == 'undefined'){
+         //logger.error("cookies == undefined......");
+        //res.render('admin/login');
+    //} else {
+        //next();
+    //}
+//};
+/*app.use(myLogger_admin_oauth);*/
 
 
 //********************************************************

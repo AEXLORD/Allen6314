@@ -1,4 +1,4 @@
-package com.allenway.user.oauthtoken;
+package com.allenway.user.kongoauth;
 
 import javax.net.ssl.*;
 import java.security.cert.CertificateException;
@@ -7,7 +7,7 @@ import java.security.cert.X509Certificate;
 /**
  *  @author wuhuachuan
  */
-
+@Deprecated
 public class SSLCertificateValidation {
     public static void disable() {
         try {

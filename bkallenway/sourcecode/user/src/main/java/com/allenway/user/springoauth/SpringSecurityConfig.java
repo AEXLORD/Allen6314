@@ -35,7 +35,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .regexMatchers("/tag/[\\s\\S]*")
                 .regexMatchers("/comment/[\\s\\S]*")
                 .regexMatchers("/message/[\\s\\S]*")
-                .regexMatchers("/module/[\\s\\S]*")
-                .antMatchers("/oauth/token");
+                .regexMatchers("/module/[\\s\\S]*");
     }
 }

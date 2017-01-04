@@ -50,7 +50,6 @@ public class C3P0Configuration {
     @Bean
     public ComboPooledDataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-
         dataSource.setMaxPoolSize(maxSize);
         dataSource.setMinPoolSize(minSize);
         dataSource.setInitialPoolSize(initSize);

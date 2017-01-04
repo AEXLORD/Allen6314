@@ -34,7 +34,7 @@ config:
 #        scope: whc
 #        expired_in: 180
     oauth2:
-        enable: true
+        enable: false
 
     c3p0:
         # 连接池中保留的最大连接数

@@ -1,6 +1,6 @@
 # 简介 
 
-个人博客代码。网站地址：[https://www.wuhuachuan.com/](https://www.wuhuachuan.com/)
+个人博客代码。网站地址：[http://www.wuhuachuan.com/](http://www.wuhuachuan.com/)
 
 # 技术栈
 
@@ -31,9 +31,3 @@
 ### 添加文章主页
 
 ![blogback3](http://7xrzlm.com1.z0.glb.clouddn.com/blogback3.png)
-
-Ps：
-
-- 邮箱：wuhuachuan712@163.com
-- 知乎：[https://www.zhihu.com/people/wuhuachuan](https://www.zhihu.com/people/wuhuachuan)
-- 微博：[http://weibo.com/1796766555/profile?topnav=1&wvr=6&is_all=1](http://weibo.com/1796766555/profile?topnav=1&wvr=6&is_all=1)

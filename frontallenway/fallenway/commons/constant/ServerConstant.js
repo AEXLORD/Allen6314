@@ -8,6 +8,8 @@ var ServerConstant = function(){
     var clientSecret = "whcsecret";
     var grantType = "password";
 
+    var nginxHtmlPath = '';
+
 	this.getBackendUrlPrefix = function(){
 		return BACKEND_URL_PREFIX;
 	}
@@ -22,6 +24,9 @@ var ServerConstant = function(){
     }
     this.getGrantType = function(){
         return grantType;
+    }
+    this.getNginxHtmlPath = function(){
+        return nginxHtmlPath;
     }
 }
 

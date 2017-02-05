@@ -117,3 +117,18 @@ app.listen(serverConstant.getNodePort());
 logger.info("****************************************************");
 logger.info("* * Application started on http://localhost:" + serverConstant.getNodePort() + "/  *");
 logger.info("****************************************************");
+
+
+//********************************************************
+//*                    schedule job                      *
+//********************************************************
+
+/*var later = require('later');*/
+//var ArticleCreator = require('./infrustructure/sche/articlecreator');
+//var articleCreator = new ArticleCreator();
+//articleCreator.start();
+//logger.info("****************************************************");
+//logger.info("*               ArticleCreator start               *");
+/*logger.info("****************************************************");*/
+
+

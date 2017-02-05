@@ -45,7 +45,7 @@ CREATE TABLE `tb_article` (
   `id` varchar(255) NOT NULL,
   `is_delete` bit(1) NOT NULL,
   `operation_time` datetime DEFAULT NULL,
-  `content` varchar(255) DEFAULT NULL,
+  `content` text DEFAULT NULL,
   `down` int(11) NOT NULL,
   `is_top` bit(1) NOT NULL,
   `read_num` int(11) NOT NULL,

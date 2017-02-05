@@ -20,7 +20,8 @@ var exceptionCode = new ExceptionCode();
 router.get('/module/:type', function(req, res, next) {
     var moduleName = req.params.type;
 
-    if((moduleName != "work") && (moduleName != "read") && (moduleName != "learn")){
+    if((moduleName != "work") && (moduleName != "read") && (moduleName != "learn")
+            && (moduleName != "help") && (moduleName != "myopinion") && (moduleName != "recommend") ){
         logger.error("moduleName = " + moduleName);
         res.render('error/unknowerror');
         return ;

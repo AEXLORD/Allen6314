@@ -5,6 +5,7 @@ INSERT INTO tb_admin(id,is_delete,password,salt,username) VALUES ('aaac4e63-da8b
 INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408fb5312',false,"work");
 INSERT INTO tb_module(id,is_delete,name) VALUES ('d5ff88b6-c8a4-436c-81f8-561a9c35950e',false,"read");
 INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9662-89b408fb5313',false,"learn");
+INSERT INTO tb_module(id,is_delete,name) VALUES ('93f1452e-e235-4f47-9762-89b408fb5313',false,"base");
 
 INSERT INTO tb_module(id,is_delete,name) VALUES ('83f1452e-e235-4f47-9662-89b408fb5313',false,"help");
 INSERT INTO tb_module(id,is_delete,name) VALUES ('73f1452e-e235-4f47-9662-89b408fb5313',false,"myopinion");

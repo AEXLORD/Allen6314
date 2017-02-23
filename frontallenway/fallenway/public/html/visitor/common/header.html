@@ -20,13 +20,10 @@ a{
 a:hover{
     color: blue;
 }
-.myheader{
+.navformat{
     font-size:13px;
-}
-.www{
-    float:right;
-    padding-top:9px;
-    padding-right:20px;
+    padding-left:10px;
+    font-weight:bold;
 }
         </style>
         <script>
@@ -43,41 +40,22 @@ a:hover{
         {% block subIncludeFileBeforeBody %}{% endblock %}
     </head>
     <body>
-        <div>
-            <div class = "myheader">
-                <div style = "float:left;padding-left:20px">
-                    <div class = "www" style = "font-weight:bold">
-                        <a href = "/visitor/article/module/learn">业余研究</a>
-                    </div>
-                    <div class = "www" style = "font-weight:bold">
-                        <a href = "/visitor/article/module/read">读书笔记</a>
-                    </div>
-                    <div class = "www" style = "font-weight:bold">
-                        <a href = "/visitor/article/module/work">工作总结</a>
-                    </div>
-                    <div style = "clear:both"></div>
+            <div style = "float:right;margin:10px">
+                <div>
+                    <span class = "navformat"><a href = "/visitor/article/module/work">工作总结</a></span>
+                    <span class = "navformat"><a href = "/visitor/article/module/read">读书笔记</a></span>
+                    <span class = "navformat"><a href = "/visitor/article/module/learn">框架</a></span>
+                    <span class = "navformat"><a href = "/visitor/article/module/base">基础</a></span>
                 </div>
-                <div style = "float:right">
-                    <!--<div class = "www">-->
-                        <!--<a href = "/visitor/message/index">留言板</a>-->
-                    <!--</div>-->
-                    <div class = "www">
-                        <a href = "/visitor/aboutme/index">博主</a>
-                    </div>
-                    <div class = "www">
-                        <a href = "/visitor/article/module/recommend">推荐</a>
-                    </div>
-                    <div class = "www">
-                        <a href = "/visitor/article/module/myopinion">愚见</a>
-                    </div>
-                    <div class = "www" style = "font-weight:bold">
-                        <a href = "/visitor/article/module/help">不懂求助</a>
-                    </div>
-                    <div style = "clear:both"></div>
+                <div>
+                    <span class = "navformat"><a href = "/visitor/article/module/help">不懂求助</a></span>
+                    <span class = "navformat"><a href = "/visitor/article/module/myopinion">opinion</a></span>
+                    <span class = "navformat"><a href = "/visitor/article/module/recommend">推荐</a></span>
+                    <span class = "navformat"><a href = "/visitor/aboutme/index">博主</a></span>
                 </div>
-                <div style = "clear:both"></div>
             </div>
-            <div id = "row" style = "margin-top:30px">
+            <div style = "clear:both"></div>
+            <div id = "row" style = "margin-top:15px">
                 {% block mainContent  %}{% endblock %}
             </div>
 
